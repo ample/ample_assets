@@ -41,6 +41,7 @@ class window.AmpleAssets
         { id: 'document-assets', title: 'Documents' }
       ]
     
+    @loaded = false
     @options = default_options
     for k of opts
       @options[k] = opts[k]
@@ -55,6 +56,7 @@ class window.AmpleAssets
     html = $(layout).prepend(@handle)
     $('body').append html
     @style()
+    @slide(0) if @options.expanded
 
   style: ->
     $("##{@options.id} .container").css('height',200)
@@ -68,6 +70,7 @@ class window.AmpleAssets
     $("##{@options.id} .pages").amplePanels(@options.panels_options).bind 'slide', (e,d) ->
       tabs.removeClass('on')
       $(tabs[d]).addClass('on')
+      ref.slide(d)
     
     $.each tabs, (idx, el) ->
       $(this).addClass('on') if idx == 0
@@ -96,8 +99,19 @@ class window.AmpleAssets
       el.animate {height: @options.expanded_height}, "fast", ->
         ref.expand()
         ref.options.onExpand()
-        $.get '/ample_assets', (d) ->
-          console.log d
+        ref.slide(0)
+
+  load: (i) ->
+    @log "load(#{i})"
+    @options.pages[i]['loaded'] = true 
+    # TODO: load content for each page
+
+  already_loaded: (i) ->
+    typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
+
+  slide: (i) ->
+    @log "slide(#{i})"
+    @load(i) unless @already_loaded(i)
 
   collapse: ->
     $("##{@options.id} .pages").amplePanels('disable')

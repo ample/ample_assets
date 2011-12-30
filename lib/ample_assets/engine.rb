@@ -19,6 +19,7 @@ module AmpleAssets
       dfly = Dragonfly[:images]
       dfly.define_macro ActiveRecord::Base, :image_accessor
       dfly.register_mime_type(:swf, 'application/x-shockwave-flash')
+      dfly.configure_with(:imagemagick)
       dfly.configure_with(:rails)
       app.middleware.insert_after ::Rack::Cache, ::Dragonfly::Middleware, :images
     end

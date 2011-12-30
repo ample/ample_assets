@@ -3,9 +3,14 @@
   They will automatically be included in application.css.
 */
 
-html, body {
-  margin: 0;
-  padding: 0;
+@mixin clearfix {
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
 }
 
 #ample-assets {
@@ -17,10 +22,11 @@ html, body {
   height: 25px; 
   font-size: 12px;
   
-  .content,
+  .background,
   .handle {
     background: #191919; 
     outline: none; 
+    color: #FFF; 
   }
   .handle {
     float: right; 
@@ -28,15 +34,70 @@ html, body {
     -moz-border-radius-topleft: 10px; 
     border-top-left-radius: 10px; 
     padding: 5px 20px; 
-    color: #FFF; 
     font-weight: bold; 
     text-decoration: none; 
     cursor: pointer; 
   }
-  .content {
+  .background {
     clear: both; 
     height: 200px; 
   }
 
+  .container {
+    width: 950px;
+    margin: 0 auto;
+  }
+
+  a.asset {
+    display: block;
+    border: 3px solid #999;
+    width: 50px;
+    height: 50px;
+  }
+
+  .page {
+    @include clearfix; 
+    width: 950px;
+    height: 100px;
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .tabs {
+    @include clearfix; 
+  }
+
+  a.tab {
+    background: #333; 
+    -webkit-border-radius: 5px; 
+    -moz-border-radius: 5px; 
+    border-radius: 5px; 
+    padding: 5px 10px; 
+    color: #999; 
+    text-decoration: none; 
+    float: left; 
+    display: block; 
+    margin: 10px 0 0 10px; 
+    outline: none; 
+    &.on {
+      background: transparent; 
+    }
+  }
 }
 
+
+
+/***
+#asset-toolbar .collections																									{clear: both; float: left; overflow: hidden; position: relative; }
+#search_collection_results img, 
+#asset-toolbar .tab img																											{border: 3px solid #333; margin: 0 5px 0 0; cursor: pointer; }
+#search_collection_results img                                              {margin: 0 10px 5px 0; }
+#asset-toolbar .tab img:hover																								{border-color: #FFF; }
+#asset-toolbar .tab																													{position: relative; height: 80px; }
+#asset-toolbar .tab	ul																											{list-style-type: none; }
+#asset-toolbar .tab a,          																						
+#asset-toolbar .tab img,        																						
+#asset-toolbar .tab	li																											{display: inline; float: left; }
+****/

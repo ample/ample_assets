@@ -17,7 +17,7 @@ class window.AmpleAssets
       expanded: true
       id: "ample-assets"
       handle_text: 'Assets'
-      expanded_height: 150
+      expanded_height: 170
       collapsed_height: 25
       onInit: ->
         ref.log 'onInit()'
@@ -30,15 +30,18 @@ class window.AmpleAssets
         width: 950
         height: 100
         orientation: 'vertical'
-        key_orientation: 'horizontal'
+        key_orientation: 'vertical'
         keyboard_nav: true
         auto: false
         parent: 'div'
         children: 'div.page'
       pages: [
-        { id: 'recent-assets', title: 'Recently Viewed' }
-        { id: 'image-assets', title: 'Images' }
-        { id: 'document-assets', title: 'Documents' }
+        { 
+          id: 'recent-assets', 
+          title: 'Recently Viewed',
+          url: '/ample_assets/',
+          panels: false
+        }
       ]
     
     @loaded = false
@@ -67,7 +70,7 @@ class window.AmpleAssets
     ref = this
     tabs = $("##{@options.id} a.tab")
     
-    $("##{@options.id} .pages").amplePanels(@options.panels_options).bind 'slide', (e,d) ->
+    $("##{@options.id} .pages").amplePanels(@options.panels_options).bind 'slide_vertical', (e,d) ->
       tabs.removeClass('on')
       $(tabs[d]).addClass('on')
       ref.slide(d)
@@ -105,12 +108,30 @@ class window.AmpleAssets
     @log "load(#{i})"
     ref = this
     if @options.pages[i]['url']
-      $.get @options.pages[i]['url'], (d,r) ->
+      panels = @options.pages[i]['panels'] if @options.pages[i]['panels']
+      $.get @options.pages[i]['url'], (response, xhr) ->
         ref.options.pages[i]['loaded'] = true 
-        $("##{ref.options.id} .pages .page:nth-child(#{(i+1)})").html(d)
-        
+        selector = "##{ref.options.id} .pages .page:nth-child(#{(i+1)})" 
+        selector += " ul" if panels
+        $(selector).html(response)
+        ref.panels(i)
     else
-      @log "Couldn't load page because there was no url."
+      @log "ERROR --> Couldn't load page because there was no url"
+
+  panels: (i) ->
+    if @options.pages[i]['panels']
+      @log "panels(#{i})"
+      el = @options.pages[i]['panel_selector'] = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul"
+      $(el).attr('id',"#{@options.pages[i]['id']}-panel").amplePanels
+        interval: 5000,
+        width: 81, 
+        height: 81,
+        distance: 10, 
+        keyboard_nav: true
+        auto: false
+        orientation: 'horizontal', 
+        key_orientation: 'horizontal', 
+        per_page: 10
 
   already_loaded: (i) ->
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']

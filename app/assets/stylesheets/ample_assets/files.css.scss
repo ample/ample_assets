@@ -13,6 +13,12 @@
   }
 }
 
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius; 
+  -moz-border-radius: $radius; 
+  border-radius: $radius; 
+}
+
 #ample-assets {
   
   position: fixed; 
@@ -48,17 +54,8 @@
     margin: 0 auto;
   }
 
-  a.asset {
-    display: block;
-    border: 3px solid #999;
-    width: 50px;
-    height: 50px;
-  }
-
   .page {
     @include clearfix; 
-    width: 950px;
-    height: 100px;
     ul {
       margin: 0;
       padding: 0;
@@ -70,10 +67,8 @@
   }
 
   a.tab {
+    @include border-radius(1px);
     background: #333; 
-    -webkit-border-radius: 5px; 
-    -moz-border-radius: 5px; 
-    border-radius: 5px; 
     padding: 5px 10px; 
     color: #999; 
     text-decoration: none; 
@@ -85,19 +80,16 @@
       background: transparent; 
     }
   }
+  
+  li {
+    display: block;
+    float: left;
+    &.file a {
+      display: block;
+      border: 3px solid #999;
+      width: 75px;
+      height: 75px;
+    }
+  }
+  
 }
-
-
-
-/***
-#asset-toolbar .collections																									{clear: both; float: left; overflow: hidden; position: relative; }
-#search_collection_results img, 
-#asset-toolbar .tab img																											{border: 3px solid #333; margin: 0 5px 0 0; cursor: pointer; }
-#search_collection_results img                                              {margin: 0 10px 5px 0; }
-#asset-toolbar .tab img:hover																								{border-color: #FFF; }
-#asset-toolbar .tab																													{position: relative; height: 80px; }
-#asset-toolbar .tab	ul																											{list-style-type: none; }
-#asset-toolbar .tab a,          																						
-#asset-toolbar .tab img,        																						
-#asset-toolbar .tab	li																											{display: inline; float: left; }
-****/

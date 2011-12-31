@@ -19,6 +19,7 @@
         distance : 0,
         easing: 'easeInOutQuart',
         orientation: 'horizontal',
+        key_orientation: 'horizontal',
         active_class: 'on',
         per_page : 1, 
         keyboard_nav : false,
@@ -349,7 +350,7 @@
           counter = -1; 
         }
         
-        $( this.options.el ).trigger('slide', counter);
+        $( this.options.el ).trigger('slide_horizontal', counter);
         
         var left = 0; 
         if( this.width_percentage() ) {
@@ -400,7 +401,7 @@
           }
         }
         
-        $( this.options.el ).trigger('slide', counter);
+        $( this.options.el ).trigger('slide_vertical', counter);
 
         var top = ( this.options.height + this.options.distance ) * this.options.per_page * counter;
         var properties = { marginTop: top * -1 + 'px' }; 
@@ -475,8 +476,9 @@
       key_down: function() {
         if(!this.options.keyboard_nav) return; 
         var ref = this; 
-        var previous = 37;  
-        var next = 39; 
+        var previous = this.options.key_orientation == 'vertical' ? 38 : 37;  
+        var next = this.options.key_orientation == 'vertical' ? 40 : 39; 
+        
         $(document).keydown(function(e){
           switch(e.keyCode) { 
             case previous: 

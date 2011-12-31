@@ -1,7 +1,7 @@
 require 'dragonfly'
 
 module AmpleAssets
-  class Asset < ActiveRecord::Base
+  class File < ActiveRecord::Base
     
     IMAGE_MIME_TYPES = %w(image/jpeg image/png image/gif)
     SWF_MIME_TYPES = %w(application/x-shockwave-flash)

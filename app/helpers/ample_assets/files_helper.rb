@@ -1,5 +1,5 @@
 module AmpleAssets
-  module AssetsHelper
+  module FilesHelper
     
     def ample_assets
       content_tag :script, "var ample_assets = {}; ample_assets.load = true; #{ample_assets_pages}", :type => "text/javascript"

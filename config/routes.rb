@@ -1,6 +1,6 @@
 AmpleAssets::Engine.routes.draw do
 
-  resources :assets
-  root :to => "assets#index"
+  resources :files
+  root :to => "files#index"
 
 end

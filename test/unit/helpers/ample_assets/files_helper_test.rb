@@ -1,6 +1,6 @@
 require 'test_helper'
 
 module AmpleAssets
-  class AssetsHelperTest < ActionView::TestCase
+  class FilesHelperTest < ActionView::TestCase
   end
 end

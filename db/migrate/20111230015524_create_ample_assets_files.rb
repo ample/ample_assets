@@ -1,6 +1,6 @@
-class CreateAmpleAssetsAssets < ActiveRecord::Migration
+class CreateAmpleAssetsFiles < ActiveRecord::Migration
   def change
-    create_table :ample_assets_assets do |t|
+    create_table :ample_assets_files do |t|
       t.string   :keywords
       t.string   :alt_text
       t.string   :attachment_uid

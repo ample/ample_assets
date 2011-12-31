@@ -1,5 +1,5 @@
 module AmpleAssets
-  class AssetsController < ApplicationController
+  class FilesController < ApplicationController
   
     def index
       if request.xhr?
@@ -12,7 +12,7 @@ module AmpleAssets
       helper_method :current_assets
       
       def current_assets
-        @current_assets ||= Asset.all
+        @current_assets ||= File.all
       end
   
   end

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module AmpleAssets
-  class AssetTest < ActiveSupport::TestCase
+  class FileTest < ActiveSupport::TestCase
     # test "the truth" do
     #   assert true
     # end

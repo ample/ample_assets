@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(:version => 20111230015524) do
 
-  create_table "ample_assets_assets", :force => true do |t|
+  create_table "ample_assets_files", :force => true do |t|
     t.string   "keywords"
     t.string   "alt_text"
     t.string   "attachment_uid"

@@ -8,4 +8,4 @@
 //= require jquery_ujs
 //= require_tree ./lib
 //= require_tree ./classes
-//= require_tree .
+//= require ./files

@@ -9,7 +9,8 @@ module AmpleAssets
       "\nample_assets.pages = [
         { id: 'recent-assets', title: 'Recently Viewed', url: '#{root_path}' },
         { id: 'image-assets', title: 'Images' },
-        { id: 'document-assets', title: 'Documents' }
+        { id: 'document-assets', title: 'Documents' },
+        { id: 'upload', title: 'Upload', url: '#{new_file_path}' }
       ];"
     end
     

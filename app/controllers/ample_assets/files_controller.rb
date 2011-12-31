@@ -2,11 +2,13 @@ module AmpleAssets
   class FilesController < ApplicationController
   
     def index
-      if request.xhr?
-        render current_assets, :content_type => :html
-      end
+      render current_assets, :content_type => :html if request.xhr?
     end
-  
+    
+    def new
+      render 'ample_assets/files/new', :layout => false, :content_type => :html if request.xhr?
+    end
+    
     protected 
       
       helper_method :current_assets

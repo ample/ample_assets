@@ -103,8 +103,14 @@ class window.AmpleAssets
 
   load: (i) ->
     @log "load(#{i})"
-    @options.pages[i]['loaded'] = true 
-    # TODO: load content for each page
+    ref = this
+    if @options.pages[i]['url']
+      $.get @options.pages[i]['url'], (d,r) ->
+        ref.options.pages[i]['loaded'] = true 
+        $("##{ref.options.id} .pages .page:nth-child(#{(i+1)})").html(d)
+        
+    else
+      @log "Couldn't load page because there was no url."
 
   already_loaded: (i) ->
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
@@ -137,4 +143,4 @@ class window.AmpleAssets
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'
     tab: '<a href="#" data-role="{{ id }}" class="tab">{{ title }}</a>'
-    page: '<div id="{{ id }}" class="page">{{ title }}<ul></ul></div>'
+    page: '<div id="{{ id }}" class="page"><ul></ul></div>'

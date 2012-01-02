@@ -7,14 +7,14 @@ class window.AmpleAssets
   init: ->
     @options.onInit()
     @setup()
-    @pages()
     @events()
 
   set_options: (opts) ->
+    @current = 0
     ref = this
     default_options = 
       debug: false
-      expanded: true
+      expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
       expanded_height: 170
@@ -35,6 +35,17 @@ class window.AmpleAssets
         auto: false
         parent: 'div'
         children: 'div.page'
+      pages_options:
+        interval: 5000
+        width: 81 
+        height: 81
+        enabled: true
+        distance: 10
+        keyboard_nav: true
+        auto: false
+        orientation: 'horizontal'
+        key_orientation: 'horizontal'
+        per_page: 10
       pages: [
         { 
           id: 'recent-assets', 
@@ -59,28 +70,38 @@ class window.AmpleAssets
     html = $(layout).prepend(@handle)
     $('body').append html
     @style()
-    @slide(0) if @options.expanded
+    @goto(0) if @options.expanded
 
   style: ->
     $("##{@options.id} .container").css('height',200)
     if @options.expanded
       $("##{@options.id}").css({height:@options.expanded_height});
 
-  pages: -> 
-    ref = this
-    tabs = $("##{@options.id} a.tab")
-    
-    $("##{@options.id} .pages").amplePanels(@options.panels_options).bind 'slide_vertical', (e,d) ->
-      tabs.removeClass('on')
-      $(tabs[d]).addClass('on')
-      ref.slide(d)
-    
-    $.each tabs, (idx, el) ->
-      $(this).addClass('on') if idx == 0
-      $(el).click ->
-        tabs.removeClass('on')
-        $(this).addClass('on')
-        $("##{ref.options.id} .pages").amplePanels('goto', idx)
+  goto: (i) ->
+    @log "goto(#{i})"
+    @current = i
+    $("##{@options.id} .pages .page").hide()
+    $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
+    @disable_panels()
+    @activate(i)
+    @load(i) unless @already_loaded(i)
+    @enable_panel(i) if @already_loaded(i)
+
+  activate: (i) ->
+    $("##{@options.id} a.tab").removeClass('on')
+    $("##{@options.id} a.tab:nth-child(#{i+1})").addClass('on')
+
+  next: ->
+    if @current < @options.pages.length - 1
+      @log "next()"
+      @current += 1
+      @goto(@current)
+
+  previous: ->
+    unless @current == 0
+      @log "previous()"
+      @current -= 1
+      @goto(@current)
 
   get_pages: (tpl = 'page') ->
     ref = this
@@ -102,7 +123,7 @@ class window.AmpleAssets
       el.animate {height: @options.expanded_height}, "fast", ->
         ref.expand()
         ref.options.onExpand()
-        ref.slide(0)
+        ref.goto(0)
 
   load: (i) ->
     @log "load(#{i})"
@@ -119,37 +140,53 @@ class window.AmpleAssets
       @log "ERROR --> Couldn't load page because there was no url"
 
   panels: (i) ->
+    ref = this
     if @options.pages[i]['panels']
       @log "panels(#{i})"
       el = @options.pages[i]['panel_selector'] = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul"
-      $(el).attr('id',"#{@options.pages[i]['id']}-panel").amplePanels
-        interval: 5000,
-        width: 81, 
-        height: 81,
-        distance: 10, 
-        keyboard_nav: true
-        auto: false
-        orientation: 'horizontal', 
-        key_orientation: 'horizontal', 
-        per_page: 10
+      $(el).attr('id',"#{@options.pages[i]['id']}-panel")
+      $(el).amplePanels(@options.pages_options).bind 'slide_horizontal', (e,d) ->
+        console.log "TODO: load next pages"
+        #TODO: load next pages
+
+  disable_panels: ->
+    ref = this
+    $.each @options.pages, (i,el) ->
+      $(ref.options.pages[i]['panel_selector']).amplePanels('disable') if ref.options.pages[i]['panel_selector']
+
+  enable_panel: (i) ->  
+    $(@options.pages[i]['panel_selector']).amplePanels('enable') if @options.pages[i]['panel_selector']
 
   already_loaded: (i) ->
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
 
-  slide: (i) ->
-    @log "slide(#{i})"
-    @load(i) unless @already_loaded(i)
-
   collapse: ->
-    $("##{@options.id} .pages").amplePanels('disable')
+    @disable_panels()
 
   expand: ->
-    $("##{@options.id} .pages").amplePanels('enable')
+    @goto(0)
 
   events: ->
     ref = this
     $("##{@options.id}-handle").live 'click', ->
       ref.toggle()
+    @key_down()
+    tabs = $("##{@options.id} a.tab")
+    $.each tabs, (idx, el) ->
+      $(this).addClass('on') if idx == 0
+      $(el).click ->
+        ref.goto(idx)
+
+  key_down: ->
+    ref = this
+    previous = 38
+    next = 40
+    $(document).keydown (e) ->
+      switch e.keyCode
+        when previous
+          ref.previous()
+        when next
+          ref.next()
 
   tpl: (view) ->
     @tpls()[view]

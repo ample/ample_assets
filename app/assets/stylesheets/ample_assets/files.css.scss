@@ -54,6 +54,10 @@
     margin: 0 auto;
   }
 
+  .pages {
+    padding-top: 15px;
+  }
+
   .page {
     @include clearfix; 
     ul {

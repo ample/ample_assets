@@ -8,10 +8,11 @@ module AmpleAssets
       content_tag :script, script, :type => "text/javascript"
     end
     
+    # TODO: move this to YAML
     def ample_assets_pages
       "\nample_assets.pages = [
-        { id: 'recent-assets', title: 'Recently Viewed', url: '#{root_path}', panels: true },
-        { id: 'image-assets', title: 'Images' },
+        { id: 'recent-assets', title: 'Recently Viewed', url: '#{recent_files_path}', panels: true },
+        { id: 'image-assets', title: 'Images', url: '#{files_path}', panels: true },
         { id: 'document-assets', title: 'Documents' },
         { id: 'upload', title: 'Upload', url: '#{new_file_path}' }
       ];".gsub(/\s+/, "")

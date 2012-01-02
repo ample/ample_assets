@@ -2,7 +2,11 @@ module AmpleAssets
   class FilesController < ApplicationController
   
     def index
-      render current_assets, :content_type => :html if request.xhr?
+      render current_files, :content_type => :html if request.xhr?
+    end
+
+    def recent
+      render recent_files, :content_type => :html if request.xhr?
     end
     
     def new
@@ -22,10 +26,14 @@ module AmpleAssets
     
     protected 
       
-      helper_method :current_assets
+      helper_method :current_files
       
-      def current_assets
-        @current_assets ||= File.all
+      def current_files
+        @current_files ||= File.all
+      end
+      
+      def recent_files
+        @recent_files ||= File.recent
       end
   
   end

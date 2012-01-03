@@ -154,10 +154,18 @@ class window.AmpleAssets
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
       link = $('<a href="#"></a>').click ->
-        console.log 'clicked'
       li = $('<li class="file"></li>').append(link)
       $(selector).append(li)
+      ref.load_img(link, el.thumbnail)
     ref.panels(i)
+
+  load_img: (el,src) ->
+    img = new Image()
+    $(img).load(->
+      $(this).hide()
+      $(el).html this
+      $(this).fadeIn()
+    ).attr src: src
 
   panels: (i) ->
     ref = this

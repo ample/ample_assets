@@ -29,5 +29,9 @@ module AmpleAssets
       IMAGE_MIME_TYPES.include?(attachment_mime_type)
     end
     
+    def thumbnail
+      attachment.thumb('75x75#').url if is_image?
+    end
+    
   end
 end

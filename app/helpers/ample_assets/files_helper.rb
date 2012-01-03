@@ -12,7 +12,7 @@ module AmpleAssets
     def ample_assets_pages
       "\nample_assets.pages = [
         { id: 'recent-assets', title: 'Recently Viewed', url: '#{recent_files_path}', panels: true, data_type: 'json' },
-        { id: 'image-assets', title: 'Images', url: '#{files_path}', panels: true },
+        { id: 'image-assets', title: 'Images', url: '#{files_path}', panels: true, data_type: 'json' },
         { id: 'document-assets', title: 'Documents' },
         { id: 'upload', title: 'Upload', url: '#{new_file_path}' }
       ];".gsub(/\s+/, "")

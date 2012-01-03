@@ -6,7 +6,11 @@ module AmpleAssets
     end
 
     def recent
-      render recent_files, :content_type => :html if request.xhr?
+      respond_to do |format|
+        format.js { render recent_files, :content_type => :html }
+        format.html { render :template => 'ample_assets/files/recent', :content_type => :html }
+        format.json { render :json => recent_files.to_json }
+      end
     end
     
     def new
@@ -26,7 +30,7 @@ module AmpleAssets
     
     protected 
       
-      helper_method :current_files
+      helper_method :current_files, :recent_files
       
       def current_files
         @current_files ||= File.all

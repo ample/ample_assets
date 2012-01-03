@@ -126,18 +126,38 @@ class window.AmpleAssets
         ref.goto(0)
 
   load: (i) ->
-    @log "load(#{i})"
     ref = this
     if @options.pages[i]['url']
-      panels = @options.pages[i]['panels'] if @options.pages[i]['panels']
+      data_type = @options.pages[i]['data_type'] if @options.pages[i]['data_type']
       $.get @options.pages[i]['url'], (response, xhr) ->
-        ref.options.pages[i]['loaded'] = true 
-        selector = "##{ref.options.id} .pages .page:nth-child(#{(i+1)})" 
-        selector += " ul" if panels
-        $(selector).html(response)
-        ref.panels(i)
+        switch data_type
+          when "json"
+            ref.load_json i, response
+          when "html"
+          else
+            ref.load_html i, response
+      , data_type
     else
       @log "ERROR --> Couldn't load page because there was no url"
+
+  load_html: (i, response) ->
+    @log "load(#{i}) html"
+    @options.pages[i]['loaded'] = true 
+    selector = "##{@options.id} .pages .page:nth-child(#{(i+1)})" 
+    selector += " ul" if @options.pages[i]['panels']
+    $(selector).html(response)
+    @panels(i)
+
+  load_json: (i, response) ->
+    @log "load(#{i}) json"
+    ref = this
+    selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
+    $.each response, (j,el) ->
+      link = $('<a href="#"></a>').click ->
+        console.log 'clicked'
+      li = $('<li class="file"></li>').append(link)
+      $(selector).append(li)
+    ref.panels(i)
 
   panels: (i) ->
     ref = this

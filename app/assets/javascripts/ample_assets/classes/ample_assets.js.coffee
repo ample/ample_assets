@@ -130,6 +130,7 @@ class window.AmpleAssets
     if @options.pages[i]['url']
       data_type = @options.pages[i]['data_type'] if @options.pages[i]['data_type']
       $.get @options.pages[i]['url'], (response, xhr) ->
+        ref.options.pages[i]['loaded'] = true 
         switch data_type
           when "json"
             ref.load_json i, response
@@ -142,7 +143,6 @@ class window.AmpleAssets
 
   load_html: (i, response) ->
     @log "load(#{i}) html"
-    @options.pages[i]['loaded'] = true 
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)})" 
     selector += " ul" if @options.pages[i]['panels']
     $(selector).html(response)
@@ -165,8 +165,9 @@ class window.AmpleAssets
       @log "panels(#{i})"
       el = @options.pages[i]['panel_selector'] = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul"
       $(el).attr('id',"#{@options.pages[i]['id']}-panel")
-      $(el).amplePanels(@options.pages_options).bind 'slide_horizontal', (e,d) ->
-        console.log "TODO: load next pages"
+      $(el).amplePanels(@options.pages_options)
+        #.bind 'slide_horizontal', (e,d) ->
+        #console.log "TODO: load next pages"
         #TODO: load next pages
 
   disable_panels: ->

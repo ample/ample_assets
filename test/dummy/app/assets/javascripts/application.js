@@ -6,4 +6,5 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require ample_assets
 //= require_tree .

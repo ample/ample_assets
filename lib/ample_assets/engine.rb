@@ -10,7 +10,7 @@ module AmpleAssets
     isolate_namespace AmpleAssets
     
     config.mount_at = '/ample_assets/'
-    
+
     initializer 'ample_assets: configure rack/cache' do |app|
       app.middleware.insert 0, ::Rack::Cache, {
         :verbose     => true,

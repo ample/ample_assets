@@ -5,6 +5,5 @@ AmpleAssets::Engine.routes.draw do
       match 'recent', :to => "files#recent"
     end
   end
-  root :to => "files#index"
 
 end

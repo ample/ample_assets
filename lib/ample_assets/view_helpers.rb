@@ -19,5 +19,9 @@ module AmpleAssets
       ];".gsub(/\s+/, "")
     end
     
+    def asset_drop
+      render :partial => 'ample_assets/files/drop'
+    end
+    
   end
 end

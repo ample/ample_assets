@@ -4,16 +4,16 @@ module AmpleAssets
     def index
       respond_to do |format|
         format.js { render current_files, :content_type => :html }
-        format.html { render :template => 'ample_assets/files/index', :content_type => :html }
         format.json { render :json => collection_to_json(current_files) }
+        format.html { render :nothing => true }
       end
     end
 
     def recent
       respond_to do |format|
         format.js { render recent_files, :content_type => :html }
-        format.html { render :template => 'ample_assets/files/recent', :content_type => :html }
         format.json { render :json => recent_files_json }
+        format.html { render :nothing => true }
       end
     end
     

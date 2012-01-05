@@ -11,6 +11,7 @@ PATH
       sass-rails (~> 3.1.5)
       therubyracer
       uglifier
+      will_paginate
 
 GEM
   remote: http://rubygems.org/
@@ -64,18 +65,18 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.2.0)
-    compass (0.12.alpha.2)
+    compass (0.12.alpha.3)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
       sass (~> 3.1)
-    dragonfly (0.9.8)
+    dragonfly (0.9.9)
       rack
     erubis (2.7.0)
     execjs (1.2.13)
       multi_json (~> 1.0)
     fabrication (1.2.0)
     ffi (1.0.11)
-    fssm (0.2.7)
+    fssm (0.2.8)
     hike (1.2.1)
     i18n (0.6.0)
     jquery-rails (1.0.19)
@@ -155,6 +156,7 @@ GEM
     uglifier (1.2.1)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
+    will_paginate (3.0.2)
     xpath (0.1.4)
       nokogiri (~> 1.3)
 

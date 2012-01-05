@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency "uglifier"
   s.add_dependency "compass", "~> 0.12.alpha.2"
   s.add_dependency "therubyracer"
+  s.add_dependency "will_paginate"
 
   s.add_development_dependency "sqlite3"
 end

@@ -37,11 +37,11 @@ module AmpleAssets
       helper_method :current_files, :recent_files
       
       def current_files
-        @current_files ||= File.all
+        @current_files ||= File.find(:all).paginate(:page => params[:page], :per_page => per_page)
       end
       
       def recent_files
-        @recent_files ||= File.recent
+        @recent_files ||= File.recent.paginate(:page => params[:page], :per_page => per_page)
       end
       
       def recent_files_json
@@ -54,6 +54,10 @@ module AmpleAssets
         collection.collect{ |file|
           eval("{ thumbnail: '#{file.thumbnail}' }")
         }.to_json
+      end
+      
+      def per_page
+        params[:per_page] || 20
       end
       
   end

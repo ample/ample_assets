@@ -2,6 +2,8 @@ require 'ample_assets'
 require 'rails'
 require 'rack/cache'
 require 'dragonfly'
+require 'will_paginate'
+require 'will_paginate/array'
 
 module AmpleAssets
   class Engine < Rails::Engine

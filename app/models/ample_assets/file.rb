@@ -9,6 +9,7 @@ module AmpleAssets
     ###---------------------------------------------------- Plugins
     
     image_accessor :attachment
+    self.per_page = 20
     
     ###---------------------------------------------------- Scopes
     

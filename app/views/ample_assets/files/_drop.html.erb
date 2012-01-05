@@ -1,1 +1,10 @@
-<%= f.input_field_tag :file_id %>
+<div class="asset-drop">
+	<%= f.hidden_field :file_id %>
+	<div class="droppable">
+		<% if drop %>
+			<%= render :partial => 'ample_assets/files/file', :object => drop %>
+		<% else %>
+			Drag Asset Here
+		<% end %>
+	</div>
+</div>

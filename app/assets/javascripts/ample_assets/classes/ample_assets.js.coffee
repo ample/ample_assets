@@ -70,6 +70,7 @@ class window.AmpleAssets
     html = $(layout).prepend(@handle)
     $('body').append html
     @style()
+    @drag_drop()
     @goto(0) if @options.expanded
 
   style: ->
@@ -86,6 +87,19 @@ class window.AmpleAssets
     @activate(i)
     @load(i) unless @already_loaded(i)
     @enable_panel(i) if @already_loaded(i)
+
+  drag_drop: ->
+    $(".draggable").liveDraggable
+      appendTo: "body"
+      helper: "clone"
+
+    $(".droppable").droppable
+      activeClass: "notice"
+      hoverClass: "success"
+      drop: (event, ui) ->
+        $(this).html ui.draggable.clone()
+        asset_id = $(ui.draggable).attr("id").split("-")[1]
+        $(this).parent().children().first().val asset_id
 
   activate: (i) ->
     $("##{@options.id} a.tab").removeClass('on')
@@ -153,7 +167,7 @@ class window.AmpleAssets
     ref = this
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
-      link = $('<a href="#"></a>').click ->
+      link = $('<a href="#"></a>').attr('id',"file-#{el.id}").addClass('draggable').click ->
       li = $('<li class="file"></li>').append(link)
       $(selector).append(li)
       ref.load_img(link, el.thumbnail)
@@ -231,3 +245,7 @@ class window.AmpleAssets
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'
     tab: '<a href="#" data-role="{{ id }}" class="tab">{{ title }}</a>'
     page: '<div id="{{ id }}" class="page"><ul></ul></div>'
+
+jQuery.fn.liveDraggable = (opts) ->
+  @live "mouseover", ->
+    $(this).data("init", true).draggable opts  unless $(this).data("init")

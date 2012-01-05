@@ -46,7 +46,7 @@ module AmpleAssets
       
       def recent_files_json
         @recent_files_json ||= recent_files.collect{ |file|
-          eval("{ thumbnail: '#{file.thumbnail}' }")
+          eval("{ id: '#{file.id}', thumbnail: '#{file.thumbnail}' }")
         }.to_json
       end
 

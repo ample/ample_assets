@@ -1,0 +1,11 @@
+<%= form_for Page.new do |f| %>
+
+	<p><%= f.label :title %><br /><%= f.text_field :title %></p>
+
+	<%= asset_drop(f) %>
+
+	<%= f.submit %>
+
+<% end %>
+
+<%= assets_toolbar %>

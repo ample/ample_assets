@@ -1,0 +1,8 @@
+<%= link_to 'Create New Page', new_page_path %>
+
+<ul>
+<% Page.all.each do |page| %>
+	<%= content_tag :li, link_to(page.title, edit_page_path(page)) %>
+<% end %>
+</ul>
+

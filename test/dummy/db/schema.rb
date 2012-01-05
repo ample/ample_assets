@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111230015524) do
+ActiveRecord::Schema.define(:version => 20120105034123) do
 
   create_table "ample_assets_files", :force => true do |t|
     t.string   "keywords"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(:version => 20111230015524) do
     t.integer  "attachment_width"
     t.integer  "attachment_height"
     t.string   "attachment_gravity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pages", :force => true do |t|
+    t.string   "title"
+    t.integer  "file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -19,8 +19,22 @@
   border-radius: $radius; 
 }
 
+div.asset-drop {
+  display: block;
+  clear: both; 
+  .droppable {
+    border:1px solid #ccc; 
+    background: #eee; 
+    padding: 5px; 
+    margin-bottom: 20px; 
+    width: 75px;
+    height: 75px;
+  }
+}
+
+
 #ample-assets {
-  
+  font-family: Arial, sans-serif;  
   position: fixed; 
   left: 0; 
   bottom: 0; 

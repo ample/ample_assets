@@ -1,3 +1,1 @@
-<%= content_tag :li, :class => :file do %>
-	<%= link_to image_tag(file.attachment.thumb('75x75#').url, :size => '75x75'), file_path(file.id) %>
-<% end %>
+<%= link_to image_tag(file.attachment.thumb('75x75#').url, :size => '75x75'), ample_assets.file_path(file.id) %>

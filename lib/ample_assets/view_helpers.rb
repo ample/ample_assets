@@ -19,8 +19,10 @@ module AmpleAssets
       ];".gsub(/\s+/, "")
     end
     
-    def asset_drop
-      render :partial => 'ample_assets/files/drop'
+    def asset_drop(f)
+      render :partial => 'ample_assets/files/drop', 
+        :object => f.object.file,
+        :locals => { :f => f } unless f.object.new_record?
     end
     
   end

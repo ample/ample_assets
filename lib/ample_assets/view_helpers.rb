@@ -19,10 +19,14 @@ module AmpleAssets
       ];".gsub(/\s+/, "")
     end
     
-    def asset_drop(f)
+    def asset_drop(obj)
+      locals = {
+        :form => nil,
+        :field => nil
+      }.merge(obj)
       render :partial => 'ample_assets/files/drop', 
-        :object => f.object.file,
-        :locals => { :f => f, :field => :file_id } unless f.object.new_record?
+        :object => locals[:form].object.file,
+        :locals => locals unless locals[:form].nil? || locals[:form].object.new_record?
     end
     
   end

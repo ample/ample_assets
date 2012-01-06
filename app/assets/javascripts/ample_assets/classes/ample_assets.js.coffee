@@ -69,12 +69,12 @@ class window.AmpleAssets
     @handle = Mustache.to_html(@tpl('handle'),{ id: id, title: @options.handle_text })
     html = $(layout).prepend(@handle)
     $('body').append html
-    @loading = $("##{@options.id}-tabs span.loading")
     @style()
     @drag_drop()
     @goto(0) if @options.expanded
 
   style: ->
+    @loading = $("##{@options.id}-tabs span.loading")
     $("##{@options.id} .container").css('height',200)
     if @options.expanded
       $("##{@options.id}").css({height:@options.expanded_height});
@@ -101,6 +101,7 @@ class window.AmpleAssets
         $(this).html ui.draggable.clone()
         asset_id = $(ui.draggable).attr("id").split("-")[1]
         $(this).parent().children().first().val asset_id
+        $(this).parent().find('a.asset-remove').removeClass('hide').show()
 
   activate: (i) ->
     $("##{@options.id} a.tab").removeClass('on')
@@ -219,6 +220,12 @@ class window.AmpleAssets
   already_loaded: (i) ->
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
 
+  remove: (el) ->
+    parent = $(el).parent()
+    parent.find('.droppable').empty().html('<span>Drag Asset Here</span>')
+    parent.find('input').val('')
+    $(el).hide()
+
   collapse: ->
     @disable_panels()
 
@@ -227,6 +234,8 @@ class window.AmpleAssets
 
   events: ->
     ref = this
+    $("a.asset-remove").live 'click', ->
+      ref.remove(this)
     $("##{@options.id}-handle").live 'click', ->
       ref.toggle()
     @key_down()
@@ -263,7 +272,10 @@ class window.AmpleAssets
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'
     tab: '<a href="#" data-role="{{ id }}" class="tab">{{ title }}</a>'
-    page: '<div id="{{ id }}" class="page"><ul></ul></div>'
+    page: '
+    <div id="{{ id }}" class="page">
+      <ul></ul>
+    </div>'
 
 jQuery.fn.liveDraggable = (opts) ->
   @live "mouseover", ->

@@ -1,10 +1,12 @@
 <div class="asset-drop">
 	<%= f.hidden_field field %>
+	<%= link_to 'Remove', '#', :class => 'asset-action asset-remove' + (drop ? '' : ' hide') %>
+	<%= link_to 'Select', '#', :class => 'asset-action asset-select' %>
 	<div class="droppable">
 		<% if drop %>
 			<%= render :partial => 'ample_assets/files/file', :object => drop %>
 		<% else %>
-			Drag Asset Here
+			<span>Drag Asset Here</span>
 		<% end %>
 	</div>
 </div>

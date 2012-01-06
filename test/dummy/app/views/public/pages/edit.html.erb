@@ -2,7 +2,7 @@
 
 	<p><%= f.label :title %><br /><%= f.text_field :title %></p>
 
-	<%= asset_drop(f) %>
+	<%= asset_drop(:form => f, :field => :file_id) %>
 
 	<%= f.submit %>
 

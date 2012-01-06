@@ -69,6 +69,7 @@ class window.AmpleAssets
     @handle = Mustache.to_html(@tpl('handle'),{ id: id, title: @options.handle_text })
     html = $(layout).prepend(@handle)
     $('body').append html
+    @loading = $("##{@options.id}-tabs span.loading")
     @style()
     @drag_drop()
     @goto(0) if @options.expanded
@@ -141,19 +142,24 @@ class window.AmpleAssets
 
   load: (i) ->
     ref = this
-    if @options.pages[i]['url']
+    if !@options.pages[i]['last_request_empty'] && @options.pages[i]['url']
+      @loading.show()
       data_type = @options.pages[i]['data_type'] if @options.pages[i]['data_type']
-      $.get @options.pages[i]['url'], (response, xhr) ->
+      $.get @next_page_url(i), (response, xhr) ->
+        ref.loading.hide()
         ref.options.pages[i]['loaded'] = true 
-        switch data_type
-          when "json"
-            ref.load_json i, response
-          when "html"
-          else
-            ref.load_html i, response
+        if $.trim(response) == ''
+          ref.options.pages[i]['last_request_empty'] = true
+        else 
+          switch data_type
+            when "json"
+              ref.load_json i, response
+            when "html"
+            else
+              ref.load_html i, response
       , data_type
     else
-      @log "ERROR --> Couldn't load page because there was no url"
+      @log "ERROR --> Couldn't load page because there was no url" unless @options.pages[i]['last_request_empty']
 
   load_html: (i, response) ->
     @log "load(#{i}) html"
@@ -164,14 +170,19 @@ class window.AmpleAssets
 
   load_json: (i, response) ->
     @log "load(#{i}) json"
+    panels_loaded = if @options.pages[i]['panel_selector'] then true else false
     ref = this
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
       link = $('<a href="#"></a>').attr('id',"file-#{el.id}").addClass('draggable').click ->
       li = $('<li class="file"></li>').append(link)
-      $(selector).append(li)
+      if panels_loaded
+        $(selector).amplePanels('append', li)
+      else
+        $(selector).append(li)
       ref.load_img(link, el.thumbnail)
-    ref.panels(i)
+
+    ref.panels(i) unless panels_loaded
 
   load_img: (el,src) ->
     img = new Image()
@@ -181,16 +192,21 @@ class window.AmpleAssets
       $(this).fadeIn()
     ).attr src: src
 
+  next_page_url: (i) ->
+    @options.pages[i]['pages_loaded'] = 0 unless @options.pages[i]['pages_loaded']
+    @options.pages[i]['pages_loaded'] += 1
+    "#{@options.pages[i]['url']}?page=#{@options.pages[i]['pages_loaded']}"
+
   panels: (i) ->
     ref = this
     if @options.pages[i]['panels']
       @log "panels(#{i})"
-      el = @options.pages[i]['panel_selector'] = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul"
-      $(el).attr('id',"#{@options.pages[i]['id']}-panel")
+      el = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul"
+      @options.pages[i]['panel_selector'] = el
+      @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
       $(el).amplePanels(@options.pages_options)
-        #.bind 'slide_horizontal', (e,d) ->
-        #console.log "TODO: load next pages"
-        #TODO: load next pages
+        .bind 'slide_horizontal', (e,d,dir) ->
+          ref.load(i) if dir == 'next'
 
   disable_panels: ->
     ref = this
@@ -224,12 +240,15 @@ class window.AmpleAssets
     ref = this
     previous = 38
     next = 40
+    escape = 27
     $(document).keydown (e) ->
       switch e.keyCode
         when previous
           ref.previous()
         when next
           ref.next()
+        when escape
+          ref.toggle()
 
   tpl: (view) ->
     @tpls()[view]
@@ -238,7 +257,7 @@ class window.AmpleAssets
     layout: '
     <div id="{{ id }}"><div class="background">
       <div class="container">
-        <div id="{{ id }}-tabs" class="tabs">{{{ tabs }}}</div>
+        <div id="{{ id }}-tabs" class="tabs">{{{ tabs }}}<span class="loading"></span></div>
         <div id="{{ id }}-pages" class="pages">{{{ pages }}}</div>
       </div></div>
     </div>'

@@ -350,7 +350,7 @@
           counter = -1; 
         }
         
-        $( this.options.el ).trigger('slide_horizontal', counter);
+        $( this.options.el ).trigger('slide_horizontal', [counter, this.dir]);
         
         var left = 0; 
         if( this.width_percentage() ) {

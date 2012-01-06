@@ -22,7 +22,7 @@ module AmpleAssets
     def asset_drop(f)
       render :partial => 'ample_assets/files/drop', 
         :object => f.object.file,
-        :locals => { :f => f } unless f.object.new_record?
+        :locals => { :f => f, :field => :file_id } unless f.object.new_record?
     end
     
   end

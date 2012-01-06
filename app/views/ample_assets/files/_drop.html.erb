@@ -1,5 +1,5 @@
 <div class="asset-drop">
-	<%= f.hidden_field :file_id %>
+	<%= f.hidden_field field %>
 	<div class="droppable">
 		<% if drop %>
 			<%= render :partial => 'ample_assets/files/file', :object => drop %>

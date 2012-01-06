@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120105034123) do
+ActiveRecord::Schema.define(:version => 20120106192233) do
 
   create_table "ample_assets_files", :force => true do |t|
     t.string   "keywords"

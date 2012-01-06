@@ -1,6 +1,5 @@
-require "ample_assets/engine"
-
 module AmpleAssets
+  require 'ample_assets/engine' if defined?(Rails)
   class << self
 
     # hooks WillPaginate::ViewHelpers into ActionView::Base

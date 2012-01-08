@@ -32,9 +32,12 @@ module AmpleAssets
       end
     end
     
+    def show
+    end
+    
     protected 
       
-      helper_method :current_files, :recent_files
+      helper_method :current_files, :recent_files, :current_file
       
       def current_files
         @current_files ||= File.find(:all).paginate(:page => params[:page], :per_page => per_page)
@@ -58,6 +61,10 @@ module AmpleAssets
       
       def per_page
         params[:per_page] || 20
+      end
+      
+      def current_file
+        @current_file ||= File.find params[:id]
       end
       
   end

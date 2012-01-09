@@ -176,7 +176,10 @@ class window.AmpleAssets
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
       link = $('<a href="#"></a>').attr('id',"file-#{el.id}").addClass('draggable').click ->
-      li = $('<li class="file"></li>').append(link)
+      li = $('<li class="file"></li>').append(link).click (e) ->
+        ref.modal_active = true
+        $.facebox('<div class="asset-detail">some html</div>');
+      
       if panels_loaded
         $(selector).amplePanels('append', li)
       else
@@ -233,6 +236,7 @@ class window.AmpleAssets
     @goto(0)
 
   events: ->
+    @modal_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
@@ -244,6 +248,14 @@ class window.AmpleAssets
       $(this).addClass('on') if idx == 0
       $(el).click ->
         ref.goto(idx)
+
+  modal_events: ->
+    @modal_active = false
+    ref = this
+    $(document).bind 'afterClose.facebox', ->
+      ref.modal_active = false
+    $(document).bind 'loading.facebox', ->
+      ref.modal_active = true
 
   key_down: ->
     ref = this
@@ -257,7 +269,7 @@ class window.AmpleAssets
         when next
           ref.next()
         when escape
-          ref.toggle()
+          ref.toggle() unless ref.modal_active
 
   tpl: (view) ->
     @tpls()[view]

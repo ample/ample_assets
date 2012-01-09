@@ -72,7 +72,9 @@ class window.AmpleAssets
     @style()
     @drag_drop()
     @goto(0) if @options.expanded
-
+    $('body').bind 'ample_uploadify.complete', =>
+      @goto(0)
+    
   style: ->
     @loading = $("##{@options.id}-tabs span.loading")
     $("##{@options.id} .container").css('height',200)

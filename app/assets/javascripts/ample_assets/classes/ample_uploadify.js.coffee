@@ -32,6 +32,7 @@ class window.AmpleUploadify
       'wmode': 'transparent'
       'onComplete': ->
         console.log('onComplete')
+        $('body').trigger('ample_uploadify.complete');
 
   log: (msg) ->
     console.log "ample_uploadify.log: #{msg}" if @options.debug

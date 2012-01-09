@@ -48,15 +48,11 @@ module AmpleAssets
       end
       
       def recent_files_json
-        @recent_files_json ||= recent_files.collect{ |file|
-          eval("{ id: '#{file.id}', thumbnail: '#{file.thumbnail}' }")
-        }.to_json
+        @recent_files_json ||= recent_files.collect{ |file| file.json }.to_json
       end
 
       def collection_to_json(collection)
-        collection.collect{ |file|
-          eval("{ thumbnail: '#{file.thumbnail}' }")
-        }.to_json
+        collection.collect{ |file| file.json }.to_json
       end
       
       def per_page

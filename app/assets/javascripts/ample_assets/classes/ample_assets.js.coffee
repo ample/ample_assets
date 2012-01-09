@@ -175,16 +175,21 @@ class window.AmpleAssets
     ref = this
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
-      link = $('<a href="#"></a>').attr('id',"file-#{el.id}").addClass('draggable').click ->
-      li = $('<li class="file"></li>').append(link).click (e) ->
+      link = $("<a href=\"#\"></a>").attr('id',"file-#{el.id}").addClass('draggable')
+      li = $('<li class="file"></li>').append(link)
+      link.click ->
         ref.modal_active = true
-        $.facebox('<div class="asset-detail">some html</div>');
+        geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
+        url = "/ample_assets/files/thumbs/#{geometry}?uid=#{el.uid}"
+        html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
+        $.facebox("<div class=\"asset-detail\">#{html}</div>")
+        false
       
       if panels_loaded
         $(selector).amplePanels('append', li)
       else
         $(selector).append(li)
-      ref.load_img(link, el.thumbnail)
+      ref.load_img(link, el.sizes.tn)
 
     ref.panels(i) unless panels_loaded
 
@@ -287,6 +292,13 @@ class window.AmpleAssets
     page: '
     <div id="{{ id }}" class="page">
       <ul></ul>
+    </div>'
+    show: '
+    <div class="asset-detail">
+      <div class="asset-media {{ orientation }}">
+        <img src="{{ src }}" />
+      </div>
+      <h3>{{ filename }}<h3>
     </div>'
 
 jQuery.fn.liveDraggable = (opts) ->

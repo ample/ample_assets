@@ -60,6 +60,21 @@ div.asset-drop {
   }
 }
 
+.asset-detail {
+  font-family: $base-font-family;  
+  font-size: $base-font-size;
+  padding: 15px 10px 10px;
+  width: 540px;
+  min-height: 500px;
+  div.asset-media {
+    width: 480px;
+    min-height: 300px;
+    text-align: center;
+    padding: 20px;
+    background: #f2f2f2;
+    border: 1px solid #d4d4d4;
+  }
+}
 
 #ample-assets {
   font-family: $base-font-family;  

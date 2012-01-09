@@ -34,5 +34,25 @@ module AmpleAssets
       attachment.thumb('75x75#').url if is_image?
     end
     
+    def medium
+      attachment.thumb('500x>').url if is_image?
+    end
+    
+    def json
+      eval("{ 
+        id: '#{id}', 
+        uid: '#{attachment_uid}', 
+        orientation: '#{orientation}',
+        sizes: { 
+          tn: '#{thumbnail}', 
+          md: '#{medium}' 
+        }
+      }")
+    end
+    
+    def orientation
+      attachment.portrait? ? 'portrait' : 'landscape'
+    end
+    
   end
 end

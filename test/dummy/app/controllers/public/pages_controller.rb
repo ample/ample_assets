@@ -32,7 +32,7 @@ class Public::PagesController < PublicController
     helper_method :current_page
     
     def current_page
-      @current_page ||= Page.find params[:id]
+      @current_page ||= params[:id] ? Page.find(params[:id]) : Page.new
     end
 
 end

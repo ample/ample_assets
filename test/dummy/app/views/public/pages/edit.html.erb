@@ -1,13 +1,1 @@
-<%= form_for current_page do |f| %>
-
-	<p><%= f.label :title %><br /><%= f.text_field :title %></p>
-
-	<%# asset_drop(:page, :file_id) %>
-	
-	<%= f.asset_drop(:file_id) %>
-	
-	<%= f.submit %>
-
-<% end %>
-
-<%= assets_toolbar %>
+<%= render 'form' %>

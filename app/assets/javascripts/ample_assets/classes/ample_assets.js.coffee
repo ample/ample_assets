@@ -96,6 +96,17 @@ class window.AmpleAssets
       appendTo: "body"
       helper: "clone"
 
+    $("textarea").droppable
+      activeClass: "notice"
+      hoverClass: "success"
+      drop: (event, ui) ->
+        geometry = if $(ui.draggable).attr("orientation") == 'portrait' then 'x300>' else '480x>'
+        asset_id = $(ui.draggable).attr("id").split("-")[1]
+        url = "/ample_assets/files/thumbs/#{geometry}?uid=#{asset_id}"
+        textile = "!#{url}!"
+        html = "<img src=\"#{url}\" />"
+        $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
+
     $(".droppable").droppable
       activeClass: "notice"
       hoverClass: "success"
@@ -177,7 +188,10 @@ class window.AmpleAssets
     ref = this
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
-      link = $("<a href=\"#\"></a>").attr('id',"file-#{el.id}").addClass('draggable')
+      link = $("<a href=\"#\" draggable=\"true\"></a>")
+        .attr('id',"file-#{el.id}")
+        .attr('data-orientation',el.orientation)
+        .addClass('draggable')
       li = $('<li class="file"></li>').append(link)
       link.click ->
         ref.modal_active = true
@@ -306,3 +320,24 @@ class window.AmpleAssets
 jQuery.fn.liveDraggable = (opts) ->
   @live "mouseover", ->
     $(this).data("init", true).draggable opts  unless $(this).data("init")
+
+
+jQuery.fn.insertAtCaret = (value) ->
+  @each (i) ->
+    if document.selection
+      @focus()
+      sel = document.selection.createRange()
+      sel.text = value
+      @focus()
+    else if @selectionStart or @selectionStart is "0"
+      startPos = @selectionStart
+      endPos = @selectionEnd
+      scrollTop = @scrollTop
+      @value = @value.substring(0, startPos) + value + @value.substring(endPos, @value.length)
+      @focus()
+      @selectionStart = startPos + value.length
+      @selectionEnd = startPos + value.length
+      @scrollTop = scrollTop
+    else
+      @value += value
+      @focus()

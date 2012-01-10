@@ -4,7 +4,9 @@
 
 	<%# asset_drop(:page, :file_id) %>
 	<%= f.asset_drop(:file_id) unless f.object.new_record? %>
-	
+
+	<p><%= text_area_tag :body, nil, :class => :textile %></p>
+
 	<%= f.submit %>
 
 <% end %>

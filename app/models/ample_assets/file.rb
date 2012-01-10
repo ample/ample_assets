@@ -10,6 +10,7 @@ module AmpleAssets
     
     image_accessor :attachment
     self.per_page = 20
+    acts_as_indexed :fields => [:keywords]
     
     ###---------------------------------------------------- Scopes
     

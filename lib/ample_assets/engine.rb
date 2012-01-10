@@ -1,6 +1,7 @@
 require 'ample_assets'
 require 'rails'
 require 'rack/cache'
+require 'acts_as_indexed'
 require 'dragonfly'
 require 'will_paginate'
 require 'will_paginate/array'

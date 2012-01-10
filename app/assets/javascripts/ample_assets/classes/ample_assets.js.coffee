@@ -19,6 +19,9 @@ class window.AmpleAssets
       handle_text: 'Assets'
       expanded_height: 170
       collapsed_height: 25
+      base_url: '/ample_assets'
+      search_url: '/files/search'
+      thumb_url: '/files/thumbs'
       onInit: ->
         ref.log 'onInit()'
       onExpand: ->
@@ -50,7 +53,7 @@ class window.AmpleAssets
         { 
           id: 'recent-assets', 
           title: 'Recently Viewed',
-          url: '/ample_assets/',
+          url: '',
           panels: false
         }
       ]
@@ -71,6 +74,7 @@ class window.AmpleAssets
     $('body').append html
     @style()
     @drag_drop()
+    @search()
     @goto(0) if @options.expanded
     $('body').bind 'ample_uploadify.complete', =>
       @goto(0)
@@ -92,6 +96,9 @@ class window.AmpleAssets
     @enable_panel(i) if @already_loaded(i)
 
   drag_drop: ->
+    base_url = @options.base_url
+    thumb_url = @options.thumb_url
+
     $(".draggable").liveDraggable
       appendTo: "body"
       helper: "clone"
@@ -102,7 +109,7 @@ class window.AmpleAssets
       drop: (event, ui) ->
         geometry = if $(ui.draggable).attr("orientation") == 'portrait' then 'x300>' else '480x>'
         asset_id = $(ui.draggable).attr("id").split("-")[1]
-        url = "/ample_assets/files/thumbs/#{geometry}?uid=#{asset_id}"
+        url = "#{base_url}#{thumb_url}/#{geometry}?uid=#{asset_id}"
         textile = "!#{url}!"
         html = "<img src=\"#{url}\" />"
         $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
@@ -117,9 +124,10 @@ class window.AmpleAssets
         $(this).parent().find('a.asset-remove').removeClass('hide').show()
 
   activate: (i) ->
+    @log "activate(#{i})"
     $("##{@options.id} a.tab").removeClass('on')
-    $("##{@options.id} a.tab:nth-child(#{i+1})").addClass('on')
-
+    $("##{@options.id} a.tab:nth-child(#{i+2})").addClass('on')
+    
   next: ->
     if @current < @options.pages.length - 1
       @log "next()"
@@ -158,8 +166,9 @@ class window.AmpleAssets
     ref = this
     if !@options.pages[i]['last_request_empty'] && @options.pages[i]['url']
       @loading.show()
+      url = @next_page_url(i)
       data_type = @options.pages[i]['data_type'] if @options.pages[i]['data_type']
-      $.get @next_page_url(i), (response, xhr) ->
+      $.get url, (response, xhr) ->
         ref.loading.hide()
         ref.options.pages[i]['loaded'] = true 
         if $.trim(response) == ''
@@ -188,26 +197,36 @@ class window.AmpleAssets
     ref = this
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
-      link = $("<a href=\"#\" draggable=\"true\"></a>")
-        .attr('id',"file-#{el.id}")
-        .attr('data-orientation',el.orientation)
-        .addClass('draggable')
-      li = $('<li class="file"></li>').append(link)
-      link.click ->
-        ref.modal_active = true
-        geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
-        url = "/ample_assets/files/thumbs/#{geometry}?uid=#{el.uid}"
-        html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
-        $.facebox("<div class=\"asset-detail\">#{html}</div>")
-        false
-      
+      li = ref.build(el)
       if panels_loaded
         $(selector).amplePanels('append', li)
       else
         $(selector).append(li)
+      ref.load_img(li.find('a'), el.sizes.tn)
+    @panels(i) unless panels_loaded
+
+  load_results: (response) ->
+    @log "load_results()"
+    ref = this
+    $.each response, (j,el) ->
+      li = ref.build(el)
+      $("#asset-results ul").amplePanels('append', li)
       ref.load_img(link, el.sizes.tn)
 
-    ref.panels(i) unless panels_loaded
+  build: (el) ->
+    ref = this
+    link = $("<a href=\"#\" draggable=\"true\"></a>")
+      .attr('id',"file-#{el.id}")
+      .attr('data-orientation',el.orientation)
+      .addClass('draggable')
+    link.click ->
+      ref.modal_active = true
+      geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
+      url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
+      html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
+      $.facebox("<div class=\"asset-detail\">#{html}</div>")
+      false
+    $('<li class="file"></li>').append(link)
 
   load_img: (el,src) ->
     img = new Image()
@@ -234,14 +253,17 @@ class window.AmpleAssets
           ref.load(i) if dir == 'next'
 
   disable_panels: ->
+    @log "disable_panels()"
     ref = this
     $.each @options.pages, (i,el) ->
       $(ref.options.pages[i]['panel_selector']).amplePanels('disable') if ref.options.pages[i]['panel_selector']
 
   enable_panel: (i) ->  
+    @log "enable_panel(#{i})"
     $(@options.pages[i]['panel_selector']).amplePanels('enable') if @options.pages[i]['panel_selector']
 
   already_loaded: (i) ->
+    @log "already_loaded(#{i})"
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
 
   remove: (el) ->
@@ -278,6 +300,19 @@ class window.AmpleAssets
     $(document).bind 'loading.facebox', ->
       ref.modal_active = true
 
+  search: ->
+    @log 'search_events()'
+    search_url = "#{@options.base_url}#{@options.search_url}"
+    i = ($("##{@options.id} .pages .page").length - 1)
+    ref = this
+    $('#asset-results ul').amplePanels(@options.pages_options)
+    @options.pages[i] = { loaded: true }
+    $('#asset-search').bind 'keyup', ->
+      $.post search_url, $(this).serialize(), (response) ->
+        ref.load_results(response)
+        ref.goto(i)
+      , 'json'
+
   key_down: ->
     ref = this
     previous = 38
@@ -299,8 +334,20 @@ class window.AmpleAssets
     layout: '
     <div id="{{ id }}"><div class="background">
       <div class="container">
-        <div id="{{ id }}-tabs" class="tabs">{{{ tabs }}}<span class="loading"></span></div>
-        <div id="{{ id }}-pages" class="pages">{{{ pages }}}</div>
+        <div id="{{ id }}-tabs" class="tabs">
+          <div class="search">
+            <label for="asset-search">Search</label>
+            <input type="text" id="asset-search" name="q" placeholder="Enter keywords..." />
+          </div>
+          {{{ tabs }}}
+          <span class="loading"></span>
+        </div>
+        <div id="{{ id }}-pages" class="pages">
+          {{{ pages }}}
+          <div id="asset-results" class="search page">
+            <ul></ul>
+          </div>
+        </div>
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'

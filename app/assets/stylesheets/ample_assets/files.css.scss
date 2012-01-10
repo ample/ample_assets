@@ -22,6 +22,10 @@ $base-font-size : 12px;
   border-radius: $radius; 
 }
 
+textarea.notice {
+  background: #FEF1B5;
+}
+
 div.asset-drop {
   font-family: $base-font-family;  
   font-size: $base-font-size;
@@ -38,6 +42,9 @@ div.asset-drop {
     span {
       display: block;
       padding-top: 25px;
+    }
+    &.notice {
+      background: #FEF1B5;
     }
   }
   .asset-action {
@@ -104,6 +111,14 @@ div.asset-drop {
   .background {
     clear: both; 
     height: 200px; 
+  }
+
+  .search {
+    float: right;
+    margin: 7px 10px 0 0;
+    input {
+      padding: 5px;
+    }
   }
 
   .container {

@@ -2,10 +2,14 @@
 
 	<p><%= f.label :title %><br /><%= f.text_field :title %></p>
 
-	<%# asset_drop(:page, :file_id) %>
-	<%= f.asset_drop(:file_id) unless f.object.new_record? %>
+	<% unless f.object.new_record? %>
 
-	<p><%= text_area_tag :body, nil, :class => :textile %></p>
+		<%# asset_drop(:page, :file_id) %>
+		<%= f.asset_drop(:file_id) %>
+
+		<p><%= text_area_tag :body, nil, :class => :textile %></p>
+
+	<% end %>
 
 	<%= f.submit %>
 

@@ -35,6 +35,15 @@ module AmpleAssets
     def show
     end
     
+    def search
+      @current_files = File.with_query(params[:q])
+      respond_to do |format|
+        format.js { render current_files, :content_type => :html }
+        format.json { render :json => collection_to_json(current_files) }
+        format.html { render :nothing => true }
+      end
+    end
+    
     protected 
       
       helper_method :current_files, :recent_files, :current_file

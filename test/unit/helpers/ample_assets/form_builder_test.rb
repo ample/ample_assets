@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module AmpleAssets
-  class FileTest < ActiveSupport::TestCase
+  class FormBuilderTest < ActionView::TestCase
     
     test "the truth" do
       assert true

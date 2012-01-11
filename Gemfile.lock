@@ -170,7 +170,6 @@ DEPENDENCIES
   capybara
   fabrication
   launchy
-  rack-cache
   shoulda (>= 3.0.0.beta)
   sqlite3
   turn (= 0.8.2)

@@ -222,6 +222,7 @@ class window.AmpleAssets
       .attr('id',"file-#{el.id}")
       .attr('data-orientation',el.orientation)
       .addClass('draggable')
+    link.addClass('document') if el.document == 'true'
     link.click ->
       ref.modal_active = true
       geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'

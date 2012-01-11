@@ -43,13 +43,18 @@ module AmpleAssets
     def json
       eval("{ 
         id: '#{id}', 
-        uid: '#{attachment_uid}', 
+        uid: '#{attachment_uid}',
+        document: '#{is_doc?}',
         orientation: '#{orientation}',
         sizes: { 
           tn: '#{thumbnail}', 
           md: '#{medium}' 
         }
       }")
+    end
+    
+    def is_doc?
+      (DOC_MIME_TYPES + SWF_MIME_TYPES).include?(attachment_mime_type)
     end
     
     def orientation

@@ -199,6 +199,15 @@ div.asset-drop {
       width: 75px;
       height: 75px;
     }
+    &.file a.document {
+      background-color: #FFF;
+      background-image: url('icon_pdf.gif');
+    }
+    &.file a.swf {
+      background-color: #FFF;
+      background-image: url('icon_swf.gif');
+    }
+    
   }
   
 }

@@ -248,10 +248,7 @@ class window.AmpleAssets
   touch: (el) ->
     @log "touch()"
     touch_url = Mustache.to_html @options.touch_url, { id: el.id }
-    $.post "#{@options.base_url}#{touch_url}", ->
-      console.log 'success'
-    
-    #
+    $.post "#{@options.base_url}#{touch_url}"
 
   panels: (i) ->
     ref = this

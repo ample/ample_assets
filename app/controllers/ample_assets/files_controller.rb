@@ -2,17 +2,26 @@ module AmpleAssets
   class FilesController < ApplicationController
   
     def index
-      respond_to do |format|
-        format.js { render current_files, :content_type => :html }
-        format.json { render :json => collection_to_json(current_files) }
-        format.html { render :nothing => true }
-      end
+      render_collection(current_files)
     end
-
+    
     def recent
+      render_collection(recent_files)
+    end
+    
+    
+    def documents
+      render_collection(current_documents)
+    end
+    
+    def images
+      render_collection(current_images)
+    end
+    
+    def render_collection(collection)
       respond_to do |format|
-        format.js { render recent_files, :content_type => :html }
-        format.json { render :json => recent_files_json }
+        format.js { render collection, :content_type => :html }
+        format.json { render :json => collection_to_json(collection) }
         format.html { render :nothing => true }
       end
     end
@@ -56,7 +65,24 @@ module AmpleAssets
       helper_method :current_files, :recent_files, :current_file
       
       def current_files
-        @current_files ||= File.find(:all).paginate(:page => params[:page], :per_page => per_page)
+        conditions = params[:type] ? current_file_conditions : nil
+        pagination = { :page => params[:page], :per_page => per_page }
+        @current_files ||= File.find(:all, :conditions => conditions).paginate(pagination)
+      end
+      
+      def current_documents
+        params[:type] = 'documents'
+        current_files
+      end
+      
+      def current_images
+        params[:type] = 'images'
+        current_files
+      end
+      
+      def current_file_conditions
+        are = params[:type] == 'documents' ? 'NOT in' : 'in'
+        [ "attachment_mime_type #{are} (?)", AmpleAssets::File::IMAGE_MIME_TYPES ]
       end
       
       def recent_files

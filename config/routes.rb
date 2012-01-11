@@ -8,6 +8,8 @@ AmpleAssets::Engine.routes.draw do
     collection do
       post :search
       match 'recent', :to => "files#recent"
+      match 'documents', :to => "files#documents"
+      match 'images', :to => "files#images"
       match '/thumbs/:geometry' => dfly.endpoint { |params, app|
         dfly.fetch(params[:uid]).thumb(params[:geometry])
       }

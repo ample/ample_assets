@@ -5,6 +5,7 @@ module AmpleAssets
     
     IMAGE_MIME_TYPES = %w(image/jpeg image/png image/gif)
     SWF_MIME_TYPES = %w(application/x-shockwave-flash)
+    DOC_MIME_TYPES = %w(application/pdf)
     
     ###---------------------------------------------------- Plugins
     
@@ -19,7 +20,7 @@ module AmpleAssets
     ###---------------------------------------------------- Validations
     
     validates_presence_of :attachment
-    validates_property :mime_type, :of => :attachment, :in => IMAGE_MIME_TYPES + %w(application/pdf application/x-shockwave-flash)
+    validates_property :mime_type, :of => :attachment, :in => IMAGE_MIME_TYPES + SWF_MIME_TYPES + DOC_MIME_TYPES
     
     ###---------------------------------------------------- Instance Methods
     

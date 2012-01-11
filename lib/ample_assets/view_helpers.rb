@@ -13,8 +13,8 @@ module AmpleAssets
     def ample_assets_pages
       "\nample_assets.pages = [
         { id: 'recent-assets', title: 'Recently Viewed', url: '#{ample_assets.recent_files_path}', panels: true, data_type: 'json' },
-        { id: 'image-assets', title: 'Images', url: '#{ample_assets.files_path}', panels: true, data_type: 'json' },
-        { id: 'document-assets', title: 'Documents' },
+        { id: 'image-assets', title: 'Images', url: '#{ample_assets.images_files_path}', panels: true, data_type: 'json' },
+        { id: 'document-assets', title: 'Documents', url: '#{ample_assets.documents_files_path}', panels: true, data_type: 'json' },
         { id: 'upload', title: 'Upload', url: '#{ample_assets.new_file_path}' }
       ];".gsub(/\s+/, "")
     end

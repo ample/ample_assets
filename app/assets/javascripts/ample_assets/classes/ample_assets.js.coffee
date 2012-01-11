@@ -78,13 +78,27 @@ class window.AmpleAssets
     @search()
     @goto(0) if @options.expanded
     $('body').bind 'ample_uploadify.complete', =>
-      @goto(0)
+      @reload(0)
     
   style: ->
     @loading = $("##{@options.id}-tabs span.loading")
     $("##{@options.id} .container").css('height',200)
     if @options.expanded
       $("##{@options.id}").css({height:@options.expanded_height});
+
+  reload: (i) ->
+    @log "reload(#{i})"
+    @empty(i)
+    @options.pages[i]['loaded'] = false
+    @options.pages[i]['pages_loaded'] = 0
+    @goto(i)
+    @enable_panel(i)
+  
+  empty: (i) ->
+    @log "empty(#{i})"
+    selector = "##{@options.id} .pages .page:nth-child(#{(i+1)})" 
+    selector += " ul" if @options.pages[i]['panels']
+    $(selector).empty()
 
   goto: (i) ->
     @log "goto(#{i})"

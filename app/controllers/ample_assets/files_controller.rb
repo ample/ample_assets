@@ -9,7 +9,6 @@ module AmpleAssets
       render_collection(recent_files)
     end
     
-    
     def documents
       render_collection(current_documents)
     end

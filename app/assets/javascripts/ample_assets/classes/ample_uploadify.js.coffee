@@ -30,8 +30,7 @@ class window.AmpleUploadify
       'auto': true
       'multi': true
       'wmode': 'transparent'
-      'onComplete': ->
-        console.log('onComplete')
+      'onAllComplete': ->
         $('body').trigger('ample_uploadify.complete');
 
   log: (msg) ->

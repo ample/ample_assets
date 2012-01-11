@@ -17,11 +17,12 @@ class window.AmpleAssets
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
-      expanded_height: 170
-      collapsed_height: 25
+      expanded_height: 175
+      collapsed_height: 35
       base_url: '/ample_assets'
       search_url: '/files/search'
       thumb_url: '/files/thumbs'
+      touch_url: '/files/{{ id }}/touch'
       onInit: ->
         ref.log 'onInit()'
       onExpand: ->
@@ -226,6 +227,7 @@ class window.AmpleAssets
       geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
       url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
       html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
+      ref.touch(el)
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
       false
     link
@@ -242,6 +244,14 @@ class window.AmpleAssets
     @options.pages[i]['pages_loaded'] = 0 unless @options.pages[i]['pages_loaded']
     @options.pages[i]['pages_loaded'] += 1
     "#{@options.pages[i]['url']}?page=#{@options.pages[i]['pages_loaded']}"
+
+  touch: (el) ->
+    @log "touch()"
+    touch_url = Mustache.to_html @options.touch_url, { id: el.id }
+    $.post "#{@options.base_url}#{touch_url}", ->
+      console.log 'success'
+    
+    #
 
   panels: (i) ->
     ref = this

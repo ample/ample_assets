@@ -2,6 +2,9 @@ AmpleAssets::Engine.routes.draw do
 
   dfly = Dragonfly[:images]
   resources :files do
+    member do
+      post :touch
+    end
     collection do
       post :search
       match 'recent', :to => "files#recent"

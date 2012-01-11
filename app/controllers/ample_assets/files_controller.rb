@@ -33,6 +33,13 @@ module AmpleAssets
     end
     
     def show
+      raise ActiveRecord::RecordNotFound if current_file.nil?
+    end
+    
+    def touch
+      raise ActiveRecord::RecordNotFound if current_file.nil?
+      current_file.touch
+      render :nothing => true
     end
     
     def search

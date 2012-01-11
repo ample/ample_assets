@@ -14,7 +14,7 @@ module AmpleAssets
     
     ###---------------------------------------------------- Scopes
     
-    scope :recent, order('created_at DESC')
+    scope :recent, order('updated_at DESC')
     
     ###---------------------------------------------------- Validations
     

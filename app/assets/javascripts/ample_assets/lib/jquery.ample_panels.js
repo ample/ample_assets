@@ -515,8 +515,20 @@
       append : function( el ) {
         this.log('append()')
         $(this.options.el).append(el); 
+        this.update(); 
+      },
+
+      update : function( ) {
+        this.log('update()')
         this.set_width(); 
         this.buttons(); 
+      },
+
+      empty : function( ) {
+        this.log('empty()')
+        this.goto(0);
+        $(this.options.el).empty(); 
+        this.update(); 
       },
 
       /** 

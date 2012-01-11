@@ -92,6 +92,14 @@ div.asset-drop {
   width: 100%; 
   height: 25px; 
   
+  label {
+    color: #999;
+  }
+  
+  .ampn {
+    margin-left: 22px;
+  }
+  
   .background,
   .handle {
     background: #191919; 

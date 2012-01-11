@@ -197,7 +197,8 @@ class window.AmpleAssets
     ref = this
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul" 
     $.each response, (j,el) ->
-      li = ref.build(el)
+      link = ref.build(el)
+      li = $('<li class="file"></li>').append(link)
       if panels_loaded
         $(selector).amplePanels('append', li)
       else
@@ -209,7 +210,8 @@ class window.AmpleAssets
     @log "load_results()"
     ref = this
     $.each response, (j,el) ->
-      li = ref.build(el)
+      link = ref.build(el)
+      li = $('<li class="file"></li>').append(link)
       $("#asset-results ul").amplePanels('append', li)
       ref.load_img(link, el.sizes.tn)
 
@@ -226,7 +228,7 @@ class window.AmpleAssets
       html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
       false
-    $('<li class="file"></li>').append(link)
+    link
 
   load_img: (el,src) ->
     img = new Image()
@@ -305,9 +307,10 @@ class window.AmpleAssets
     search_url = "#{@options.base_url}#{@options.search_url}"
     i = ($("##{@options.id} .pages .page").length - 1)
     ref = this
-    $('#asset-results ul').amplePanels(@options.pages_options)
+    $('#asset-results ul').attr('id','assets-result-list').amplePanels(@options.pages_options)
     @options.pages[i] = { loaded: true }
-    $('#asset-search').bind 'keyup', ->
+    $('#asset-search').bind 'change', ->
+      $("#asset-results ul").amplePanels('empty')
       $.post search_url, $(this).serialize(), (response) ->
         ref.load_results(response)
         ref.goto(i)
@@ -344,7 +347,7 @@ class window.AmpleAssets
         </div>
         <div id="{{ id }}-pages" class="pages">
           {{{ pages }}}
-          <div id="asset-results" class="search page">
+          <div id="asset-results" class="page">
             <ul></ul>
           </div>
         </div>

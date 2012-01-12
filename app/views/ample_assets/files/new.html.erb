@@ -1,11 +1,9 @@
-<%# session_key = Rails.application.config.session_options[:key] %>
-
 <p><input type="file" name="uploadify" id="uploadify" /></p>
 
 <div id="fileQueue"></div>
 
 <script type="text/javascript">
 $(document).ready(function() {
-	new AmpleUploadify({debug:true})
+	new AmpleUploadify()
 });
 </script>

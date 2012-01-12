@@ -123,8 +123,8 @@ class window.AmpleAssets
       hoverClass: "success"
       drop: (event, ui) ->
         geometry = if $(ui.draggable).attr("orientation") == 'portrait' then 'x300>' else '480x>'
-        asset_id = $(ui.draggable).attr("id").split("-")[1]
-        url = "#{base_url}#{thumb_url}/#{geometry}?uid=#{asset_id}"
+        uid = $(ui.draggable).attr("data-uid")
+        url = encodeURI "#{base_url}#{thumb_url}/#{geometry}?uid=#{uid}"
         textile = "!#{url}!"
         html = "<img src=\"#{url}\" />"
         $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
@@ -234,6 +234,7 @@ class window.AmpleAssets
     ref = this
     link = $("<a href=\"#\" draggable=\"true\"></a>")
       .attr('id',"file-#{el.id}")
+      .attr('data-uid',"#{el.uid}")
       .attr('data-orientation',el.orientation)
       .addClass('draggable')
     link.addClass('document') if el.document == 'true'

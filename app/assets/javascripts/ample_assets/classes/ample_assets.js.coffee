@@ -425,7 +425,7 @@ class window.AmpleAssets
         </div>
         <div id="{{ id }}-pages" class="pages">
           {{{ pages }}}
-          <div id="asset-results" class="page">
+          <div id="asset-results" class="page panels">
             <ul></ul>
           </div>
         </div>

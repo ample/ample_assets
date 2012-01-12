@@ -31,7 +31,6 @@ class window.AmpleUploadify
       'queueID': 'fileQueue'
       'auto': true
       'multi': true
-      'removeCompleted': false
       'wmode': 'transparent'
       'onAllComplete': ->
         $('body').trigger('ample_uploadify.complete');

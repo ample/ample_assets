@@ -17,7 +17,7 @@ class window.AmpleAssets
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
-      expanded_height: 175
+      expanded_height: 215
       collapsed_height: 35
       base_url: '/ample_assets'
       search_url: '/files/search'
@@ -78,7 +78,7 @@ class window.AmpleAssets
     @search()
     @goto(0) if @options.expanded
     $('body').bind 'ample_uploadify.complete', =>
-      
+      @reload(0)
     
   style: ->
     @loading = $("##{@options.id}-tabs span.loading")

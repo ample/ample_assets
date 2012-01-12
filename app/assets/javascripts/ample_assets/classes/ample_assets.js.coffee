@@ -288,7 +288,7 @@ class window.AmpleAssets
       @options.pages[i]['panel_selector'] = el
       @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
-      
+      $(el).parent().addClass('panels')
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
           ref.load(i) if dir == 'next'

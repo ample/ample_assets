@@ -25,3 +25,6 @@
   -moz-border-radius: $radius; 
   border-radius: $radius; 
 }
+
+@import 'bourbon/css3/box-shadow';
+@import 'bourbon/css3/border-radius';

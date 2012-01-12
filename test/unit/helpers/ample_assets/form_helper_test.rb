@@ -3,7 +3,7 @@ require 'test_helper'
 module AmpleAssets
   class FormHelperTest < ActionView::TestCase
     
-    context 'Asset Drop' do
+    context 'The asset_drop method' do
       
       setup do
         render :text => asset_drop(:f, :g)

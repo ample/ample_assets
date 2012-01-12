@@ -18,11 +18,12 @@ class window.AmpleAssets
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
-      expanded_height: 175
+      expanded_height: 215
       collapsed_height: 35
       base_url: '/ample_assets'
       search_url: '/files/search'
       thumb_url: '/files/thumbs'
+      show_url: '/files/{{ id }}'
       touch_url: '/files/{{ id }}/touch'
       onInit: ->
         ref.log 'onInit()'
@@ -78,7 +79,7 @@ class window.AmpleAssets
     @search()
     @goto(0) if @options.expanded
     $('body').bind 'ample_uploadify.complete', =>
-      
+      @reload(0)
     
   style: ->
     @loading = $("##{@options.id}-tabs span.loading")
@@ -158,6 +159,7 @@ class window.AmpleAssets
   get_pages: (tpl = 'page') ->
     html = ''
     $.each @options.pages, (idx,el) => 
+      el['classes'] = 'first-child' if idx == 0
       html += Mustache.to_html @tpl(tpl), el
     html
 
@@ -231,31 +233,34 @@ class window.AmpleAssets
 
   build: (el) ->
     ref = this
-    link = $("<a href=\"#\" draggable=\"true\"></a>")
+    show_url = Mustache.to_html @options.show_url, { id: el.id }
+    link = $("<a href=\"#{@options.base_url}#{show_url}\" draggable=\"true\"></a>")
       .attr('id',"file-#{el.id}")
       .attr('data-uid',"#{el.uid}")
       .attr('data-orientation',el.orientation)
       .addClass('draggable')
     link.addClass('document') if el.document == 'true'
     link.click ->
-      ref.modal_active = true
-      if el.document == 'true'
-        html = Mustache.to_html(ref.tpl('pdf'),{ filename: el.uid })
-        $.facebox("<div class=\"asset-detail\">#{html}</div>")
-        myPDF = new PDFObject(
-          url: el.url
-          pdfOpenParams:
-            view: "Fit"
-        ).embed("pdf")
-      else
-        geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
-        url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
-        html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
-        $.facebox("<div class=\"asset-detail\">#{html}</div>")
-      
-      ref.touch(el)
+      ref.modal_open(el)
       false
     link
+
+  modal_open: (data) ->
+    @modal_active = true
+    if data.document == 'true'
+      html = Mustache.to_html(@tpl('pdf'),{ filename: data.uid })
+      $.facebox("<div class=\"asset-detail\">#{html}</div>")
+      myPDF = new PDFObject(
+        url: data.url
+        pdfOpenParams:
+          view: "Fit"
+      ).embed("pdf")
+    else
+      geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
+      url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
+      html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation })
+      $.facebox("<div class=\"asset-detail\">#{html}</div>")
+    @touch(data)
 
   load_img: (el,src) ->
     img = new Image()
@@ -283,7 +288,7 @@ class window.AmpleAssets
       @options.pages[i]['panel_selector'] = el
       @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
-      
+      $(el).parent().addClass('panels')
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
           ref.load(i) if dir == 'next'
@@ -318,7 +323,9 @@ class window.AmpleAssets
 
   events: ->
     @modal_events()
+    @global_events()
     @field_events()
+    @drop_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
@@ -334,6 +341,22 @@ class window.AmpleAssets
       $(el).click ->
         ref.goto(idx)
         false
+
+  global_events: ->
+    $('a.global.next').click =>
+      $(@active_panel).amplePanels('next')
+      
+    $('a.global.previous').click =>
+      $(@active_panel).amplePanels('previous')
+
+  drop_events: ->
+    ref = this
+    $('.asset-drop .droppable a').live 'click', ->
+      id = $(this).attr("href")
+      $.get $(this).attr("href"), (response) ->
+        ref.modal_open(response)
+      , 'json'
+      false
 
   field_events: ->
     $('textarea, input').bind 'blur', =>
@@ -406,10 +429,15 @@ class window.AmpleAssets
             <ul></ul>
           </div>
         </div>
+        <nav class="controls">
+          <a href="#" class="global previous">Previous</a>
+          <a href="#" class="global next">Next</a>
+        </nav>
+
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'
-    tab: '<a href="#" data-role="{{ id }}" class="tab">{{ title }}</a>'
+    tab: '<a href="#" data-role="{{ id }}" class="tab {{ classes }}">{{ title }}</a>'
     page: '
     <div id="{{ id }}" class="page">
       <ul></ul>

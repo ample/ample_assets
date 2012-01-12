@@ -349,7 +349,7 @@ $link-focus-color       : #533d79;
       @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
     } //on
     
-    &.first {
+    &.first-child {
       margin-left: 0;
     }
   } //tab

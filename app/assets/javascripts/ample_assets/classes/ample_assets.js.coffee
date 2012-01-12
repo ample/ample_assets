@@ -78,7 +78,7 @@ class window.AmpleAssets
     @search()
     @goto(0) if @options.expanded
     $('body').bind 'ample_uploadify.complete', =>
-      
+      @reload(0)
     
   style: ->
     @loading = $("##{@options.id}-tabs span.loading")

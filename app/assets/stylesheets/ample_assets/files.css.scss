@@ -53,7 +53,7 @@ div.asset-drop {
     width: 20px;
     height: 20px;
     position: absolute;
-    left: 75px; 
+    margin-left: 70px; 
     margin-top: 65px;
     &.asset-select {
       margin-top: 20px
@@ -94,6 +94,11 @@ div.asset-drop {
   
   label {
     color: #999;
+    margin-right: 3px;
+  }
+  
+  input#asset-search {
+    width: 100px;
   }
   
   .ampn {

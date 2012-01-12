@@ -305,17 +305,30 @@ class window.AmpleAssets
 
   events: ->
     @modal_events()
+    @field_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
+      false
     $("##{@options.id}-handle").live 'click', ->
       ref.toggle()
+      false
     @key_down()
     tabs = $("##{@options.id} a.tab")
     $.each tabs, (idx, el) ->
       $(this).addClass('on') if idx == 0
       $(el).click ->
         ref.goto(idx)
+        false
+
+  field_events: ->
+    ref = this
+    $('textarea, input').live 'blur', ->
+      console.log '>>>>>>>>> blur'
+      ref.modal_active = false
+    $('textarea, input').live 'focus', ->
+      console.log '>>>>>>>>> focus'
+      ref.modal_active = true
 
   modal_events: ->
     @modal_active = false

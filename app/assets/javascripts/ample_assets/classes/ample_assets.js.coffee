@@ -165,11 +165,13 @@ class window.AmpleAssets
     el = $("##{@options.id}")
     if @options.expanded 
       @options.expanded = false
+      $('body').animate {'padding-bottom': 0}, "fast"
       el.animate {height: @options.collapsed_height}, "fast", =>
         @collapse()
         @options.onCollapse()
     else
       @options.expanded = true
+      $('body').animate {'padding-bottom': @options.expanded_height}, "fast"
       el.animate {height: @options.expanded_height}, "fast", =>
         @expand()
         @options.onExpand()

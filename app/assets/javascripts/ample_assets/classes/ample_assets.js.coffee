@@ -159,6 +159,7 @@ class window.AmpleAssets
   get_pages: (tpl = 'page') ->
     html = ''
     $.each @options.pages, (idx,el) => 
+      el['classes'] = 'first-child' if idx == 0
       html += Mustache.to_html @tpl(tpl), el
     html
 
@@ -245,7 +246,6 @@ class window.AmpleAssets
     link
 
   modal_open: (data) ->
-    data = @modal_data(data) unless typeof data == 'object'
     @modal_active = true
     if data.document == 'true'
       html = Mustache.to_html(@tpl('pdf'),{ filename: data.uid })
@@ -261,11 +261,6 @@ class window.AmpleAssets
       html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation })
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     @touch(data)
-
-  modal_data: (id) ->
-    @log "modal_data(#{id})"
-    #touch_url = Mustache.to_html @options.touch_url, { id: el.id }
-    #$.post "#{@options.base_url}#{touch_url}"
 
   load_img: (el,src) ->
     img = new Image()
@@ -429,7 +424,7 @@ class window.AmpleAssets
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'
-    tab: '<a href="#" data-role="{{ id }}" class="tab">{{ title }}</a>'
+    tab: '<a href="#" data-role="{{ id }}" class="tab {{ classes }}">{{ title }}</a>'
     page: '
     <div id="{{ id }}" class="page">
       <ul></ul>

@@ -11,6 +11,7 @@ class window.AmpleAssets
 
   set_options: (opts) ->
     @current = 0
+    @keys_enabled = true
     ref = this
     default_options = 
       debug: false
@@ -45,7 +46,6 @@ class window.AmpleAssets
         height: 81
         enabled: true
         distance: 10
-        keyboard_nav: true
         auto: false
         orientation: 'horizontal'
         key_orientation: 'horizontal'
@@ -123,8 +123,8 @@ class window.AmpleAssets
       hoverClass: "success"
       drop: (event, ui) ->
         geometry = if $(ui.draggable).attr("orientation") == 'portrait' then 'x300>' else '480x>'
-        asset_id = $(ui.draggable).attr("id").split("-")[1]
-        url = "#{base_url}#{thumb_url}/#{geometry}?uid=#{asset_id}"
+        uid = $(ui.draggable).attr("data-uid")
+        url = encodeURI "#{base_url}#{thumb_url}/#{geometry}?uid=#{uid}"
         textile = "!#{url}!"
         html = "<img src=\"#{url}\" />"
         $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
@@ -156,26 +156,26 @@ class window.AmpleAssets
       @goto(@current)
 
   get_pages: (tpl = 'page') ->
-    ref = this
     html = ''
-    $.each @options.pages, (idx,el) -> 
-      html += Mustache.to_html ref.tpl(tpl), el
+    $.each @options.pages, (idx,el) => 
+      html += Mustache.to_html @tpl(tpl), el
     html
 
   toggle: ->
-    ref = this
     el = $("##{@options.id}")
     if @options.expanded 
       @options.expanded = false
-      el.animate {height: @options.collapsed_height}, "fast", ->
-        ref.collapse()
-        ref.options.onCollapse()
+      $('body').animate {'padding-bottom': 0}, "fast"
+      el.animate {height: @options.collapsed_height}, "fast", =>
+        @collapse()
+        @options.onCollapse()
     else
       @options.expanded = true
-      el.animate {height: @options.expanded_height}, "fast", ->
-        ref.expand()
-        ref.options.onExpand()
-        ref.goto(0)
+      $('body').animate {'padding-bottom': @options.expanded_height}, "fast"
+      el.animate {height: @options.expanded_height}, "fast", =>
+        @expand()
+        @options.onExpand()
+        @goto(0)
 
   load: (i) ->
     ref = this
@@ -223,27 +223,37 @@ class window.AmpleAssets
 
   load_results: (response) ->
     @log "load_results()"
-    ref = this
-    $.each response, (j,el) ->
-      link = ref.build(el)
+    $.each response, (j,el) =>
+      link = @build(el)
       li = $('<li class="file"></li>').append(link)
       $("#asset-results ul").amplePanels('append', li)
-      ref.load_img(link, el.sizes.tn)
+      @load_img(link, el.sizes.tn)
 
   build: (el) ->
     ref = this
     link = $("<a href=\"#\" draggable=\"true\"></a>")
       .attr('id',"file-#{el.id}")
+      .attr('data-uid',"#{el.uid}")
       .attr('data-orientation',el.orientation)
       .addClass('draggable')
     link.addClass('document') if el.document == 'true'
     link.click ->
       ref.modal_active = true
-      geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
-      url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
-      html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
+      if el.document == 'true'
+        html = Mustache.to_html(ref.tpl('pdf'),{ filename: el.uid })
+        $.facebox("<div class=\"asset-detail\">#{html}</div>")
+        myPDF = new PDFObject(
+          url: el.url
+          pdfOpenParams:
+            view: "Fit"
+        ).embed("pdf")
+      else
+        geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
+        url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
+        html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
+        $.facebox("<div class=\"asset-detail\">#{html}</div>")
+      
       ref.touch(el)
-      $.facebox("<div class=\"asset-detail\">#{html}</div>")
       false
     link
 
@@ -271,7 +281,9 @@ class window.AmpleAssets
       @log "panels(#{i})"
       el = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul"
       @options.pages[i]['panel_selector'] = el
+      @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
+      
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
           ref.load(i) if dir == 'next'
@@ -284,7 +296,9 @@ class window.AmpleAssets
 
   enable_panel: (i) ->  
     @log "enable_panel(#{i})"
-    $(@options.pages[i]['panel_selector']).amplePanels('enable') if @options.pages[i]['panel_selector']
+    if @options.pages[i]['panel_selector']
+      @active_panel = @options.pages[i]['panel_selector']
+      $(@options.pages[i]['panel_selector']).amplePanels('enable') 
 
   already_loaded: (i) ->
     @log "already_loaded(#{i})"
@@ -304,25 +318,37 @@ class window.AmpleAssets
 
   events: ->
     @modal_events()
+    @field_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
-    $("##{@options.id}-handle").live 'click', ->
-      ref.toggle()
+      false
+    $("##{@options.id}-handle").live 'click', =>
+      @toggle()
+      false
     @key_down()
     tabs = $("##{@options.id} a.tab")
+    ref = this
     $.each tabs, (idx, el) ->
       $(this).addClass('on') if idx == 0
       $(el).click ->
         ref.goto(idx)
+        false
+
+  field_events: ->
+    $('textarea, input').bind 'blur', =>
+      @keys_enabled = true
+    $('textarea, input').bind 'focus', =>
+      @keys_enabled = false
 
   modal_events: ->
     @modal_active = false
-    ref = this
-    $(document).bind 'afterClose.facebox', ->
-      ref.modal_active = false
-    $(document).bind 'loading.facebox', ->
-      ref.modal_active = true
+    $(document).bind 'afterClose.facebox', =>
+      @keys_enabled = true
+      @modal_active = false
+    $(document).bind 'loading.facebox', =>
+      @keys_enabled = false
+      @modal_active = true
 
   search: ->
     @log 'search_events()'
@@ -340,17 +366,24 @@ class window.AmpleAssets
 
   key_down: ->
     ref = this
-    previous = 38
-    next = 40
+    previous = 37
+    next = 39
+    up = 38
+    down = 40
     escape = 27
-    $(document).keydown (e) ->
+    $(document).keydown (e) =>
+      return unless @keys_enabled
       switch e.keyCode
         when previous
-          ref.previous()
+          $(@active_panel).amplePanels('previous')
         when next
-          ref.next()
+          $(@active_panel).amplePanels('next')
+        when up
+          @previous()
+        when down
+          @next()
         when escape
-          ref.toggle() unless ref.modal_active
+          @toggle() unless @modal_active
 
   tpl: (view) ->
     @tpls()[view]
@@ -386,6 +419,11 @@ class window.AmpleAssets
       <div class="asset-media {{ orientation }}">
         <img src="{{ src }}" />
       </div>
+      <h3>{{ filename }}<h3>
+    </div>'
+    pdf: '
+    <div class="asset-detail">
+      <div id="pdf" class="asset-media"></div>
       <h3>{{ filename }}<h3>
     </div>'
 

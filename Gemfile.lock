@@ -47,7 +47,6 @@ GEM
       multi_json (~> 1.0)
     acts_as_indexed (0.7.7)
     addressable (2.2.6)
-    ansi (1.4.1)
     arel (2.2.1)
     builder (3.0.0)
     capybara (1.1.2)
@@ -76,7 +75,6 @@ GEM
     erubis (2.7.0)
     execjs (1.2.13)
       multi_json (~> 1.0)
-    fabrication (1.2.0)
     ffi (1.0.11)
     fssm (0.2.8)
     hike (1.2.1)
@@ -152,8 +150,6 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
-    turn (0.8.2)
-      ansi (>= 1.2.2)
     tzinfo (0.3.31)
     uglifier (1.2.1)
       execjs (>= 0.3.0)
@@ -168,9 +164,6 @@ PLATFORMS
 DEPENDENCIES
   ample_assets!
   capybara
-  fabrication
   launchy
-  rack-cache
   shoulda (>= 3.0.0.beta)
   sqlite3
-  turn (= 0.8.2)

@@ -239,11 +239,21 @@ class window.AmpleAssets
     link.addClass('document') if el.document == 'true'
     link.click ->
       ref.modal_active = true
-      geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
-      url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
-      html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
+      if el.document == 'true'
+        html = Mustache.to_html(ref.tpl('pdf'),{ filename: el.uid })
+        $.facebox("<div class=\"asset-detail\">#{html}</div>")
+        myPDF = new PDFObject(
+          url: el.url
+          pdfOpenParams:
+            view: "Fit"
+        ).embed("pdf")
+      else
+        geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
+        url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
+        html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
+        $.facebox("<div class=\"asset-detail\">#{html}</div>")
+      
       ref.touch(el)
-      $.facebox("<div class=\"asset-detail\">#{html}</div>")
       false
     link
 
@@ -409,6 +419,11 @@ class window.AmpleAssets
       <div class="asset-media {{ orientation }}">
         <img src="{{ src }}" />
       </div>
+      <h3>{{ filename }}<h3>
+    </div>'
+    pdf: '
+    <div class="asset-detail">
+      <div id="pdf" class="asset-media"></div>
       <h3>{{ filename }}<h3>
     </div>'
 

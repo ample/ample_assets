@@ -50,6 +50,7 @@ module AmpleAssets
         uid: '#{attachment_uid}',
         document: '#{is_doc?}',
         orientation: '#{orientation}',
+        url: '#{attachment.url}',
         sizes: { 
           tn: '#{thumbnail}', 
           md: '#{medium}' 

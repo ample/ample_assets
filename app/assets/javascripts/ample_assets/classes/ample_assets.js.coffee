@@ -23,6 +23,7 @@ class window.AmpleAssets
       base_url: '/ample_assets'
       search_url: '/files/search'
       thumb_url: '/files/thumbs'
+      show_url: '/files/{{ id }}'
       touch_url: '/files/{{ id }}/touch'
       onInit: ->
         ref.log 'onInit()'
@@ -231,31 +232,40 @@ class window.AmpleAssets
 
   build: (el) ->
     ref = this
-    link = $("<a href=\"#\" draggable=\"true\"></a>")
+    show_url = Mustache.to_html @options.show_url, { id: el.id }
+    link = $("<a href=\"#{@options.base_url}#{show_url}\" draggable=\"true\"></a>")
       .attr('id',"file-#{el.id}")
       .attr('data-uid',"#{el.uid}")
       .attr('data-orientation',el.orientation)
       .addClass('draggable')
     link.addClass('document') if el.document == 'true'
     link.click ->
-      ref.modal_active = true
-      if el.document == 'true'
-        html = Mustache.to_html(ref.tpl('pdf'),{ filename: el.uid })
-        $.facebox("<div class=\"asset-detail\">#{html}</div>")
-        myPDF = new PDFObject(
-          url: el.url
-          pdfOpenParams:
-            view: "Fit"
-        ).embed("pdf")
-      else
-        geometry = if el.orientation == 'portrait' then 'x300>' else '480x>'
-        url = "#{ref.options.base_url}#{ref.options.thumb_url}/#{geometry}?uid=#{el.uid}"
-        html = Mustache.to_html(ref.tpl('show'),{ filename: el.uid, src: url, orientation: el.orientation })
-        $.facebox("<div class=\"asset-detail\">#{html}</div>")
-      
-      ref.touch(el)
+      ref.modal_open(el)
       false
     link
+
+  modal_open: (data) ->
+    data = @modal_data(data) unless typeof data == 'object'
+    @modal_active = true
+    if data.document == 'true'
+      html = Mustache.to_html(@tpl('pdf'),{ filename: data.uid })
+      $.facebox("<div class=\"asset-detail\">#{html}</div>")
+      myPDF = new PDFObject(
+        url: data.url
+        pdfOpenParams:
+          view: "Fit"
+      ).embed("pdf")
+    else
+      geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
+      url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
+      html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation })
+      $.facebox("<div class=\"asset-detail\">#{html}</div>")
+    @touch(data)
+
+  modal_data: (id) ->
+    @log "modal_data(#{id})"
+    #touch_url = Mustache.to_html @options.touch_url, { id: el.id }
+    #$.post "#{@options.base_url}#{touch_url}"
 
   load_img: (el,src) ->
     img = new Image()
@@ -319,6 +329,7 @@ class window.AmpleAssets
   events: ->
     @modal_events()
     @field_events()
+    @drop_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
@@ -334,6 +345,15 @@ class window.AmpleAssets
       $(el).click ->
         ref.goto(idx)
         false
+
+  drop_events: ->
+    ref = this
+    $('.asset-drop .droppable a').live 'click', ->
+      id = $(this).attr("href")
+      $.get $(this).attr("href"), (response) ->
+        ref.modal_open(response)
+      , 'json'
+      false
 
   field_events: ->
     $('textarea, input').bind 'blur', =>

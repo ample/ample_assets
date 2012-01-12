@@ -309,8 +309,9 @@ class window.AmpleAssets
   events: ->
     @modal_events()
     @field_events()
-    $("a.asset-remove").live 'click', =>
-      @remove(this)
+    ref = this
+    $("a.asset-remove").live 'click', ->
+      ref.remove(this)
       false
     $("##{@options.id}-handle").live 'click', =>
       @toggle()

@@ -42,6 +42,10 @@ module AmpleAssets
     
     def show
       raise ActiveRecord::RecordNotFound if current_file.nil?
+      respond_to do |format|
+        format.json { render :json => current_file.json }
+        format.html
+      end
     end
     
     def touch
@@ -81,7 +85,7 @@ module AmpleAssets
       
       def current_file_conditions
         are = params[:type] == 'documents' ? 'NOT in' : 'in'
-        [ "attachment_mime_type #{are} (?)", AmpleAssets::File::IMAGE_MIME_TYPES ]
+        [ "attachment_mime_type #{are} (?)", AmpleAssets::Engine.config.allowed_mime_types[:images] ]
       end
       
       def recent_files

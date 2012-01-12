@@ -1,5 +1,5 @@
 <div class="asset-drop">
-	<%= hidden_field object_name, method %>
+	<%= hidden_field object_name, method, :value => drop.try(:id) %>
 	<%= link_to 'Remove', '#', :class => 'asset-action asset-remove' + (drop ? '' : ' hide') %>
 	<%= link_to 'Select', '#', :class => 'asset-action asset-select' %>
 	<div class="droppable">

@@ -1,11 +1,5 @@
 class Public::PagesController < PublicController
-  
-  def index
-  end
-  
-  def new
-  end
-  
+
   def create
     @current_page = Page.new params[:page]
     if @current_page.save

@@ -11,6 +11,11 @@ module AmpleAssets
     isolate_namespace AmpleAssets
     
     config.mount_at = '/ample_assets/'
+    config.allowed_mime_types = {
+      :images => %w(image/jpeg image/png image/gif),
+      :documents => %w(application/pdf),
+      :other => %w(application/x-shockwave-flash)
+    }
 
     initializer 'ample_assets: configure rack/cache' do |app|
       app.middleware.insert 0, ::Rack::Cache, {

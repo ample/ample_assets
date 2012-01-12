@@ -143,13 +143,22 @@ $link-focus-color       : #533d79;
   }
 }
 
+#pdf {
+	width: 480px;
+	height: 300px;
+  padding: 20px;
+  background: #f2f2f2;
+  border: 1px solid #d4d4d4;
+}
+
 #ample-assets {
   font-family: $font-family;  
   font-size: $base-font-size;
   position: fixed; 
   left: 0; 
   bottom: 0; 
-  width: 100%;
+  width: 100%; 
+  height: 35px; 
   
   .background {
     clear: both;
@@ -295,21 +304,6 @@ $link-focus-color       : #533d79;
     }
   } //tabs
 
-
-  a.next,
-  a.previous {
-    display: block;
-    width: 34px;
-    height: 41px;
-    background: url('prev-next.png') no-repeat top left;
-    float: right;
-    margin: -60px 0 0 0;
-  }
-  a.previous {
-    background: url('prev-next.png') no-repeat top right;
-    float: left;
-    margin-left: -50px;
-  }
 
   a.tab {
     float: left; 

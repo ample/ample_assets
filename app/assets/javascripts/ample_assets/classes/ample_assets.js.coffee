@@ -323,6 +323,7 @@ class window.AmpleAssets
 
   events: ->
     @modal_events()
+    @global_events()
     @field_events()
     @drop_events()
     ref = this
@@ -340,6 +341,13 @@ class window.AmpleAssets
       $(el).click ->
         ref.goto(idx)
         false
+
+  global_events: ->
+    $('a.global.next').click =>
+      $(@active_panel).amplePanels('next')
+      
+    $('a.global.previous').click =>
+      $(@active_panel).amplePanels('previous')
 
   drop_events: ->
     ref = this
@@ -421,6 +429,8 @@ class window.AmpleAssets
             <ul></ul>
           </div>
         </div>
+        <a href="#" class="global previous">Previous</a>
+        <a href="#" class="global next">Next</a>
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'

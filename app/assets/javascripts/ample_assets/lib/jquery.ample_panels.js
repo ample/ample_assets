@@ -41,6 +41,7 @@
         this.log('init()')
         this.setup(); 
         this.buttons(); 
+        $( this.options.el ).trigger('init')
       },
 
       /** 

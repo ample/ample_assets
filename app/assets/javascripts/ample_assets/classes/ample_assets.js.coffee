@@ -106,6 +106,7 @@ class window.AmpleAssets
     @current = i
     $("##{@options.id} .pages .page").hide()
     $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
+    $('nav.controls').hide()
     @disable_panels()
     @activate(i)
     @load(i) unless @already_loaded(i)
@@ -289,6 +290,8 @@ class window.AmpleAssets
       @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
       $(el).parent().addClass('panels')
+      $(el).amplePanels(@options.pages_options).bind 'init', (e) ->
+        $('nav.controls').show()
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
           ref.load(i) if dir == 'next'
@@ -304,6 +307,7 @@ class window.AmpleAssets
     if @options.pages[i]['panel_selector']
       @active_panel = @options.pages[i]['panel_selector']
       $(@options.pages[i]['panel_selector']).amplePanels('enable') 
+      $('nav.controls').show()
 
   already_loaded: (i) ->
     @log "already_loaded(#{i})"

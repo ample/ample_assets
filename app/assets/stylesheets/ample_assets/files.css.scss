@@ -162,13 +162,13 @@ $link-focus-color       : #533d79;
   
   .controls {
     @include clearfix;
+    display: none;
     position: absolute;
     width: calc-em(950px, $base-font-size);
     margin: calc-em(-70px, $base-font-size) 0 0 0;
     .previous,
     .next {
       position: relative;
-      display: block;
       text-indent: -9999px;
       width:15px;
       height:27px; 
@@ -178,9 +178,7 @@ $link-focus-color       : #533d79;
       background: url('btn-prev.png') no-repeat top left;
     } //previous
     .next {
-      
-        float: right;
-      
+      float: right;
       background: url('btn-next.png') no-repeat top left;
     } //next
   } //controls

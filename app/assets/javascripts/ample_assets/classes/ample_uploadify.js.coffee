@@ -25,10 +25,13 @@ class window.AmpleUploadify
       'uploader': '/assets/ample_assets/uploadify.swf'
       'script': "#{ample_assets.mount_at}/files"
       'cancelImg': '/assets/ample_assets/cancel.png'
+      'buttonImg': '/assets/ample_assets/btn-select-files.png'
+      'height': 34
       'scriptData': uploadify_script_data
       'queueID': 'fileQueue'
       'auto': true
       'multi': true
+      'removeCompleted': false
       'wmode': 'transparent'
       'onAllComplete': ->
         $('body').trigger('ample_uploadify.complete');

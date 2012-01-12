@@ -78,7 +78,7 @@ class window.AmpleAssets
     @search()
     @goto(0) if @options.expanded
     $('body').bind 'ample_uploadify.complete', =>
-      @reload(0)
+      
     
   style: ->
     @loading = $("##{@options.id}-tabs span.loading")
@@ -394,8 +394,8 @@ class window.AmpleAssets
       <div class="container">
         <div id="{{ id }}-tabs" class="tabs">
           <div class="search">
-            <label for="asset-search">Search</label>
             <input type="text" id="asset-search" name="q" placeholder="Enter keywords..." />
+            <label for="asset-search">Search</label>
           </div>
           {{{ tabs }}}
           <span class="loading"></span>

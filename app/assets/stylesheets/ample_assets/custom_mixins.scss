@@ -1,0 +1,27 @@
+// ------------------------------------------- //
+//    MATH & LAYOUT   												 //
+// ------------------------------------------- //
+
+@function calc-em($target-px, $context) {
+  @return ($target-px / $context) * 1em;
+}
+
+@mixin clearfix {
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+// ------------------------------------------- //
+//    CSS3 Mixins      												 //
+// ------------------------------------------- //
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius; 
+  -moz-border-radius: $radius; 
+  border-radius: $radius; 
+}

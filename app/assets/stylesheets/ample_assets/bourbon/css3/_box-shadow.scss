@@ -1,0 +1,11 @@
+// Box-Shadow Mixin Requires Sass v3.1.1+
+@mixin box-shadow ($shadows)
+  {
+    $full: $shadows;
+
+  -webkit-box-shadow: $full;
+     -moz-box-shadow: $full;
+      -ms-box-shadow: $full;
+       -o-box-shadow: $full;
+          box-shadow: $full;
+}

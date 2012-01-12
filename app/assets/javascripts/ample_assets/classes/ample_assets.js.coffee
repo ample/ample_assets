@@ -156,26 +156,24 @@ class window.AmpleAssets
       @goto(@current)
 
   get_pages: (tpl = 'page') ->
-    ref = this
     html = ''
-    $.each @options.pages, (idx,el) -> 
-      html += Mustache.to_html ref.tpl(tpl), el
+    $.each @options.pages, (idx,el) => 
+      html += Mustache.to_html @tpl(tpl), el
     html
 
   toggle: ->
-    ref = this
     el = $("##{@options.id}")
     if @options.expanded 
       @options.expanded = false
-      el.animate {height: @options.collapsed_height}, "fast", ->
-        ref.collapse()
-        ref.options.onCollapse()
+      el.animate {height: @options.collapsed_height}, "fast", =>
+        @collapse()
+        @options.onCollapse()
     else
       @options.expanded = true
-      el.animate {height: @options.expanded_height}, "fast", ->
-        ref.expand()
-        ref.options.onExpand()
-        ref.goto(0)
+      el.animate {height: @options.expanded_height}, "fast", =>
+        @expand()
+        @options.onExpand()
+        @goto(0)
 
   load: (i) ->
     ref = this
@@ -223,12 +221,11 @@ class window.AmpleAssets
 
   load_results: (response) ->
     @log "load_results()"
-    ref = this
-    $.each response, (j,el) ->
-      link = ref.build(el)
+    $.each response, (j,el) =>
+      link = @build(el)
       li = $('<li class="file"></li>').append(link)
       $("#asset-results ul").amplePanels('append', li)
-      ref.load_img(link, el.sizes.tn)
+      @load_img(link, el.sizes.tn)
 
   build: (el) ->
     ref = this
@@ -310,15 +307,15 @@ class window.AmpleAssets
   events: ->
     @modal_events()
     @field_events()
-    ref = this
-    $("a.asset-remove").live 'click', ->
-      ref.remove(this)
+    $("a.asset-remove").live 'click', =>
+      @remove(this)
       false
-    $("##{@options.id}-handle").live 'click', ->
-      ref.toggle()
+    $("##{@options.id}-handle").live 'click', =>
+      @toggle()
       false
     @key_down()
     tabs = $("##{@options.id} a.tab")
+    ref = this
     $.each tabs, (idx, el) ->
       $(this).addClass('on') if idx == 0
       $(el).click ->

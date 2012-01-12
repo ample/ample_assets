@@ -4,7 +4,7 @@ module AmpleAssets
   class ViewHelperTest < ActionView::TestCase
     
     # TODO: Routes are not loaded in this context, so this test fails.
-    # context 'Assets Toolbar' do
+    # context 'The assets_toolbar method' do
     #   
     #   setup do
     #     render :text => assets_toolbar
@@ -16,17 +16,12 @@ module AmpleAssets
     # 
     # end
     
-    context 'Image Asset' do
-      
-      setup do
-        @file = File.create :attachment => ::File.read("#{Rails.root}/app/assets/images/rails.png")
-        @page = Page.create :title => 'Test Page', :file_id => @file.id
-      end
-      
+    context 'The image_asset method' do
+
       context 'without args' do
 
         setup do
-          render :text => image_asset(@page)
+          render :text => image_asset(current_page)
         end
         
         should 'not require dimensions to be set' do
@@ -39,7 +34,7 @@ module AmpleAssets
       context 'with some args' do
         
         setup do
-          render :text => image_asset(@page, { :size => false })
+          render :text => image_asset(current_page, { :size => false })
         end
         
         should 'have no dimensions if size is false' do
@@ -52,11 +47,11 @@ module AmpleAssets
       context 'with args' do
         
         setup do
-          render :text => image_asset(@page, {
+          render :text => image_asset(current_page, {
                             :dimensions => '50x50#', 
                             :style => 'border: 1px solid;', 
                             :class => "some-selector", 
-                            :title => @page.title,
+                            :title => current_page.title,
                             :link => 'http://yahoo.com',
                             :video => true,
                             :video_dimensions => '1x1',

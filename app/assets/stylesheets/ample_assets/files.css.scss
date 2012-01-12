@@ -167,6 +167,7 @@ $link-focus-color       : #533d79;
     margin: calc-em(-70px, $base-font-size) 0 0 0;
     .previous,
     .next {
+      position: relative;
       display: block;
       text-indent: -9999px;
       width:15px;

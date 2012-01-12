@@ -355,6 +355,10 @@ class window.AmpleAssets
 
   drop_events: ->
     ref = this
+    $(document).bind 'mousedown', =>
+      @keys_enabled = false
+    $(document).bind 'mouseup', =>
+      @keys_enabled = true
     $('.asset-drop .droppable a').live 'click', ->
       id = $(this).attr("href")
       $.get $(this).attr("href"), (response) ->

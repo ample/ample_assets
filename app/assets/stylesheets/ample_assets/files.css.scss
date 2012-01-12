@@ -358,7 +358,7 @@ $link-focus-color       : #533d79;
     background: -ms-linear-gradient(top, #333333 0%,#1c1c1c 100%);
     background: linear-gradient(top, #333333 0%,#1c1c1c 100%);
     
-    @include box-shadow((inset rgba(255,255,255,.1) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
+    @include box-shadow((inset rgba(255,255,255,.1) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, inset rgba(255,255,255,.1) 1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
     
     &.on {
       color: #E5E5E5;

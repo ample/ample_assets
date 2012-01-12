@@ -3,10 +3,6 @@ require 'dragonfly'
 module AmpleAssets
   class File < ActiveRecord::Base
     
-    IMAGE_MIME_TYPES = %w(image/jpeg image/png image/gif)
-    SWF_MIME_TYPES = %w(application/x-shockwave-flash)
-    DOC_MIME_TYPES = %w(application/pdf)
-    
     ###---------------------------------------------------- Plugins
     
     image_accessor :attachment
@@ -20,16 +16,20 @@ module AmpleAssets
     ###---------------------------------------------------- Validations
     
     validates_presence_of :attachment
-    validates_property :mime_type, :of => :attachment, :in => IMAGE_MIME_TYPES + SWF_MIME_TYPES + DOC_MIME_TYPES
+    validates_property :mime_type, :of => :attachment, :in => AmpleAssets::Engine.config.allowed_mime_types.collect{ |a| a[1] }.flatten
     
     ###---------------------------------------------------- Instance Methods
     
     def is_swf?
-      SWF_MIME_TYPES.include?(attachment_mime_type)
+      attachment_mime_type == 'application/x-shockwave-flash'
     end
     
     def is_image?
-      IMAGE_MIME_TYPES.include?(attachment_mime_type)
+      AmpleAssets::Engine.config.allowed_mime_types[:images].include?(attachment_mime_type)
+    end
+    
+    def is_doc?
+      AmpleAssets::Engine.config.allowed_mime_types[:documents].include?(attachment_mime_type)
     end
     
     def thumbnail
@@ -40,25 +40,22 @@ module AmpleAssets
       attachment.thumb('500x>').url if is_image?
     end
     
+    def orientation
+      attachment.portrait? ? 'portrait' : 'landscape'
+    end
+    
     def json
       eval("{ 
         id: '#{id}', 
         uid: '#{attachment_uid}',
         document: '#{is_doc?}',
         orientation: '#{orientation}',
+        url: '#{attachment.url}',
         sizes: { 
           tn: '#{thumbnail}', 
           md: '#{medium}' 
         }
       }")
-    end
-    
-    def is_doc?
-      (DOC_MIME_TYPES + SWF_MIME_TYPES).include?(attachment_mime_type)
-    end
-    
-    def orientation
-      attachment.portrait? ? 'portrait' : 'landscape'
     end
     
   end

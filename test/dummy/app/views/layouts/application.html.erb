@@ -8,8 +8,10 @@
 </head>
 <body>
 
-<%= show_flashes %>
-<%= yield %>
+<%= content_tag :div, :class => :container do %>
+  <%= show_flashes %>
+  <%= yield %>
+<% end %>
 
 </body>
 </html>

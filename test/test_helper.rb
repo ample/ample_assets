@@ -10,7 +10,16 @@ Rails.backtrace_cleaner.remove_silencers!
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-def assert_select_string(string, *selectors, &block)
-  doc_root = HTML::Document.new(string).root
-  assert_select(doc_root, *selectors, &block)
+module AmpleAssets
+  class ActiveSupport::TestCase
+    
+    def current_page
+      @page ||= Page.create! :title => 'Test Page', :file_id => current_file.id
+    end
+
+    def current_file
+      @file ||= File.create! :attachment => ::File.read("#{Rails.root}/app/assets/images/rails.png")
+    end
+    
+  end
 end

@@ -205,11 +205,13 @@ $link-focus-color       : #533d79;
   }
 
   input#asset-search {
-    width: 100px;
+    width: 215px;
   }
   
   .ampn {
     margin-left: calc-em(14px, $base-font-size);
+    position: relative;
+    z-index: 100;
   }
   
   

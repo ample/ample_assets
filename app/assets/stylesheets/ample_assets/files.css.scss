@@ -18,10 +18,33 @@ $link-focus-color       : #533d79;
 
 @import 'custom_mixins';
 
-textarea.notice {
-  background: #FEF1B5;
-}
+/* ------------------------------------------- */
+/*    WEBKIT ANIMATIONS												 */
+/* ------------------------------------------- */
 
+@-webkit-keyframes pulse_target {
+ 	0% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(29,160,0, 1) 0 0 16px));
+	 }
+	 50% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(29,160,0, .5) 0 0 6px));
+	 }
+	 100% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(29,160,0, 1) 0 0 16px));
+	 }
+} // pulse animation
+
+.notice {
+  border: 1px solid #3e7532;
+  
+  background: #6ca852;
+  background: -moz-linear-gradient(top, #6ca852 0%, #3e7532 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6ca852), color-stop(100%,#3e7532));
+  background: -webkit-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+  background: -o-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+  background: -ms-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+  background: linear-gradient(top, #6ca852 0%,#3e7532 100%);
+}
 
 .asset-drop {
   font-family: $font-family;  
@@ -31,18 +54,54 @@ textarea.notice {
   .droppable {
     width: calc-em(75px, $base-font-size);
     height: calc-em(75px, $base-font-size);
-    background: #eee;
-    border:1px solid #ccc;
     margin: 0 0 calc-em(20px, $base-font-size);
+    border: 1px solid #A5A5A5;
     
+    background: #eeeeee;
+    background: -moz-linear-gradient(top, #eeeeee 0%, #c6c6c6 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#c6c6c6));
+    background: -webkit-linear-gradient(top, #eeeeee 0%,#c6c6c6 100%);
+    background: -o-linear-gradient(top, #eeeeee 0%,#c6c6c6 100%);
+    background: -ms-linear-gradient(top, #eeeeee 0%,#c6c6c6 100%);
+    background: linear-gradient(top, #eeeeee 0%,#c6c6c6 100%);
+    
+    @include border-radius(1px);
+    
+    @include box-shadow(inset rgba(0,0,0,.2) 0 2px 4px);
     span {
       display: block;
-      font-size: calc-em(14px, $base-font-size);
-      line-height: calc-em(21px, 14px);
-      margin: calc-em(14px, 14px) 0 0 0;
+      margin: calc-em(14px, 12px) 0 0 0;
+      
+      font-weight: bold;
+      color: darken(#c6c6c6, 35%);
+      font-size: calc-em(12px, $base-font-size);
+      line-height: calc-em(21px, 12px);
+      text-shadow: rgba(0,0,0,.05) 0 -1px 0, rgba(255,255,255,1) 0 1px 0;
     } //span
+     
+     
     &.notice {
-      background: #FEF1B5;
+      border: 1px solid #3e7532;
+      
+      background: #6ca852;
+      background: -moz-linear-gradient(top, #6ca852 0%, #3e7532 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6ca852), color-stop(100%,#3e7532));
+      background: -webkit-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+      background: -o-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+      background: -ms-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+      background: linear-gradient(top, #6ca852 0%,#3e7532 100%);
+      
+      
+      -webkit-animation-name: pulse_target;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-timing-function: ease-in-out;
+      -webkit-animation-iteration-count: infinite;
+      
+      span {
+        color: darken(#3e7532, 15%);
+        text-shadow: rgba(0,0,0,.05) 0 -1px 0, rgba(255,255,255,.3) 0 1px 0;
+      }
+      
     } //notice
   } //droppable
   
@@ -98,14 +157,15 @@ textarea.notice {
     height: 200px;
     
     background: #2b2b2b;
-    background: -moz-linear-gradient(top, #2b2b2b 0%, #191919 44%, #111111 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b2b2b), color-stop(44%,#191919), color-stop(100%,#111111));
-    background: -webkit-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
-    background: -o-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
-    background: -ms-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
-    background: linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+    background: url('bg-noise.png') repeat top left, -moz-linear-gradient(top, #2b2b2b 0%, #191919 44%, #111111 100%);
+    background: url('bg-noise.png') repeat top left, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b2b2b), color-stop(44%,#191919), color-stop(100%,#111111));
+    background: url('bg-noise.png') repeat top left, -webkit-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+    background: url('bg-noise.png') repeat top left, -o-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+    background: url('bg-noise.png') repeat top left, -ms-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+    background: url('bg-noise.png') repeat top left, linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
   
-    -webkit-box-shadow: rgba(0,0,0,.2) 0 -1px 2px, inset rgba(255,255,255,.2) 0 2px 0;
+    @include box-shadow((rgba(0,0,0,.2) 0 -1px 2px, inset rgba(255,255,255,.2) 0 2px 0, inset rgba(255,255,255,.1) 2px 0 0));
+   
   }
   
   label {
@@ -127,8 +187,7 @@ textarea.notice {
     top: 2px;
     padding: calc-em(10px, 13px) calc-em(20px, 13px); 
     cursor: pointer;
-    
-    background: #2B2B2B; 
+    background: #2B2B2B url('bg-noise.png') repeat top left; 
     
     color: #FFF; 
     font-size: calc-em(13px, $base-font-size);
@@ -136,22 +195,62 @@ textarea.notice {
     text-decoration: none;
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     
-    
-    -webkit-border-top-left-radius: 6px; 
-    -moz-border-radius-topleft: 6px; 
-    border-top-left-radius: 6px;
-    
-    -webkit-box-shadow: rgba(0,0,0,.2) 0 -1px 2px, inset rgba(255,255,255,.2) 0 2px 0, inset rgba(255,255,255,.1) 2px 0 0;
-    
+    @include border-top-left-radius(6px);
+    @include box-shadow((rgba(0,0,0,.2) 0 -1px 2px, inset rgba(255,255,255,.2) 0 2px 0, inset rgba(255,255,255,.1) 2px 0 0));
     
   }
   
 
   .search {
+    @include clearfix;
     float: right;
-    margin: 7px 10px 0 0;
+    margin: calc-em(7px, $base-font-size) calc-em(10px, $base-font-size) 0 0;
+    width: calc-em(300px, $base-font-size);
+    padding: calc-em(5px, $base-font-size);
+    background: rgba(0,0,0,.2);
+    border: 1px solid #000;
+    
+    @include border-radius(3px);
+    
     input {
-      padding: 5px;
+      padding: calc-em(5px, 13px) calc-em(5px, 13px);
+      margin: 0;
+      float: left;
+      border: 1px solid rgba(0,0,0,.4);
+      width: calc-em(235px, 13px);
+      
+      font-size: calc-em(12px, $base-font-size);
+      
+      @include border-left-radius(4px);
+      @include box-shadow((inset rgba(0,0,0,.4) 0 1px 2px, rgba(0,0,0,.6) 0 1px 2px));
+      
+      
+      
+    }
+    label {
+      border-left: 1px solid #000;
+      border-bottom: 1px solid #000;
+      float: left;
+      display: block;
+      padding: 0 calc-em(14px, 13px);
+      line-height: calc-em(25px, 13px);
+      
+      font-size: calc-em(13px, $base-font-size);
+      
+      color: darken(#355487, 25%);
+      text-shadow: rgba(255,255,255,.2) 0 1px 0;
+      
+      background: #3e6e9b;
+      background: -moz-linear-gradient(top, #3e6e9b 0%, #124d87 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3e6e9b), color-stop(100%,#124d87));
+      background: -webkit-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+      background: -o-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+      background: -ms-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+      background: linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+      
+      @include border-right-radius(4px);
+      @include box-shadow((inset rgba(255,255,255,.3) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
+      
     }
   }
 
@@ -175,7 +274,6 @@ textarea.notice {
   .tabs {
     @include clearfix; 
     padding-top: 2px;
-    font-size: calc-em(13px, $base-font-size);
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     font-weight: bold;
     span.loading {
@@ -186,7 +284,8 @@ textarea.notice {
       height: calc-em(20px, 13px); 
       margin: calc-em(10px, 13px) 0 0 calc-em(10px, 13px);
     }
-  }
+  } //tabs
+
 
   a.next,
   a.previous {
@@ -204,17 +303,47 @@ textarea.notice {
   }
 
   a.tab {
-    @include border-radius(1px);
-    background: #333; 
-    padding: 5px 10px; 
-    color: #999; 
-    text-decoration: none; 
     float: left; 
-    display: block; 
-    margin: 10px 0 0 10px; 
+    display: block;
     outline: none; 
+    margin: calc-em(10px, 13px) 0 0 calc-em(10px, 13px); 
+    padding: 0 calc-em(14px, 13px);
+    border: 1px solid #000;
+    
+    color: #FFF;
+    font-size: calc-em(13px, $base-font-size);
+    line-height: calc-em(26px, 13px);
+    text-decoration: none; 
+    text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
+    
+    @include border-radius(4px);
+    
+    background: #333333;
+    background: -moz-linear-gradient(top, #333333 0%, #1c1c1c 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333333), color-stop(100%,#1c1c1c));
+    background: -webkit-linear-gradient(top, #333333 0%,#1c1c1c 100%);
+    background: -o-linear-gradient(top, #333333 0%,#1c1c1c 100%);
+    background: -ms-linear-gradient(top, #333333 0%,#1c1c1c 100%);
+    background: linear-gradient(top, #333333 0%,#1c1c1c 100%);
+    
+    @include box-shadow((inset rgba(255,255,255,.1) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
+    
     &.on {
-      background: transparent; 
+      color: #E5E5E5;
+      line-height: calc-em(27px, 13px);
+      text-shadow: rgba(0,0,0,1) 0 -1px 0;
+      
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+        
+      background: #141414;
+      background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
+      background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
+      background: -o-linear-gradient(top, #141414 0%,#070707 100%);
+      background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
+      background: linear-gradient(top, #141414 0%,#070707 100%);
+      @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
     }
   }
   
@@ -223,11 +352,18 @@ textarea.notice {
     float: left;
     &.file a {
       display: block;
-      border: 3px solid #999;
       background: url('loading.gif') no-repeat center center;
-      width: 75px;
-      height: 75px;
-    }
+      width: calc-em(75px, $base-font-size);
+      height: calc-em(75px, $base-font-size);
+      border: 3px solid #191919;
+      
+      @include box-shadow(rgba(0,0,0,1) 0 2px 3px);
+      
+      &:hover {
+        border: 3px solid #000;
+      }
+    } //file a
+     
     &.file a.document {
       background-color: #FFF;
       background-image: url('icon_pdf.gif');
@@ -237,6 +373,89 @@ textarea.notice {
       background-image: url('icon_swf.gif');
     }
     
-  }
+  } //li
+  
+  .uploadifyQueue {
+    float: left;
+    width: calc-em(780px, $base-font-size);
+    height: calc-em(100px, $base-font-size);
+    @include clearfix;
+    overflow-y: scroll;
+
+    .uploadifyQueueItem {
+      float: left;
+      width: calc-em(350px, 11px);
+      margin: calc-em(10px, 11px) calc-em(10px, 11px) 0 0;
+      padding: calc-em(10px, 11px);
+
+      background: rgba(0,0,0,.2);
+      border: 1px solid #000;
+
+      @include border-radius(4px);
+
+      font-weight: bold;
+      font-size: calc-em(11px, $base-font-size);
+      text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
+      text-transform: uppercase;
+
+      .cancel {
+        float: right;
+      }
+
+      .fileName {
+        color: #FFF;
+      } //fileName
+
+      .percentage {
+        color: #1b6fc0;
+      } //percentage
+
+
+      .uploadifyProgress {
+       width: 100%;
+       padding: calc-em(3px, 11px);
+       margin-top: calc-em(10px, 11px);
+       border: 1px solid #000;
+       border-bottom: 1px solid rgba(255,255,255,.2);
+
+       background: #141414;
+       background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
+       background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
+       background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
+       background: -o-linear-gradient(top, #141414 0%,#070707 100%);
+       background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
+       background: linear-gradient(top, #141414 0%,#070707 100%);
+
+       @include border-radius(2px);
+       @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
+
+        .uploadifyProgressBar {
+        	height: calc-em(5px, 11px);
+        	width: 1px;
+          background-color: #0099FF;
+
+          color: #1b6fc0;
+
+        	@include border-right-radius(12px);
+        } //progressBar
+
+      } //progressbarContainer
+
+      &.uploadifyError {    
+        .percentage {
+          color: #c00d0d;
+        } //percentage
+      } //uploadifyError
+    } //uploadifyQueueItem
+
+  } //uploadifyQueue
+  
+  #upload {
+    p {
+      float: left;
+      width: calc-em(140px, $base-font-size);
+    }
+  } //upload
+  
   
 }

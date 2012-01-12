@@ -429,8 +429,11 @@ class window.AmpleAssets
             <ul></ul>
           </div>
         </div>
-        <a href="#" class="global previous">Previous</a>
-        <a href="#" class="global next">Next</a>
+        <nav class="controls">
+          <a href="#" class="global previous">Previous</a>
+          <a href="#" class="global next">Next</a>
+        </nav>
+
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'

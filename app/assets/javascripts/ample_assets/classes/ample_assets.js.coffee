@@ -11,6 +11,7 @@ class window.AmpleAssets
 
   set_options: (opts) ->
     @current = 0
+    @keys_enabled = true
     ref = this
     default_options = 
       debug: false
@@ -45,7 +46,6 @@ class window.AmpleAssets
         height: 81
         enabled: true
         distance: 10
-        keyboard_nav: true
         auto: false
         orientation: 'horizontal'
         key_orientation: 'horizontal'
@@ -272,7 +272,9 @@ class window.AmpleAssets
       @log "panels(#{i})"
       el = "##{@options.id} .pages .page:nth-child(#{(i+1)}) ul"
       @options.pages[i]['panel_selector'] = el
+      @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
+      
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
           ref.load(i) if dir == 'next'
@@ -285,7 +287,9 @@ class window.AmpleAssets
 
   enable_panel: (i) ->  
     @log "enable_panel(#{i})"
-    $(@options.pages[i]['panel_selector']).amplePanels('enable') if @options.pages[i]['panel_selector']
+    if @options.pages[i]['panel_selector']
+      @active_panel = @options.pages[i]['panel_selector']
+      $(@options.pages[i]['panel_selector']).amplePanels('enable') 
 
   already_loaded: (i) ->
     @log "already_loaded(#{i})"
@@ -322,21 +326,19 @@ class window.AmpleAssets
         false
 
   field_events: ->
-    ref = this
-    $('textarea, input').live 'blur', ->
-      console.log '>>>>>>>>> blur'
-      ref.modal_active = false
-    $('textarea, input').live 'focus', ->
-      console.log '>>>>>>>>> focus'
-      ref.modal_active = true
+    $('textarea, input').bind 'blur', =>
+      @keys_enabled = true
+    $('textarea, input').bind 'focus', =>
+      @keys_enabled = false
 
   modal_events: ->
     @modal_active = false
-    ref = this
-    $(document).bind 'afterClose.facebox', ->
-      ref.modal_active = false
-    $(document).bind 'loading.facebox', ->
-      ref.modal_active = true
+    $(document).bind 'afterClose.facebox', =>
+      @keys_enabled = true
+      @modal_active = false
+    $(document).bind 'loading.facebox', =>
+      @keys_enabled = false
+      @modal_active = true
 
   search: ->
     @log 'search_events()'
@@ -354,17 +356,24 @@ class window.AmpleAssets
 
   key_down: ->
     ref = this
-    previous = 38
-    next = 40
+    previous = 37
+    next = 39
+    up = 38
+    down = 40
     escape = 27
-    $(document).keydown (e) ->
+    $(document).keydown (e) =>
+      return unless @keys_enabled
       switch e.keyCode
         when previous
-          ref.previous()
+          $(@active_panel).amplePanels('previous')
         when next
-          ref.next()
+          $(@active_panel).amplePanels('next')
+        when up
+          @previous()
+        when down
+          @next()
         when escape
-          ref.toggle() unless ref.modal_active
+          @toggle() unless @modal_active
 
   tpl: (view) ->
     @tpls()[view]

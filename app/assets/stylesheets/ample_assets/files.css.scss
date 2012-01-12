@@ -297,21 +297,6 @@ $link-focus-color       : #533d79;
   } //tabs
 
 
-  a.next,
-  a.previous {
-    display: block;
-    width: 34px;
-    height: 41px;
-    background: url('prev-next.png') no-repeat top left;
-    float: right;
-    margin: -60px 0 0 0;
-  }
-  a.previous {
-    background: url('prev-next.png') no-repeat top right;
-    float: left;
-    margin-left: -50px;
-  }
-
   a.tab {
     float: left; 
     display: block;

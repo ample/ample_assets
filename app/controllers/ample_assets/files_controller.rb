@@ -42,6 +42,10 @@ module AmpleAssets
     
     def show
       raise ActiveRecord::RecordNotFound if current_file.nil?
+      respond_to do |format|
+        format.json { render :json => current_file.json }
+        format.html
+      end
     end
     
     def touch

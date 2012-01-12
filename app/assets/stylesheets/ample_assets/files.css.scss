@@ -157,12 +157,38 @@ $link-focus-color       : #533d79;
   position: fixed; 
   left: 0; 
   bottom: 0; 
-  width: 100%;
+  width: 100%; 
+  height: 35px; 
+  
+  .controls {
+    @include clearfix;
+    position: absolute;
+    width: calc-em(950px, $base-font-size);
+    margin: calc-em(-70px, $base-font-size) 0 0 0;
+    .previous,
+    .next {
+      position: relative;
+      display: block;
+      text-indent: -9999px;
+      width:15px;
+      height:27px; 
+    }
+    .previous {
+      float: left;
+      background: url('btn-prev.png') no-repeat top left;
+    } //previous
+    .next {
+      
+        float: right;
+      
+      background: url('btn-next.png') no-repeat top left;
+    } //next
+  } //controls
+  
+  
   
   .background {
-    clear: both; 
-    
-    height: 35px;
+    clear: both;
     
     background: #2b2b2b;
     background: url('bg-noise.png') repeat top left, -moz-linear-gradient(top, #2b2b2b 0%, #191919 44%, #111111 100%);
@@ -181,12 +207,11 @@ $link-focus-color       : #533d79;
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     font-weight: bold;
     font-size: calc-em(13px, $base-font-size);
-    width: 100%; 
   }
   
   
   .ampn {
-    margin-left: calc-em(22px, $base-font-size);
+    margin-left: calc-em(14px, $base-font-size);
   }
   
   
@@ -214,11 +239,8 @@ $link-focus-color       : #533d79;
   .search {
     @include clearfix;
     float: right;
-    margin: calc-em(7px, $base-font-size) calc-em(10px, $base-font-size) 0 0;
+    margin: calc-em(10px, $base-font-size) 0 0 0;
     width: calc-em(300px, $base-font-size);
-    padding: calc-em(5px, $base-font-size);
-    background: rgba(0,0,0,.2);
-    border: 1px solid #000;
     
     @include border-radius(3px);
     
@@ -233,8 +255,6 @@ $link-focus-color       : #533d79;
       
       @include border-left-radius(4px);
       @include box-shadow((inset rgba(0,0,0,.4) 0 1px 2px, rgba(0,0,0,.6) 0 1px 2px));
-      
-      
       
     }
     label {
@@ -270,11 +290,28 @@ $link-focus-color       : #533d79;
   }
 
   .pages {
-    padding-top: 8px;
+    width: 100%;
   }
 
   .page {
     @include clearfix; 
+    &.panels {
+      width: calc-em(930px,$base-font-size);
+      margin: 0 auto;
+      padding: calc-em(16px, $base-font-size) 0;
+      @include border-radius(4px);
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+
+      background: #141414;
+      background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
+      background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
+      background: -o-linear-gradient(top, #141414 0%,#070707 100%);
+      background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
+      background: linear-gradient(top, #141414 0%,#070707 100%);
+      @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
+    }
     ul {
       margin: 0;
       padding: 0;
@@ -286,6 +323,7 @@ $link-focus-color       : #533d79;
     padding-top: 2px;
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     font-weight: bold;
+    margin-bottom: calc-em(16px, $base-font-size);
     span.loading {
       display: none; 
       float: left;
@@ -321,7 +359,7 @@ $link-focus-color       : #533d79;
     background: -ms-linear-gradient(top, #333333 0%,#1c1c1c 100%);
     background: linear-gradient(top, #333333 0%,#1c1c1c 100%);
     
-    @include box-shadow((inset rgba(255,255,255,.1) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
+    @include box-shadow((inset rgba(255,255,255,.1) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, inset rgba(255,255,255,.1) 1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
     
     &.on {
       color: #E5E5E5;
@@ -339,18 +377,24 @@ $link-focus-color       : #533d79;
       background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
       background: linear-gradient(top, #141414 0%,#070707 100%);
       @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
+    } //on
+    
+    &.first-child {
+      margin-left: 0;
     }
-  }
+  } //tab
   
   li {
     display: block;
     float: left;
+    
     &.file a {
       display: block;
       background: url('loading.gif') no-repeat center center;
       width: calc-em(75px, $base-font-size);
       height: calc-em(75px, $base-font-size);
-      border: 3px solid #191919;
+      border: 3px solid #FFF;
+      background: #111111;
       
       @include box-shadow(rgba(0,0,0,1) 0 2px 3px);
       
@@ -406,7 +450,8 @@ $link-focus-color       : #533d79;
       } //percentage
 
 
-      .uploadifyProgress {
+      .uploadifyProgress,
+      .uploadifyError {
        width: 100%;
        padding: calc-em(3px, 11px);
        margin-top: calc-em(10px, 11px);
@@ -436,7 +481,8 @@ $link-focus-color       : #533d79;
 
       } //progressbarContainer
 
-      &.uploadifyError {    
+      &.uploadifyError {
+        
         .percentage {
           color: #c00d0d;
         } //percentage

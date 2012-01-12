@@ -18,7 +18,7 @@ class window.AmpleAssets
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
-      expanded_height: 175
+      expanded_height: 215
       collapsed_height: 35
       base_url: '/ample_assets'
       search_url: '/files/search'
@@ -429,8 +429,11 @@ class window.AmpleAssets
             <ul></ul>
           </div>
         </div>
-        <a href="#" class="global previous">Previous</a>
-        <a href="#" class="global next">Next</a>
+        <nav class="controls">
+          <a href="#" class="global previous">Previous</a>
+          <a href="#" class="global next">Next</a>
+        </nav>
+
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'

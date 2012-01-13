@@ -415,6 +415,14 @@ class window.AmpleAssets
     up = 38
     down = 40
     escape = 27
+    
+    $(document).keyup (e) =>
+      return unless @keys_enabled
+      switch e.keyCode
+        when escape
+          @toggle() unless @modal_active
+      e.stopPropagation();
+      
     $(document).keydown (e) =>
       return unless @keys_enabled
       switch e.keyCode
@@ -426,8 +434,6 @@ class window.AmpleAssets
           @previous()
         when down
           @next()
-        when escape
-          @toggle() unless @modal_active
       e.stopPropagation();
 
   tpl: (view) ->

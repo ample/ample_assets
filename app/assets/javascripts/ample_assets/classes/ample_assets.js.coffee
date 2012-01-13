@@ -490,12 +490,12 @@ class window.AmpleAssets
       <div class="asset-media {{ orientation }}">
         <img src="{{ src }}" />
       </div>
-      <h3>{{ filename }}<h3>
+      <h3>{{ filename }}</h3>
     </div>'
     pdf: '
     <div class="asset-detail">
       <div id="pdf" class="asset-media"></div>
-      <h3>{{ filename }}<h3>
+      <h3>{{ filename }}</h3>
     </div>'
     empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
 

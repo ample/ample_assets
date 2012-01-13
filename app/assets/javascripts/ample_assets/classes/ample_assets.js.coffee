@@ -315,6 +315,7 @@ class window.AmpleAssets
 
   controls: (display=true) ->
     @log "controls(#{display})"
+    display = false if $(@active_panel).find('li').length < @options.pages_options.per_page
     switch display
       when true
         $('nav.controls').show()

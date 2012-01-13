@@ -15,7 +15,7 @@ class window.AmpleAssets
     @reloading = false
     ref = this
     default_options = 
-      debug: true
+      debug: false
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
@@ -430,15 +430,16 @@ class window.AmpleAssets
     
     $(document).keydown (e) =>
       return unless @keys_enabled
-      switch e.keyCode
-        when previous
-          $(@active_panel).amplePanels('previous')
-        when next
-          $(@active_panel).amplePanels('next')
-        when up
-          @previous()
-        when down
-          @next()
+      if @active_panel
+        switch e.keyCode
+          when previous
+            $(@active_panel).amplePanels('previous')
+          when next
+            $(@active_panel).amplePanels('next')
+          when up
+            @previous()
+          when down
+            @next()
       e.stopPropagation();
 
   tpl: (view) ->

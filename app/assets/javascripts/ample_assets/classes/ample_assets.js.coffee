@@ -1,14 +1,14 @@
 class window.AmpleAssets
-
+  
   constructor: (opts=undefined) ->
     @set_options(opts)
     @init()
-
+  
   init: ->
     @options.onInit()
     @setup()
     @events()
-
+  
   set_options: (opts) ->
     @current = 0
     @keys_enabled = true
@@ -65,10 +65,10 @@ class window.AmpleAssets
     @options = default_options
     for k of opts
       @options[k] = opts[k]
-
+  
   log: (msg) ->
     console.log "ample_assets.log: #{msg}" if @options.debug
-
+  
   setup: ->
     id = @options.id
     layout = Mustache.to_html(@tpl('layout'),{ id: id, pages: @get_pages(), tabs: @get_pages('tab') })
@@ -81,13 +81,13 @@ class window.AmpleAssets
     @goto(0) if @options.expanded
     $('body').bind 'ample_uploadify.complete', =>
       @reload(0)
-    
+  
   style: ->
     @loading = $("##{@options.id}-tabs span.loading")
     $("##{@options.id} .container").css('height',200)
     if @options.expanded
       $("##{@options.id}").css({height:@options.expanded_height});
-
+  
   reload: (i) ->
     @log "reload(#{i})"
     @reloading = true
@@ -102,7 +102,7 @@ class window.AmpleAssets
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)})" 
     selector += " ul" if @options.pages[i]['panels']
     $(selector).empty()
-
+  
   goto: (i) ->
     @log "goto(#{i})"
     @current = i
@@ -111,19 +111,19 @@ class window.AmpleAssets
     @activate(i)
     @load(i) unless @already_loaded(i)
     @enable_panel(i) if @already_loaded(i)
-
+  
   show: (i) ->
     $("##{@options.id} .pages .page").hide()
     $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
-
+  
   drag_drop: ->
     base_url = @options.base_url
     thumb_url = @options.thumb_url
-
+    
     $(".draggable").liveDraggable
       appendTo: "body"
       helper: "clone"
-
+    
     $("textarea").droppable
       activeClass: "notice"
       hoverClass: "success"
@@ -134,7 +134,7 @@ class window.AmpleAssets
         textile = "!#{url}!"
         html = "<img src=\"#{url}\" />"
         $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
-
+    
     $(".droppable").droppable
       activeClass: "notice"
       hoverClass: "success"
@@ -143,31 +143,31 @@ class window.AmpleAssets
         asset_id = $(ui.draggable).attr("id").split("-")[1]
         $(this).parent().children().first().val asset_id
         $(this).parent().find('a.asset-remove').removeClass('hide').show()
-
+  
   activate: (i) ->
     @log "activate(#{i})"
     $("##{@options.id} a.tab").removeClass('on')
     $("##{@options.id} a.tab:nth-child(#{i+2})").addClass('on')
-    
+  
   next: ->
     if @current < @options.pages.length - 1
       @log "next()"
       @current += 1
       @goto(@current)
-
+  
   previous: ->
     unless @current == 0
       @log "previous()"
       @current -= 1
       @goto(@current)
-
+  
   get_pages: (tpl = 'page') ->
     html = ''
     $.each @options.pages, (idx,el) => 
       el['classes'] = 'first-child' if idx == 0
       html += Mustache.to_html @tpl(tpl), el
     html
-
+  
   toggle: ->
     el = $("##{@options.id}")
     if @options.expanded 
@@ -182,7 +182,7 @@ class window.AmpleAssets
       el.animate {height: @options.expanded_height}, "fast", =>
         @expand()
         @options.onExpand()
-
+  
   load: (i) ->
     ref = this
     if !@options.pages[i]['last_request_empty'] && @options.pages[i]['url']
@@ -205,7 +205,7 @@ class window.AmpleAssets
       , data_type
     else
       @log "ERROR --> Couldn't load page because there was no url" unless @options.pages[i]['last_request_empty']
-
+  
   load_empty: (i) ->
     @log "load_empty(#{i})"
     empty = Mustache.to_html(@tpl('empty'))
@@ -214,14 +214,14 @@ class window.AmpleAssets
     $('li.empty').css('width',$('.ampn').first().width())
     $('li.empty a').click =>
       @goto(@options.pages.length-2)
-
+  
   load_html: (i, response) ->
     @log "load(#{i}) html"
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)})" 
     selector += " ul" if @options.pages[i]['panels']
     $(selector).html(response)
     @panels(i)
-
+  
   load_json: (i, response) ->
     @log "load(#{i}) json"
     panels_loaded = if @options.pages[i]['panel_selector'] then true else false
@@ -239,7 +239,7 @@ class window.AmpleAssets
     if @reloading
       @reloading = false
       @controls() 
-
+  
   load_results: (response) ->
     @log "load_results()"
     $.each response, (j,el) =>
@@ -250,7 +250,7 @@ class window.AmpleAssets
     @active_panel = $("#asset-results ul")
     @show(@options.pages.length-1)
     @controls()
-
+  
   build: (el) ->
     ref = this
     show_url = Mustache.to_html @options.show_url, { id: el.id }
@@ -264,7 +264,7 @@ class window.AmpleAssets
       ref.modal_open(el)
       false
     link
-
+  
   modal_open: (data) ->
     @modal_active = true
     if data.document == 'true'
@@ -282,7 +282,7 @@ class window.AmpleAssets
       console.log html
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     @touch(data)
-
+  
   load_img: (el,src) ->
     img = new Image()
     $(img).load(->
@@ -290,17 +290,17 @@ class window.AmpleAssets
       $(el).html this
       $(this).fadeIn()
     ).attr src: src
-
+  
   next_page_url: (i) ->
     @options.pages[i]['pages_loaded'] = 0 unless @options.pages[i]['pages_loaded']
     @options.pages[i]['pages_loaded'] += 1
     "#{@options.pages[i]['url']}?page=#{@options.pages[i]['pages_loaded']}"
-
+  
   touch: (el) ->
     @log "touch()"
     touch_url = Mustache.to_html @options.touch_url, { id: el.id }
     $.post "#{@options.base_url}#{touch_url}"
-
+  
   panels: (i) ->
     ref = this
     if @options.pages[i]['panels']
@@ -314,21 +314,21 @@ class window.AmpleAssets
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
           ref.load(i) if dir == 'next'
-
+  
   disable_panels: ->
     @log "disable_panels()"
     ref = this
     @controls(false)
     $.each @options.pages, (i,el) ->
       $(ref.options.pages[i]['panel_selector']).amplePanels('disable') if ref.options.pages[i]['panel_selector']
-
+  
   enable_panel: (i) ->  
     @log "enable_panel(#{i})"
     if @options.pages[i]['panel_selector']
       @active_panel = @options.pages[i]['panel_selector']
       $(@options.pages[i]['panel_selector']).amplePanels('enable') 
       @controls()
-
+  
   controls: (display=true) ->
     @log "controls(#{display})"
     display = false if $(@active_panel).find('li').length < @options.pages_options.per_page
@@ -337,22 +337,22 @@ class window.AmpleAssets
         $('nav.controls').show()
       when false
         $('nav.controls').hide()
-
+  
   already_loaded: (i) ->
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
-
+  
   remove: (el) ->
     parent = $(el).parent()
     parent.find('.droppable').empty().html('<span>Drag Asset Here</span>')
     parent.find('input').val('')
     $(el).hide()
-
+  
   collapse: ->
     @disable_panels()
-
+  
   expand: ->
     @goto(0)
-
+  
   events: ->
     @modal_events()
     @global_events()
@@ -374,18 +374,18 @@ class window.AmpleAssets
       $(el).click ->
         ref.goto(idx)
         false
-
+  
   global_events: ->
     $('a.global.next').click =>
       $(@active_panel).amplePanels('next')
       
     $('a.global.previous').click =>
       $(@active_panel).amplePanels('previous')
-
+  
   drag_events: ->
     @log "drag_events()"
     # TODO: kill key events during drag?
-
+  
   drop_events: ->
     ref = this
     $('.asset-drop .droppable a').live 'click', ->
@@ -394,14 +394,14 @@ class window.AmpleAssets
         ref.modal_open(response)
       , 'json'
       false
-
+  
   field_events: ->
     @log "field_events()"
     $('textarea, input').live 'blur', =>
       @keys_enabled = true
     $('textarea, input').live 'focus', =>
       @keys_enabled = false
-
+  
   modal_events: ->
     @modal_active = false
     $(document).bind 'afterClose.facebox', =>
@@ -410,7 +410,7 @@ class window.AmpleAssets
     $(document).bind 'loading.facebox', =>
       @keys_enabled = false
       @modal_active = true
-
+  
   search: ->
     @log 'search_events()'
     search_url = "#{@options.base_url}#{@options.search_url}"
@@ -423,7 +423,7 @@ class window.AmpleAssets
       $.post search_url, $(this).serialize(), (response) ->
         ref.load_results(response)
       , 'json'
-
+  
   key_down: ->
     ref = this
     previous = 37
@@ -452,10 +452,10 @@ class window.AmpleAssets
           when down
             @next()
       e.stopPropagation();
-
+  
   tpl: (view) ->
     @tpls()[view]
-
+  
   tpls: ->
     layout: '
     <div id="{{ id }}"><div class="background">
@@ -499,11 +499,12 @@ class window.AmpleAssets
       <h3>{{ filename }}</h3>
     </div>'
     empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
+  
 
 jQuery.fn.liveDraggable = (opts) ->
   @live "mouseover", ->
     $(this).data("init", true).draggable opts  unless $(this).data("init")
-
+    
 
 jQuery.fn.insertAtCaret = (value) ->
   @each (i) ->
@@ -524,3 +525,4 @@ jQuery.fn.insertAtCaret = (value) ->
     else
       @value += value
       @focus()
+

@@ -279,6 +279,7 @@ class window.AmpleAssets
       geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
       url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
       html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation })
+      console.log html
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     @touch(data)
 

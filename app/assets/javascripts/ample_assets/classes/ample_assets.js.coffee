@@ -330,6 +330,7 @@ class window.AmpleAssets
     @global_events()
     @field_events()
     @drop_events()
+    @drag_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
@@ -353,12 +354,26 @@ class window.AmpleAssets
     $('a.global.previous').click =>
       $(@active_panel).amplePanels('previous')
 
+  drag_events: ->
+    @log "drag_events()"
+    
+    # this kills dragging...
+    # $(".draggable").live 'dragstart', =>
+    #   @keys_enabled = false
+    # $(".draggable").live 'dragstop', =>
+    #   @keys_enabled = true
+    
+    # and this kills all input fields...
+    # $(document).bind 'mousedown', =>
+    #   @keys_enabled = false
+    # $(document).bind 'mouseup', =>
+    #   @keys_enabled = true
+    
+    # wtf.
+    
+
   drop_events: ->
     ref = this
-    $(document).bind 'mousedown', =>
-      @keys_enabled = false
-    $(document).bind 'mouseup', =>
-      @keys_enabled = true
     $('.asset-drop .droppable a').live 'click', ->
       id = $(this).attr("href")
       $.get $(this).attr("href"), (response) ->
@@ -368,9 +383,9 @@ class window.AmpleAssets
 
   field_events: ->
     $('textarea, input').bind 'blur', =>
-      @keys_enabled = true
+      @esc_enabled = true
     $('textarea, input').bind 'focus', =>
-      @keys_enabled = false
+      @esc_enabled = false
 
   modal_events: ->
     @modal_active = false
@@ -403,7 +418,8 @@ class window.AmpleAssets
     down = 40
     escape = 27
     $(document).keydown (e) =>
-      return unless @keys_enabled
+      #console.log('keydown')
+      #return unless @keys_enabled or @active_panel
       switch e.keyCode
         when previous
           $(@active_panel).amplePanels('previous')

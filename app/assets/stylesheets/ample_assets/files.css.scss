@@ -401,10 +401,14 @@ $link-focus-color       : #533d79;
     &.file a.document {
       background-color: #FFF;
       background-image: url('icon_pdf.gif');
+      background-position: center center;
+      background-repeat: no-repeat;
     }
     &.file a.swf {
       background-color: #FFF;
       background-image: url('icon_swf.gif');
+      background-position: center center;
+      background-repeat: no-repeat;
     }
     
   } //li

@@ -368,21 +368,7 @@ class window.AmpleAssets
 
   drag_events: ->
     @log "drag_events()"
-    
-    # this kills dragging...
-    # $(".draggable").live 'dragstart', =>
-    #   @keys_enabled = false
-    # $(".draggable").live 'dragstop', =>
-    #   @keys_enabled = true
-    
-    # and this kills all input fields...
-    # $(document).bind 'mousedown', =>
-    #   @keys_enabled = false
-    # $(document).bind 'mouseup', =>
-    #   @keys_enabled = true
-    
-    # wtf.
-    
+    # TODO: kill key events during drag?
 
   drop_events: ->
     ref = this
@@ -394,10 +380,11 @@ class window.AmpleAssets
       false
 
   field_events: ->
-    $('textarea, input').bind 'blur', =>
-      @esc_enabled = true
-    $('textarea, input').bind 'focus', =>
-      @esc_enabled = false
+    @log "field_events()"
+    $('textarea, input').live 'blur', =>
+      @keys_enabled = true
+    $('textarea, input').live 'focus', =>
+      @keys_enabled = false
 
   modal_events: ->
     @modal_active = false
@@ -429,7 +416,7 @@ class window.AmpleAssets
     down = 40
     escape = 27
     $(document).keydown (e) =>
-      # return unless @keys_enabled or @active_panel
+      return unless @keys_enabled
       switch e.keyCode
         when previous
           $(@active_panel).amplePanels('previous')
@@ -441,6 +428,7 @@ class window.AmpleAssets
           @next()
         when escape
           @toggle() unless @modal_active
+      e.stopPropagation();
 
   tpl: (view) ->
     @tpls()[view]
@@ -467,7 +455,6 @@ class window.AmpleAssets
           <a href="#" class="global previous">Previous</a>
           <a href="#" class="global next">Next</a>
         </nav>
-
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'

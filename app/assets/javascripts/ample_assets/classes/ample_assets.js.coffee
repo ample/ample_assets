@@ -178,7 +178,6 @@ class window.AmpleAssets
       el.animate {height: @options.expanded_height}, "fast", =>
         @expand()
         @options.onExpand()
-        @goto(0)
 
   load: (i) ->
     ref = this

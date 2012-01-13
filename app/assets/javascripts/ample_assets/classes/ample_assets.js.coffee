@@ -12,6 +12,7 @@ class window.AmpleAssets
   set_options: (opts) ->
     @current = 0
     @keys_enabled = true
+    @reloading = false
     ref = this
     default_options = 
       debug: true
@@ -89,6 +90,7 @@ class window.AmpleAssets
 
   reload: (i) ->
     @log "reload(#{i})"
+    @reloading = true
     @empty(i)
     @options.pages[i]['loaded'] = false
     @options.pages[i]['pages_loaded'] = 0
@@ -224,6 +226,9 @@ class window.AmpleAssets
         $(selector).append(li)
       ref.load_img(li.find('a'), el.sizes.tn)
     @panels(i) unless panels_loaded
+    if @reloading
+      @reloading = false
+      @controls() 
 
   load_results: (response) ->
     @log "load_results()"
@@ -422,7 +427,7 @@ class window.AmpleAssets
         when escape
           @toggle() unless @modal_active
       e.stopPropagation();
-      
+    
     $(document).keydown (e) =>
       return unless @keys_enabled
       switch e.keyCode

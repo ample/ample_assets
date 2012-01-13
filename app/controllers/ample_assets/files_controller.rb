@@ -30,8 +30,12 @@ module AmpleAssets
     end
     
     def create
-      filename, filedata = params['Filename'], params['Filedata'] 
-      file = File.new(:keywords => filename.gsub(/[^a-zA-Z0-9]/,' ').humanize, :attachment => filedata) 
+      if params['Filename'] && params['Filedata'] 
+        filename, filedata = params['Filename'], params['Filedata'] 
+        file = File.new(:keywords => filename.gsub(/[^a-zA-Z0-9]/,' ').humanize, :attachment => filedata)
+      else
+        file = File.new(params[:file])
+      end
       if file.save
         render file
       else 

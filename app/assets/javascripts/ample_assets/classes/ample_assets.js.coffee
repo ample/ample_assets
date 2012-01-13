@@ -194,6 +194,7 @@ class window.AmpleAssets
         ref.options.pages[i]['loaded'] = true 
         if $.trim(response) == ''
           ref.options.pages[i]['last_request_empty'] = true
+          ref.load_empty(i)
         else 
           switch data_type
             when "json"
@@ -204,6 +205,15 @@ class window.AmpleAssets
       , data_type
     else
       @log "ERROR --> Couldn't load page because there was no url" unless @options.pages[i]['last_request_empty']
+
+  load_empty: (i) ->
+    @log "load_empty(#{i})"
+    empty = Mustache.to_html(@tpl('empty'))
+    @load_html(i, empty)
+    @loading.hide()
+    $('li.empty').css('width',$('.ampn').first().width())
+    $('li.empty a').click =>
+      @goto(@options.pages.length-2)
 
   load_html: (i, response) ->
     @log "load(#{i}) html"
@@ -487,6 +497,7 @@ class window.AmpleAssets
       <div id="pdf" class="asset-media"></div>
       <h3>{{ filename }}<h3>
     </div>'
+    empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
 
 jQuery.fn.liveDraggable = (opts) ->
   @live "mouseover", ->

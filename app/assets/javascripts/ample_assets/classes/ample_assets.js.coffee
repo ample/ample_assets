@@ -104,13 +104,15 @@ class window.AmpleAssets
   goto: (i) ->
     @log "goto(#{i})"
     @current = i
-    $("##{@options.id} .pages .page").hide()
-    $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
-    $('nav.controls').hide()
+    @show(i)
     @disable_panels()
     @activate(i)
     @load(i) unless @already_loaded(i)
     @enable_panel(i) if @already_loaded(i)
+
+  show: (i) ->
+    $("##{@options.id} .pages .page").hide()
+    $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
 
   drag_drop: ->
     base_url = @options.base_url
@@ -231,7 +233,8 @@ class window.AmpleAssets
       $("#asset-results ul").amplePanels('append', li)
       @load_img(link, el.sizes.tn)
     @active_panel = $("#asset-results ul")
-    
+    @show(@options.pages.length-1)
+    @controls()
 
   build: (el) ->
     ref = this
@@ -291,15 +294,15 @@ class window.AmpleAssets
       @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
       $(el).parent().addClass('panels')
-      $('nav.controls').show()
+      @controls()
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
-          console.log 'slide_horizontal'
           ref.load(i) if dir == 'next'
 
   disable_panels: ->
     @log "disable_panels()"
     ref = this
+    @controls(false)
     $.each @options.pages, (i,el) ->
       $(ref.options.pages[i]['panel_selector']).amplePanels('disable') if ref.options.pages[i]['panel_selector']
 
@@ -308,7 +311,15 @@ class window.AmpleAssets
     if @options.pages[i]['panel_selector']
       @active_panel = @options.pages[i]['panel_selector']
       $(@options.pages[i]['panel_selector']).amplePanels('enable') 
-    $('nav.controls').show()
+      @controls()
+
+  controls: (display=true) ->
+    @log "controls(#{display})"
+    switch display
+      when true
+        $('nav.controls').show()
+      when false
+        $('nav.controls').hide()
 
   already_loaded: (i) ->
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
@@ -407,7 +418,6 @@ class window.AmpleAssets
       $("#asset-results ul").amplePanels('empty')
       $.post search_url, $(this).serialize(), (response) ->
         ref.load_results(response)
-        ref.goto(i)
       , 'json'
 
   key_down: ->

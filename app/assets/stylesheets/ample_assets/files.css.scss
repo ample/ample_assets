@@ -5,16 +5,16 @@
 /* Primary Typography configuration */
 $font-family	          : Helvetica, "Helvetica Neue", Arial, sans-serif;
 $base-font-size         : 16px;
-$base-line-height       : 24px;
-$font-color             : #252525;
-$subdued-font-color			: #636363;
+$text-highlight-color   : #1b6fc0;
+$text-error-color       : #c00d0d;
 
-/* Link configuration */
-$link-color							: #533d79;
-$link-hover-color       : darken($link-color, 10%);
-$link-active-color      : darken($link-color, 10%);
-$link-visited-color     : #533d79;
-$link-focus-color       : #533d79;
+/* Border-radius configuration */
+$border-radius          : 3px;
+
+/* Asset border configuration */
+$asset-border-color     : #FFF;
+$asset-border           : 3px solid $asset-border-color;
+$asset-border-hover     : 3px solid darken($asset-border-color, 10%);
 
 @import 'custom_mixins';
 
@@ -34,16 +34,23 @@ $link-focus-color       : #533d79;
 	 }
 } // pulse animation
 
-.notice {
+@-webkit-keyframes pulse_success {
+  0% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(62,110,155, 1) 0 0 16px));
+	 }
+	 50% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(62,110,155, .5) 0 0 6px));
+	 }
+	 100% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(62,110,155, 1) 0 0 16px));
+	 }
+}
+
+/* ------------------------------------------- */
+/*   TOP FORM ELEMENTS              					 */
+/* ------------------------------------------- */
+textarea.notice {
   border: 1px solid #3e7532;
-  
-  background: #6ca852;
-  background: -moz-linear-gradient(top, #6ca852 0%, #3e7532 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6ca852), color-stop(100%,#3e7532));
-  background: -webkit-linear-gradient(top, #6ca852 0%,#3e7532 100%);
-  background: -o-linear-gradient(top, #6ca852 0%,#3e7532 100%);
-  background: -ms-linear-gradient(top, #6ca852 0%,#3e7532 100%);
-  background: linear-gradient(top, #6ca852 0%,#3e7532 100%);
 }
 
 .asset-drop {
@@ -102,6 +109,24 @@ $link-focus-color       : #533d79;
         text-shadow: rgba(0,0,0,.05) 0 -1px 0, rgba(255,255,255,.3) 0 1px 0;
       }
       
+      &.success {
+        border: 1px solid #3e6e9b;
+        
+        background: #3e6e9b;
+        background: -moz-linear-gradient(top, #3e6e9b 0%, #124d87 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3e6e9b), color-stop(100%,#124d87));
+        background: -webkit-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        background: -o-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        background: -ms-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        background: linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        
+        -webkit-animation-name: pulse_success;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-iteration-count: infinite;
+      }
+      
+      
     } //notice
   } //droppable
   
@@ -151,6 +176,9 @@ $link-focus-color       : #533d79;
   border: 1px solid #d4d4d4;
 }
 
+/* ------------------------------------------- */
+/*   ASSET MANAGER                  					 */
+/* ------------------------------------------- */
 #ample-assets {
   font-family: $font-family;  
   font-size: $base-font-size;
@@ -160,15 +188,68 @@ $link-focus-color       : #533d79;
   width: 100%; 
   height: 35px; 
   
+  .container {
+    width: 950px;
+    margin: 0 auto;
+  } //container
+  
+  .background {
+    clear: both;
+    background: #2b2b2b;
+    background: url('bg-noise.png') repeat top left, -moz-linear-gradient(top, #2b2b2b 0%, #191919 44%, #111111 100%);
+    background: url('bg-noise.png') repeat top left, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b2b2b), color-stop(44%,#191919), color-stop(100%,#111111));
+    background: url('bg-noise.png') repeat top left, -webkit-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+    background: url('bg-noise.png') repeat top left, -o-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+    background: url('bg-noise.png') repeat top left, -ms-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+    background: url('bg-noise.png') repeat top left, linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
+
+    @include box-shadow((rgba(0,0,0,.2) 0 -1px 2px, inset rgba(255,255,255,.2) 0 2px 0, inset rgba(255,255,255,.1) 2px 0 0));
+   
+  } //background
+   
+   // ---- Ample Panels Styles ------------------------------------ //
+    
+   .ampn {
+     margin-left: calc-em(14px, $base-font-size);
+     position: relative;
+     z-index: 100;
+   } //ampn
+   
+   .pages {
+     width: 100%;
+   } //pages
+
+   .page {
+     @include clearfix; 
+     &.panels {
+       border: none;
+       @include imprint;
+
+       width: calc-em(930px,$base-font-size);
+       margin: 0 auto;
+       padding: calc-em(16px, $base-font-size) 0;
+
+       @include border-radius($border-radius);
+       
+     } //panels
+      
+     ul {
+       margin: 0;
+       padding: 0;
+     }
+     
+   } //page
+
+  // ---- Pagination Controls ------------------------------------ //
   .controls {
     @include clearfix;
+    display: none;
     position: absolute;
     width: calc-em(950px, $base-font-size);
     margin: calc-em(-70px, $base-font-size) 0 0 0;
     .previous,
     .next {
       position: relative;
-      display: block;
       text-indent: -9999px;
       width:15px;
       height:27px; 
@@ -178,43 +259,15 @@ $link-focus-color       : #533d79;
       background: url('btn-prev.png') no-repeat top left;
     } //previous
     .next {
-      
-        float: right;
-      
+      float: right;
       background: url('btn-next.png') no-repeat top left;
     } //next
   } //controls
   
   
+
   
-  .background {
-    clear: both;
-    
-    background: #2b2b2b;
-    background: url('bg-noise.png') repeat top left, -moz-linear-gradient(top, #2b2b2b 0%, #191919 44%, #111111 100%);
-    background: url('bg-noise.png') repeat top left, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b2b2b), color-stop(44%,#191919), color-stop(100%,#111111));
-    background: url('bg-noise.png') repeat top left, -webkit-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
-    background: url('bg-noise.png') repeat top left, -o-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
-    background: url('bg-noise.png') repeat top left, -ms-linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
-    background: url('bg-noise.png') repeat top left, linear-gradient(top, #2b2b2b 0%,#191919 44%,#111111 100%);
-  
-    @include box-shadow((rgba(0,0,0,.2) 0 -1px 2px, inset rgba(255,255,255,.2) 0 2px 0, inset rgba(255,255,255,.1) 2px 0 0));
-   
-  }
-  
-  label {
-    color: #999;
-    text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
-    font-weight: bold;
-    font-size: calc-em(13px, $base-font-size);
-  }
-  
-  
-  .ampn {
-    margin-left: calc-em(14px, $base-font-size);
-  }
-  
-  
+  // ---- Handle to Collapse/Expand ------------------------------------ //
   .handle {
     position: relative;
     float: right;
@@ -232,23 +285,31 @@ $link-focus-color       : #533d79;
     
     @include border-top-left-radius(6px);
     @include box-shadow((rgba(0,0,0,.2) 0 -1px 2px, inset rgba(255,255,255,.2) 0 2px 0, inset rgba(255,255,255,.1) 2px 0 0));
-    
-  }
-  
 
+  } //handle
+   
+   // ---- Search Box ------------------------------------ //    
   .search {
     @include clearfix;
     float: right;
     margin: calc-em(10px, $base-font-size) 0 0 0;
     width: calc-em(300px, $base-font-size);
     
-    @include border-radius(3px);
+    @include border-radius($border-radius);
     
     input {
-      padding: calc-em(5px, 13px) calc-em(5px, 13px);
-      margin: 0;
+      @include imprint;
+      color: #FFF;
+      
       float: left;
-      border: 1px solid rgba(0,0,0,.4);
+      padding: calc-em(6px, 13px) calc-em(5px, 13px) calc-em(5px, 13px);
+      margin: 0;
+      
+      border: 1px solid #000;
+      border-right: none;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      
+      
       width: calc-em(235px, 13px);
       
       font-size: calc-em(12px, $base-font-size);
@@ -256,7 +317,8 @@ $link-focus-color       : #533d79;
       @include border-left-radius(4px);
       @include box-shadow((inset rgba(0,0,0,.4) 0 1px 2px, rgba(0,0,0,.6) 0 1px 2px));
       
-    }
+    } //input
+    
     label {
       border-left: 1px solid #000;
       border-bottom: 1px solid #000;
@@ -267,8 +329,8 @@ $link-focus-color       : #533d79;
       
       font-size: calc-em(13px, $base-font-size);
       
-      color: darken(#355487, 25%);
-      text-shadow: rgba(255,255,255,.2) 0 1px 0;
+      color: #FFF;
+      text-shadow: rgba(0,0,0,1) 0 -1px 0;
       
       background: #3e6e9b;
       background: -moz-linear-gradient(top, #3e6e9b 0%, #124d87 100%);
@@ -280,43 +342,11 @@ $link-focus-color       : #533d79;
       
       @include border-right-radius(4px);
       @include box-shadow((inset rgba(255,255,255,.3) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
-      
-    }
-  }
+    } //label
+    
+  } //search
 
-  .container {
-    width: 950px;
-    margin: 0 auto;
-  }
-
-  .pages {
-    width: 100%;
-  }
-
-  .page {
-    @include clearfix; 
-    &.panels {
-      width: calc-em(930px,$base-font-size);
-      margin: 0 auto;
-      padding: calc-em(16px, $base-font-size) 0;
-      @include border-radius(4px);
-      border: none;
-      border-bottom: 1px solid rgba(255,255,255,.2);
-
-      background: #141414;
-      background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
-      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
-      background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
-      background: -o-linear-gradient(top, #141414 0%,#070707 100%);
-      background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
-      background: linear-gradient(top, #141414 0%,#070707 100%);
-      @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
-    }
-    ul {
-      margin: 0;
-      padding: 0;
-    }
-  }
+  // ---- Tab Navigation ------------------------------------ //
 
   .tabs {
     @include clearfix; 
@@ -334,7 +364,6 @@ $link-focus-color       : #533d79;
     }
   } //tabs
 
-
   a.tab {
     float: left; 
     display: block;
@@ -347,9 +376,9 @@ $link-focus-color       : #533d79;
     font-size: calc-em(13px, $base-font-size);
     line-height: calc-em(26px, 13px);
     text-decoration: none; 
-    text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
+    text-shadow: rgba(0,0,0,1) 0 1px 0;
     
-    @include border-radius(4px);
+    @include border-radius($border-radius);
     
     background: #333333;
     background: -moz-linear-gradient(top, #333333 0%, #1c1c1c 100%);
@@ -367,23 +396,17 @@ $link-focus-color       : #533d79;
       text-shadow: rgba(0,0,0,1) 0 -1px 0;
       
       border: none;
-      border-bottom: 1px solid rgba(255,255,255,.2);
+      
+      @include imprint;
         
-      background: #141414;
-      background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
-      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
-      background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
-      background: -o-linear-gradient(top, #141414 0%,#070707 100%);
-      background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
-      background: linear-gradient(top, #141414 0%,#070707 100%);
-      @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
     } //on
     
     &.first-child {
       margin-left: 0;
     }
   } //tab
-  
+   
+  // ---- Asset Styling ------------------------------------ //
   li {
     display: block;
     float: left;
@@ -393,110 +416,112 @@ $link-focus-color       : #533d79;
       background: url('loading.gif') no-repeat center center;
       width: calc-em(75px, $base-font-size);
       height: calc-em(75px, $base-font-size);
-      border: 3px solid #FFF;
+      border: $asset-border;
       background: #111111;
       
+      @include border-radius($border-radius);
       @include box-shadow(rgba(0,0,0,1) 0 2px 3px);
       
       &:hover {
-        border: 3px solid #000;
+       border: $asset-border-hover; 
       }
+      
     } //file a
      
     &.file a.document {
       background-color: #FFF;
       background-image: url('icon_pdf.gif');
+      background-position: center center;
+      background-repeat: no-repeat;
     }
     &.file a.swf {
       background-color: #FFF;
       background-image: url('icon_swf.gif');
+      background-position: center center;
+      background-repeat: no-repeat;
     }
     
   } //li
+   
+  // ---- Uploadify Styling ------------------------------------ //
+   
+   #upload {
+     p {
+       float: left;
+       width: calc-em(140px, $base-font-size);
+     }
+     .uploadifyQueue {
+       float: left;
+       width: calc-em(780px, $base-font-size);
+       height: calc-em(100px, $base-font-size);
+       @include clearfix;
+       overflow-y: scroll;
+
+       .uploadifyQueueItem {
+         float: left;
+         width: calc-em(350px, 11px);
+         margin: calc-em(10px, 11px) calc-em(10px, 11px) 0 0;
+         padding: calc-em(10px, 11px);
+
+         background: rgba(0,0,0,.2);
+         border: 1px solid #000;
+
+         @include border-radius($border-radius);
+
+         font-weight: bold;
+         font-size: calc-em(11px, $base-font-size);
+         text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
+         text-transform: uppercase;
+
+         .cancel {
+           float: right;
+         } //cancel icon
+
+         .fileName {
+           color: #FFF;
+         } //fileName
+
+         .percentage {
+           color: $text-highlight-color;
+         } //percentage
+
+
+         .uploadifyProgress,
+         .uploadifyError {
+
+          @include imprint;
+
+           border: 1px solid #000;
+           border-bottom: 1px solid rgba(255,255,255,.2);       
+           width: 100%;
+           padding: calc-em(3px, 11px);
+           margin-top: calc-em(10px, 11px);
+
+           @include border-radius($border-radius);
+           @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
+
+           .uploadifyProgressBar {
+           	height: calc-em(5px, 11px);
+           	width: 1px;
+             background-color: #0099FF;
+
+             color: $text-highlight-color;
+
+           	@include border-right-radius(12px);
+           } //progressBar
+
+         } //progressbarContainer
+
+         &.uploadifyError {
+
+           .percentage {
+             color: $text-error-color;
+           } //percentage
+         } //uploadifyError
+       } //uploadifyQueueItem
+
+     } //uploadifyQueue
+      
+   } //upload
   
-  .uploadifyQueue {
-    float: left;
-    width: calc-em(780px, $base-font-size);
-    height: calc-em(100px, $base-font-size);
-    @include clearfix;
-    overflow-y: scroll;
-
-    .uploadifyQueueItem {
-      float: left;
-      width: calc-em(350px, 11px);
-      margin: calc-em(10px, 11px) calc-em(10px, 11px) 0 0;
-      padding: calc-em(10px, 11px);
-
-      background: rgba(0,0,0,.2);
-      border: 1px solid #000;
-
-      @include border-radius(4px);
-
-      font-weight: bold;
-      font-size: calc-em(11px, $base-font-size);
-      text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
-      text-transform: uppercase;
-
-      .cancel {
-        float: right;
-      }
-
-      .fileName {
-        color: #FFF;
-      } //fileName
-
-      .percentage {
-        color: #1b6fc0;
-      } //percentage
-
-
-      .uploadifyProgress,
-      .uploadifyError {
-       width: 100%;
-       padding: calc-em(3px, 11px);
-       margin-top: calc-em(10px, 11px);
-       border: 1px solid #000;
-       border-bottom: 1px solid rgba(255,255,255,.2);
-
-       background: #141414;
-       background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
-       background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
-       background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
-       background: -o-linear-gradient(top, #141414 0%,#070707 100%);
-       background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
-       background: linear-gradient(top, #141414 0%,#070707 100%);
-
-       @include border-radius(2px);
-       @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
-
-        .uploadifyProgressBar {
-        	height: calc-em(5px, 11px);
-        	width: 1px;
-          background-color: #0099FF;
-
-          color: #1b6fc0;
-
-        	@include border-right-radius(12px);
-        } //progressBar
-
-      } //progressbarContainer
-
-      &.uploadifyError {
-        
-        .percentage {
-          color: #c00d0d;
-        } //percentage
-      } //uploadifyError
-    } //uploadifyQueueItem
-
-  } //uploadifyQueue
-  
-  #upload {
-    p {
-      float: left;
-      width: calc-em(140px, $base-font-size);
-    }
-  } //upload
-  
-  
-}
+} //ample-assets

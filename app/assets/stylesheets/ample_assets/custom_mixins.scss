@@ -1,6 +1,6 @@
-// ------------------------------------------- //
-//    MATH & LAYOUT   												 //
-// ------------------------------------------- //
+// ------------------------------------------------------ //
+//    MATH & LAYOUT               												//
+// ------------------------------------------------------ //
 
 @function calc-em($target-px, $context) {
   @return ($target-px / $context) * 1em;
@@ -16,15 +16,32 @@
   }
 }
 
-// ------------------------------------------- //
-//    CSS3 Mixins      												 //
-// ------------------------------------------- //
+// ------------------------------------------------------ //
+//    Background/Colors           												//
+// ------------------------------------------------------ //
 
-@mixin border-radius($radius) {
-  -webkit-border-radius: $radius; 
-  -moz-border-radius: $radius; 
-  border-radius: $radius; 
+@mixin imprint {
+  background: #141414;
+  background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
+  background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
+  background: -o-linear-gradient(top, #141414 0%,#070707 100%);
+  background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
+  background: linear-gradient(top, #141414 0%,#070707 100%);
+  
+  @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
+  
+  border-bottom: 1px solid rgba(255,255,255,.2);
 }
 
-@import 'bourbon/css3/box-shadow';
-@import 'bourbon/css3/border-radius';
+// ------------------------------------------------------ //
+//    Bourbon Mixins:                                     //
+//  	Taken from thoughtbot's bourbon gem,                //
+//    found here: https://github.com/thoughtbot/bourbon   //
+// ------------------------------------------------------ //
+
+  // ---- Box Shadow ------------------------------------ //
+  @import 'bourbon/css3/box-shadow';
+  
+  // ---- Border Radius --------------------------------- //
+  @import 'bourbon/css3/border-radius';

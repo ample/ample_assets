@@ -14,7 +14,7 @@ class window.AmpleAssets
     @keys_enabled = true
     ref = this
     default_options = 
-      debug: false
+      debug: true
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
@@ -104,12 +104,15 @@ class window.AmpleAssets
   goto: (i) ->
     @log "goto(#{i})"
     @current = i
-    $("##{@options.id} .pages .page").hide()
-    $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
+    @show(i)
     @disable_panels()
     @activate(i)
     @load(i) unless @already_loaded(i)
     @enable_panel(i) if @already_loaded(i)
+
+  show: (i) ->
+    $("##{@options.id} .pages .page").hide()
+    $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
 
   drag_drop: ->
     base_url = @options.base_url
@@ -177,7 +180,6 @@ class window.AmpleAssets
       el.animate {height: @options.expanded_height}, "fast", =>
         @expand()
         @options.onExpand()
-        @goto(0)
 
   load: (i) ->
     ref = this
@@ -230,6 +232,9 @@ class window.AmpleAssets
       li = $('<li class="file"></li>').append(link)
       $("#asset-results ul").amplePanels('append', li)
       @load_img(link, el.sizes.tn)
+    @active_panel = $("#asset-results ul")
+    @show(@options.pages.length-1)
+    @controls()
 
   build: (el) ->
     ref = this
@@ -289,6 +294,7 @@ class window.AmpleAssets
       @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
       $(el).parent().addClass('panels')
+      @controls()
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
           ref.load(i) if dir == 'next'
@@ -296,6 +302,7 @@ class window.AmpleAssets
   disable_panels: ->
     @log "disable_panels()"
     ref = this
+    @controls(false)
     $.each @options.pages, (i,el) ->
       $(ref.options.pages[i]['panel_selector']).amplePanels('disable') if ref.options.pages[i]['panel_selector']
 
@@ -304,9 +311,18 @@ class window.AmpleAssets
     if @options.pages[i]['panel_selector']
       @active_panel = @options.pages[i]['panel_selector']
       $(@options.pages[i]['panel_selector']).amplePanels('enable') 
+      @controls()
+
+  controls: (display=true) ->
+    @log "controls(#{display})"
+    display = false if $(@active_panel).find('li').length < @options.pages_options.per_page
+    switch display
+      when true
+        $('nav.controls').show()
+      when false
+        $('nav.controls').hide()
 
   already_loaded: (i) ->
-    @log "already_loaded(#{i})"
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
 
   remove: (el) ->
@@ -326,6 +342,7 @@ class window.AmpleAssets
     @global_events()
     @field_events()
     @drop_events()
+    @drag_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
@@ -349,6 +366,10 @@ class window.AmpleAssets
     $('a.global.previous').click =>
       $(@active_panel).amplePanels('previous')
 
+  drag_events: ->
+    @log "drag_events()"
+    # TODO: kill key events during drag?
+
   drop_events: ->
     ref = this
     $('.asset-drop .droppable a').live 'click', ->
@@ -359,9 +380,10 @@ class window.AmpleAssets
       false
 
   field_events: ->
-    $('textarea, input').bind 'blur', =>
+    @log "field_events()"
+    $('textarea, input').live 'blur', =>
       @keys_enabled = true
-    $('textarea, input').bind 'focus', =>
+    $('textarea, input').live 'focus', =>
       @keys_enabled = false
 
   modal_events: ->
@@ -384,7 +406,6 @@ class window.AmpleAssets
       $("#asset-results ul").amplePanels('empty')
       $.post search_url, $(this).serialize(), (response) ->
         ref.load_results(response)
-        ref.goto(i)
       , 'json'
 
   key_down: ->
@@ -407,6 +428,7 @@ class window.AmpleAssets
           @next()
         when escape
           @toggle() unless @modal_active
+      e.stopPropagation();
 
   tpl: (view) ->
     @tpls()[view]
@@ -425,7 +447,7 @@ class window.AmpleAssets
         </div>
         <div id="{{ id }}-pages" class="pages">
           {{{ pages }}}
-          <div id="asset-results" class="page">
+          <div id="asset-results" class="page panels">
             <ul></ul>
           </div>
         </div>
@@ -433,7 +455,6 @@ class window.AmpleAssets
           <a href="#" class="global previous">Previous</a>
           <a href="#" class="global next">Next</a>
         </nav>
-
       </div></div>
     </div>'
     handle: '<a href="#" id="{{ id }}-handle" class="handle">{{ title }}</a>'

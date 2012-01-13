@@ -32,7 +32,7 @@ module AmpleAssets
     def create
       if params['Filename'] && params['Filedata'] 
         filename, filedata = params['Filename'], params['Filedata'] 
-        file = File.new(:keywords => filename.gsub(/[^a-zA-Z0-9]/,' ').humanize, :attachment => filedata)
+        file = File.new(:attachment => filedata)
       else
         file = File.new(params[:file])
       end

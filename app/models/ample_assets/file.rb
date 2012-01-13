@@ -5,7 +5,10 @@ module AmpleAssets
     
     ###---------------------------------------------------- Plugins
     
-    image_accessor :attachment
+    image_accessor :attachment do
+        after_assign { |a| self.keywords = a.name.gsub(/[^a-zA-Z0-9]/,' ').humanize unless a.name.nil? }
+    end
+    
     self.per_page = 20
     acts_as_indexed :fields => [:keywords]
     
@@ -17,7 +20,7 @@ module AmpleAssets
     
     validates_presence_of :attachment
     validates_property :mime_type, :of => :attachment, :in => AmpleAssets::Engine.config.allowed_mime_types.collect{ |a| a[1] }.flatten
-    
+
     ###---------------------------------------------------- Instance Methods
     
     def is_swf?

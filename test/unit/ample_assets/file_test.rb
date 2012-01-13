@@ -3,8 +3,8 @@ require 'test_helper'
 module AmpleAssets
   class FileTest < ActiveSupport::TestCase
     
-    test "the truth" do
-      assert true
+    should 'create keywords based on the uploaded filename' do
+      # The filename is coming out nil in these tests
     end
     
   end

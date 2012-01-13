@@ -418,7 +418,8 @@ class window.AmpleAssets
     down = 40
     escape = 27
     $(document).keydown (e) =>
-      return unless @keys_enabled
+      #console.log('keydown')
+      #return unless @keys_enabled or @active_panel
       switch e.keyCode
         when previous
           $(@active_panel).amplePanels('previous')

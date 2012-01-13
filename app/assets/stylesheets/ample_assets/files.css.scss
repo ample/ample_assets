@@ -34,16 +34,9 @@ $link-focus-color       : #533d79;
 	 }
 } // pulse animation
 
-.notice {
-  border: 1px solid #3e7532;
+textarea.notice {
   
-  background: #6ca852;
-  background: -moz-linear-gradient(top, #6ca852 0%, #3e7532 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6ca852), color-stop(100%,#3e7532));
-  background: -webkit-linear-gradient(top, #6ca852 0%,#3e7532 100%);
-  background: -o-linear-gradient(top, #6ca852 0%,#3e7532 100%);
-  background: -ms-linear-gradient(top, #6ca852 0%,#3e7532 100%);
-  background: linear-gradient(top, #6ca852 0%,#3e7532 100%);
+  border: 1px solid #3e7532;
 }
 
 .asset-drop {
@@ -395,9 +388,6 @@ $link-focus-color       : #533d79;
       @include border-radius(3px);
       @include box-shadow(rgba(0,0,0,1) 0 2px 3px);
       
-      &:hover {
-        border: 3px solid #000;
-      }
     } //file a
      
     &.file a.document {

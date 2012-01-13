@@ -242,6 +242,7 @@ $link-focus-color       : #533d79;
     
     input {
       @include imprint;
+      color: #FFF;
       
       float: left;
       padding: calc-em(6px, 13px) calc-em(5px, 13px);

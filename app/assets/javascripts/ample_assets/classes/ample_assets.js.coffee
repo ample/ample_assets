@@ -14,7 +14,7 @@ class window.AmpleAssets
     @keys_enabled = true
     ref = this
     default_options = 
-      debug: false
+      debug: true
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
@@ -231,6 +231,8 @@ class window.AmpleAssets
       li = $('<li class="file"></li>').append(link)
       $("#asset-results ul").amplePanels('append', li)
       @load_img(link, el.sizes.tn)
+    @active_panel = $("#asset-results ul")
+    
 
   build: (el) ->
     ref = this
@@ -307,10 +309,9 @@ class window.AmpleAssets
     if @options.pages[i]['panel_selector']
       @active_panel = @options.pages[i]['panel_selector']
       $(@options.pages[i]['panel_selector']).amplePanels('enable') 
-      $('nav.controls').show()
+    $('nav.controls').show()
 
   already_loaded: (i) ->
-    @log "already_loaded(#{i})"
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
 
   remove: (el) ->
@@ -418,8 +419,7 @@ class window.AmpleAssets
     down = 40
     escape = 27
     $(document).keydown (e) =>
-      #console.log('keydown')
-      #return unless @keys_enabled or @active_panel
+      # return unless @keys_enabled or @active_panel
       switch e.keyCode
         when previous
           $(@active_panel).amplePanels('previous')

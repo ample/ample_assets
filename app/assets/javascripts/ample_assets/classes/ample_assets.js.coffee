@@ -292,10 +292,10 @@ class window.AmpleAssets
       @active_panel = el
       @options.pages[i][''] = $(el).attr('id',"#{@options.pages[i]['id']}-panel")
       $(el).parent().addClass('panels')
-      $(el).amplePanels(@options.pages_options).bind 'init', (e) ->
-        $('nav.controls').show()
+      $('nav.controls').show()
       $(el).amplePanels(@options.pages_options)
         .bind 'slide_horizontal', (e,d,dir) ->
+          console.log 'slide_horizontal'
           ref.load(i) if dir == 'next'
 
   disable_panels: ->

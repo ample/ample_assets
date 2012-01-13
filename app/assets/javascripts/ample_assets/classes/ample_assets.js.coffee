@@ -12,9 +12,10 @@ class window.AmpleAssets
   set_options: (opts) ->
     @current = 0
     @keys_enabled = true
+    @reloading = false
     ref = this
     default_options = 
-      debug: true
+      debug: false
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
@@ -89,6 +90,7 @@ class window.AmpleAssets
 
   reload: (i) ->
     @log "reload(#{i})"
+    @reloading = true
     @empty(i)
     @options.pages[i]['loaded'] = false
     @options.pages[i]['pages_loaded'] = 0
@@ -192,6 +194,7 @@ class window.AmpleAssets
         ref.options.pages[i]['loaded'] = true 
         if $.trim(response) == ''
           ref.options.pages[i]['last_request_empty'] = true
+          ref.load_empty(i)
         else 
           switch data_type
             when "json"
@@ -202,6 +205,15 @@ class window.AmpleAssets
       , data_type
     else
       @log "ERROR --> Couldn't load page because there was no url" unless @options.pages[i]['last_request_empty']
+
+  load_empty: (i) ->
+    @log "load_empty(#{i})"
+    empty = Mustache.to_html(@tpl('empty'))
+    @load_html(i, empty)
+    @loading.hide()
+    $('li.empty').css('width',$('.ampn').first().width())
+    $('li.empty a').click =>
+      @goto(@options.pages.length-2)
 
   load_html: (i, response) ->
     @log "load(#{i}) html"
@@ -224,6 +236,9 @@ class window.AmpleAssets
         $(selector).append(li)
       ref.load_img(li.find('a'), el.sizes.tn)
     @panels(i) unless panels_loaded
+    if @reloading
+      @reloading = false
+      @controls() 
 
   load_results: (response) ->
     @log "load_results()"
@@ -422,18 +437,19 @@ class window.AmpleAssets
         when escape
           @toggle() unless @modal_active
       e.stopPropagation();
-      
+    
     $(document).keydown (e) =>
       return unless @keys_enabled
-      switch e.keyCode
-        when previous
-          $(@active_panel).amplePanels('previous')
-        when next
-          $(@active_panel).amplePanels('next')
-        when up
-          @previous()
-        when down
-          @next()
+      if @active_panel
+        switch e.keyCode
+          when previous
+            $(@active_panel).amplePanels('previous')
+          when next
+            $(@active_panel).amplePanels('next')
+          when up
+            @previous()
+          when down
+            @next()
       e.stopPropagation();
 
   tpl: (view) ->
@@ -481,6 +497,7 @@ class window.AmpleAssets
       <div id="pdf" class="asset-media"></div>
       <h3>{{ filename }}<h3>
     </div>'
+    empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
 
 jQuery.fn.liveDraggable = (opts) ->
   @live "mouseover", ->

@@ -212,6 +212,18 @@ $link-focus-color       : #533d79;
     margin-left: calc-em(14px, $base-font-size);
     position: relative;
     z-index: 100;
+    .empty {
+      color: #FFF;
+      text-align: center;
+      padding: calc-em(30px, $base-font-size);
+      a {
+        color: #7799b8;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
   
   

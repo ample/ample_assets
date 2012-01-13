@@ -49,9 +49,6 @@ $asset-border-hover     : 3px solid darken($asset-border-color, 10%);
 /* ------------------------------------------- */
 /*   TOP FORM ELEMENTS              					 */
 /* ------------------------------------------- */
-textarea.notice {
-  border: 1px solid #3e7532;
-}
 
 .asset-drop {
   font-family: $font-family;  
@@ -87,7 +84,7 @@ textarea.notice {
     } //span
      
      
-    &.notice {
+    &.drag-notice {
       border: 1px solid #3e7532;
       
       background: #6ca852;
@@ -127,7 +124,7 @@ textarea.notice {
       }
       
       
-    } //notice
+    } //drag-notice
   } //droppable
   
   .asset-action {
@@ -167,6 +164,12 @@ textarea.notice {
     border: 1px solid #d4d4d4;
   }
 }
+
+textarea {
+  &.drag-notice {
+    border: 1px solid #3e7532;
+  } 
+} //textarea
 
 #pdf {
 	width: 480px;

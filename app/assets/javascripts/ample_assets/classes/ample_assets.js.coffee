@@ -123,7 +123,7 @@ class window.AmpleAssets
       helper: "clone"
 
     $("textarea").droppable
-      activeClass: "notice"
+      activeClass: "drag-notice"
       hoverClass: "success"
       drop: (event, ui) ->
         geometry = if $(ui.draggable).attr("orientation") == 'portrait' then 'x300>' else '480x>'
@@ -134,7 +134,7 @@ class window.AmpleAssets
         $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
 
     $(".droppable").droppable
-      activeClass: "notice"
+      activeClass: "drag-notice"
       hoverClass: "success"
       drop: (event, ui) ->
         $(this).html ui.draggable.clone()

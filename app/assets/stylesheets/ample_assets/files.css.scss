@@ -34,8 +34,20 @@ $link-focus-color       : #533d79;
 	 }
 } // pulse animation
 
-textarea.notice {
+@-webkit-keyframes pulse_success {
+  0% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(62,110,155, 1) 0 0 16px));
+	 }
+	 50% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(62,110,155, .5) 0 0 6px));
+	 }
+	 100% {
+	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(62,110,155, 1) 0 0 16px));
+	 }
   
+}
+
+textarea.notice {
   border: 1px solid #3e7532;
 }
 
@@ -94,6 +106,24 @@ textarea.notice {
         color: darken(#3e7532, 15%);
         text-shadow: rgba(0,0,0,.05) 0 -1px 0, rgba(255,255,255,.3) 0 1px 0;
       }
+      
+      &.success {
+        border: 1px solid #3e6e9b;
+        
+        background: #3e6e9b;
+        background: -moz-linear-gradient(top, #3e6e9b 0%, #124d87 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3e6e9b), color-stop(100%,#124d87));
+        background: -webkit-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        background: -o-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        background: -ms-linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        background: linear-gradient(top, #3e6e9b 0%,#124d87 100%);
+        
+        -webkit-animation-name: pulse_success;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-iteration-count: infinite;
+      }
+      
       
     } //notice
   } //droppable

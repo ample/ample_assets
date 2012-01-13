@@ -392,6 +392,7 @@ $link-focus-color       : #533d79;
       border: 3px solid #FFF;
       background: #111111;
       
+      @include border-radius(3px);
       @include box-shadow(rgba(0,0,0,1) 0 2px 3px);
       
       &:hover {

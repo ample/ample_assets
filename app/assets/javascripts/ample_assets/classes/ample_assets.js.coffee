@@ -357,7 +357,7 @@ class window.AmpleAssets
     @disable_panels()
   
   expand: ->
-    @goto(0)
+    @goto(@current)
   
   events: ->
     @modal_events()

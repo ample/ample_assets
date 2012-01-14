@@ -94,6 +94,7 @@ class window.AmpleAssets
     @empty(i)
     @options.pages[i]['loaded'] = false
     @options.pages[i]['pages_loaded'] = 0
+    $(@options.pages[i]['panel_selector']).amplePanels('goto', 0)
     @goto(i)
     @enable_panel(i)
   
@@ -435,6 +436,8 @@ class window.AmpleAssets
       $("#asset-results ul").amplePanels('empty')
       $.post search_url, $(this).serialize(), (response) ->
         ref.load_results(response)
+        $('.asset-results').show()
+        ref.activate(i)
       , 'json'
   
   key_down: ->
@@ -480,6 +483,7 @@ class window.AmpleAssets
             <label for="asset-search">Search</label>
           </div>
           {{{ tabs }}}
+          <a href="#" data-role="asset-search-results" class="tab asset-results">Results</a>
           <span class="asset-loading"></span>
         </div>
         <div id="{{ id }}-pages" class="pages">

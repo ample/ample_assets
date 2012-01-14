@@ -352,6 +352,9 @@ $link-focus-color       : #533d79;
       height: calc-em(20px, 13px); 
       margin: calc-em(10px, 13px) 0 0 calc-em(10px, 13px);
     }
+    .asset-results {
+      display: none;
+    }
   } //tabs
 
   a.assets-reload,

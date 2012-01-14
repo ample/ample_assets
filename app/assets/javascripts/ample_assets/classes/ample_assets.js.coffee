@@ -83,7 +83,7 @@ class window.AmpleAssets
       @reload(0)
   
   style: ->
-    @loading = $("##{@options.id}-tabs span.loading")
+    @loading = $("##{@options.id}-tabs span.asset-loading")
     $("##{@options.id} .container").css('height',200)
     if @options.expanded
       $("##{@options.id}").css({height:@options.expanded_height});
@@ -125,8 +125,8 @@ class window.AmpleAssets
       helper: "clone"
     
     $("textarea").droppable
-      activeClass: "notice"
-      hoverClass: "success"
+      activeClass: "asset-notice"
+      hoverClass: "asset-success"
       drop: (event, ui) ->
         geometry = if $(ui.draggable).attr("orientation") == 'portrait' then 'x300>' else '480x>'
         uid = $(ui.draggable).attr("data-uid")
@@ -136,8 +136,8 @@ class window.AmpleAssets
         $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
     
     $(".droppable").droppable
-      activeClass: "notice"
-      hoverClass: "success"
+      activeClass: "asset-notice"
+      hoverClass: "asset-success"
       drop: (event, ui) ->
         $(this).html ui.draggable.clone()
         asset_id = $(ui.draggable).attr("id").split("-")[1]
@@ -146,8 +146,9 @@ class window.AmpleAssets
   
   activate: (i) ->
     @log "activate(#{i})"
-    $("##{@options.id} a.tab").removeClass('on')
-    $("##{@options.id} a.tab:nth-child(#{i+2})").addClass('on')
+    tabs = $("##{@options.id} a.tab")
+    tabs.removeClass('on')
+    tabs.eq(i).addClass('on')
   
   next: ->
     if @current < @options.pages.length - 1
@@ -184,17 +185,22 @@ class window.AmpleAssets
         @options.onExpand()
   
   load: (i) ->
+    @log "load(#{i})"
     ref = this
-    if !@options.pages[i]['last_request_empty'] && @options.pages[i]['url']
+    load_next_page = true unless @options.pages[i]['last_request_empty']
+    load_next_page = true if @reloading
+
+    if @options.pages[i]['url'] && load_next_page
       @loading.show()
       url = @next_page_url(i)
       data_type = @options.pages[i]['data_type'] if @options.pages[i]['data_type']
       $.get url, (response, xhr) ->
         ref.loading.hide()
         ref.options.pages[i]['loaded'] = true 
-        if $.trim(response) == ''
+        if $.trim(response) == '' || response.length == 0
           ref.options.pages[i]['last_request_empty'] = true
-          ref.load_empty(i) unless ref.options.pages[i]['panel_selector']
+          console.log ">>> #{ref.reloading}"
+          ref.load_empty(i) if ref.reloading || !ref.options.pages[i]['panel_selector']
         else 
           switch data_type
             when "json"
@@ -359,6 +365,7 @@ class window.AmpleAssets
     @field_events()
     @drop_events()
     @drag_events()
+    @reload_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
@@ -402,6 +409,12 @@ class window.AmpleAssets
     $('textarea, input').live 'focus', =>
       @keys_enabled = false
   
+  reload_events: ->
+    @log "reload_events()"
+    reload = $('<a href="#" class="assets-reload"><span></span></a>')
+    reload.appendTo('.asset-refresh').click (e) =>
+      @reload(@current)
+    
   modal_events: ->
     @modal_active = false
     $(document).bind 'afterClose.facebox', =>
@@ -461,12 +474,13 @@ class window.AmpleAssets
     <div id="{{ id }}"><div class="background">
       <div class="container">
         <div id="{{ id }}-tabs" class="tabs">
-          <div class="search">
+          <div class="asset-refresh"></div>
+          <div class="asset-search">
             <input type="text" id="asset-search" name="q" placeholder="Enter keywords..." />
             <label for="asset-search">Search</label>
           </div>
           {{{ tabs }}}
-          <span class="loading"></span>
+          <span class="asset-loading"></span>
         </div>
         <div id="{{ id }}-pages" class="pages">
           {{{ pages }}}

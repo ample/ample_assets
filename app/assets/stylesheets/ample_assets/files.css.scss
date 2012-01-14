@@ -34,7 +34,7 @@ $link-focus-color       : #533d79;
 	 }
 } // pulse animation
 
-.notice {
+.asset-notice {
   border: 1px solid #3e7532;
   
   background: #6ca852;
@@ -80,7 +80,7 @@ $link-focus-color       : #533d79;
     } //span
      
      
-    &.notice {
+    &.asset-notice {
       border: 1px solid #3e7532;
       
       background: #6ca852;
@@ -102,7 +102,7 @@ $link-focus-color       : #533d79;
         text-shadow: rgba(0,0,0,.05) 0 -1px 0, rgba(255,255,255,.3) 0 1px 0;
       }
       
-    } //notice
+    } //asset-notice
   } //droppable
   
   .asset-action {
@@ -248,7 +248,7 @@ $link-focus-color       : #533d79;
   }
   
 
-  .search {
+  .asset-search {
     @include clearfix;
     float: right;
     margin: calc-em(10px, $base-font-size) 0 0 0;
@@ -301,8 +301,16 @@ $link-focus-color       : #533d79;
     margin: 0 auto;
   }
 
-  .pages {
+  .asset-pages {
     width: 100%;
+  }
+  
+  .assets-empty {
+    display: none;
+  }
+  
+  .assets-reload {
+    
   }
 
   .page {
@@ -336,7 +344,7 @@ $link-focus-color       : #533d79;
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     font-weight: bold;
     margin-bottom: calc-em(16px, $base-font-size);
-    span.loading {
+    span.asset-loading {
       display: none; 
       float: left;
       background: url('loading.gif') no-repeat center center;
@@ -346,7 +354,7 @@ $link-focus-color       : #533d79;
     }
   } //tabs
 
-
+  a.assets-reload,
   a.tab {
     float: left; 
     display: block;
@@ -377,10 +385,8 @@ $link-focus-color       : #533d79;
       color: #E5E5E5;
       line-height: calc-em(27px, 13px);
       text-shadow: rgba(0,0,0,1) 0 -1px 0;
-      
       border: none;
       border-bottom: 1px solid rgba(255,255,255,.2);
-        
       background: #141414;
       background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
       background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
@@ -391,10 +397,18 @@ $link-focus-color       : #533d79;
       @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
     } //on
     
-    &.first-child {
-      margin-left: 0;
-    }
   } //tab
+  
+  a.assets-reload {
+    margin-left: 0;
+    span {
+      display: block;
+      background: url('reload.png') no-repeat center center;
+      width: 16px;
+      height: 20px;
+      padding: 3px 0;
+    }
+  }
   
   li {
     display: block;

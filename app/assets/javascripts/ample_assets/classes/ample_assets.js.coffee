@@ -93,7 +93,8 @@ class window.AmpleAssets
     @reloading = true
     @empty(i)
     @options.pages[i]['loaded'] = false
-    @options.pages[i]['pages_loaded'] = 0
+    @options.pages[i]['pages_loaded'] = false
+    @options.pages[i]['last_request_empty'] = false
     $(@options.pages[i]['panel_selector']).amplePanels('goto', 0)
     @goto(i)
     @enable_panel(i)
@@ -188,9 +189,10 @@ class window.AmpleAssets
   load: (i) ->
     @log "load(#{i})"
     ref = this
-    load_next_page = true unless @options.pages[i]['last_request_empty']
+    load_next_page = true 
+    load_next_page = false if @options.pages[i]['last_request_empty']
     load_next_page = true if @reloading
-
+    
     if @options.pages[i]['url'] && load_next_page
       @loading.show()
       url = @next_page_url(i)
@@ -200,7 +202,6 @@ class window.AmpleAssets
         ref.options.pages[i]['loaded'] = true 
         if $.trim(response) == '' || response.length == 0
           ref.options.pages[i]['last_request_empty'] = true
-          console.log ">>> #{ref.reloading}"
           ref.load_empty(i) if ref.reloading || !ref.options.pages[i]['panel_selector']
         else 
           switch data_type

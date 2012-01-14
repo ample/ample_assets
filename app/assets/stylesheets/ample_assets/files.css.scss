@@ -213,9 +213,10 @@ $link-focus-color       : #533d79;
     position: relative;
     z-index: 100;
     .empty {
-      color: #FFF;
+      color: #D4D4D4;
+      font-size: 14px;
       text-align: center;
-      padding: calc-em(30px, $base-font-size);
+      padding: calc-em(36px, $base-font-size);
       a {
         color: #7799b8;
         text-decoration: none;

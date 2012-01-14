@@ -59,7 +59,7 @@ module AmpleAssets
     end
     
     def search
-      @current_files = File.with_query(params[:q])
+      @current_files = File.with_query("^#{params[:q]}")
       respond_to do |format|
         format.js { render current_files, :content_type => :html }
         format.json { render :json => collection_to_json(current_files) }

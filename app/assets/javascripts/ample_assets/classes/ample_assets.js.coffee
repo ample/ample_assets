@@ -15,7 +15,7 @@ class window.AmpleAssets
     @reloading = false
     ref = this
     default_options = 
-      debug: false
+      debug: true
       expanded: false
       id: "ample-assets"
       handle_text: 'Assets'
@@ -194,7 +194,7 @@ class window.AmpleAssets
         ref.options.pages[i]['loaded'] = true 
         if $.trim(response) == ''
           ref.options.pages[i]['last_request_empty'] = true
-          ref.load_empty(i)
+          ref.load_empty(i) unless ref.options.pages[i]['panel_selector']
         else 
           switch data_type
             when "json"

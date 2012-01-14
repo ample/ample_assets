@@ -13,6 +13,7 @@ class window.AmpleAssets
     @current = 0
     @keys_enabled = true
     @reloading = false
+    @searching = false
     ref = this
     default_options = 
       debug: true
@@ -91,13 +92,14 @@ class window.AmpleAssets
   reload: (i) ->
     @log "reload(#{i})"
     @reloading = true
-    @empty(i)
-    @options.pages[i]['loaded'] = false
-    @options.pages[i]['pages_loaded'] = false
-    @options.pages[i]['last_request_empty'] = false
-    $(@options.pages[i]['panel_selector']).amplePanels('goto', 0)
-    @goto(i)
-    @enable_panel(i)
+    if i < @options.pages.length - 1 
+      @empty(i)
+      @options.pages[i]['loaded'] = false
+      @options.pages[i]['pages_loaded'] = false
+      @options.pages[i]['last_request_empty'] = false
+      $(@options.pages[i]['panel_selector']).amplePanels('goto', 0)
+      @goto(i)
+      @enable_panel(i)
   
   empty: (i) ->
     @log "empty(#{i})"
@@ -107,7 +109,6 @@ class window.AmpleAssets
   
   goto: (i) ->
     @log "goto(#{i})"
-    @current = i
     @show(i)
     @disable_panels()
     @activate(i)
@@ -116,7 +117,7 @@ class window.AmpleAssets
   
   show: (i) ->
     $("##{@options.id} .pages .page").hide()
-    $("##{@options.id} .pages .page:nth-child(#{i+1})").show()
+    $("##{@options.id} .pages .page:nth-child(#{i+1}), ##{@options.id} .pages .page:nth-child(#{i+1}) ul").show()
   
   drag_drop: ->
     base_url = @options.base_url
@@ -148,6 +149,7 @@ class window.AmpleAssets
   
   activate: (i) ->
     @log "activate(#{i})"
+    @current = i
     tabs = $("##{@options.id} a.tab")
     tabs.removeClass('on')
     tabs.eq(i).addClass('on')
@@ -226,8 +228,8 @@ class window.AmpleAssets
   load_html: (i, response) ->
     @log "load(#{i}) html"
     selector = "##{@options.id} .pages .page:nth-child(#{(i+1)})" 
-    selector += " ul" if @options.pages[i]['panels']
-    $(selector).html(response)
+    selector += " ul" if @options.pages[i]['panels'] || @searching
+    $(selector).html(response).show()
     @panels(i)
   
   load_json: (i, response) ->
@@ -243,6 +245,7 @@ class window.AmpleAssets
       else
         $(selector).append(li)
       ref.load_img(li.find('a'), el.sizes.tn)
+    $(selector).show()
     @panels(i) unless panels_loaded
     if @reloading
       @reloading = false
@@ -250,13 +253,24 @@ class window.AmpleAssets
   
   load_results: (response) ->
     @log "load_results()"
-    $.each response, (j,el) =>
-      link = @build(el)
-      li = $('<li class="file"></li>').append(link)
-      $("#asset-results ul").amplePanels('append', li)
-      @load_img(link, el.sizes.tn)
-    @active_panel = $("#asset-results ul")
-    @show(@options.pages.length-1)
+    i = @options.pages.length - 1
+
+    if response.length > 0
+      $.each response, (j,el) =>
+        link = @build(el)
+        li = $('<li class="file"></li>').append(link)
+        $("#asset-results ul").amplePanels('append', li)
+        @load_img(link, el.sizes.tn)
+    else
+      no_results = Mustache.to_html(@tpl('no_results'))
+      @load_html(i, no_results)
+      @loading.hide()
+      $('li.empty').css('width',$('.ampn').first().width())
+      
+    @options.pages[i]['panel_selector'] = "#asset-results ul"
+    @active_panel = $(@options.pages[i]['panel_selector'])
+    @searching = false
+    @loading.hide()
     @controls()
   
   build: (el) ->
@@ -427,7 +441,7 @@ class window.AmpleAssets
       @modal_active = true
   
   search: ->
-    @log 'search_events()'
+    @log 'search()'
     search_url = "#{@options.base_url}#{@options.search_url}"
     i = ($("##{@options.id} .pages .page").length - 1)
     ref = this
@@ -435,10 +449,14 @@ class window.AmpleAssets
     @options.pages[i] = { loaded: true }
     $('#asset-search').bind 'change', ->
       $("#asset-results ul").amplePanels('empty')
+      ref.loading.show()
+      ref.controls(false)
+      ref.show(i)
+      ref.activate(i)
+      ref.searching = true
+      $('.asset-results').show()
       $.post search_url, $(this).serialize(), (response) ->
         ref.load_results(response)
-        $('.asset-results').show()
-        ref.activate(i)
       , 'json'
   
   key_down: ->
@@ -518,7 +536,7 @@ class window.AmpleAssets
       <h3>{{ filename }}</h3>
     </div>'
     empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
-  
+    no_results: '<li class="empty">Sorry. Your search returned zero results.</li>'
 
 jQuery.fn.liveDraggable = (opts) ->
   @live "mouseover", ->

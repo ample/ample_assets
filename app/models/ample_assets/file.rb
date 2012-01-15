@@ -54,6 +54,7 @@ module AmpleAssets
         document: '#{is_doc?}',
         orientation: '#{orientation}',
         url: '#{attachment.url}',
+        size: '#{attachment.width}x#{attachment.height}',
         sizes: { 
           tn: '#{thumbnail}', 
           md: '#{medium}' 

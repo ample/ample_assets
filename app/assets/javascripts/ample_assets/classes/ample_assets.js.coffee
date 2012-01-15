@@ -122,6 +122,7 @@ class window.AmpleAssets
   drag_drop: ->
     base_url = @options.base_url
     thumb_url = @options.thumb_url
+    ref = this
     
     $(".draggable").liveDraggable
       appendTo: "body"
@@ -131,12 +132,8 @@ class window.AmpleAssets
       activeClass: "asset-notice"
       hoverClass: "asset-success"
       drop: (event, ui) ->
-        geometry = if $(ui.draggable).attr("orientation") == 'portrait' then 'x300>' else '480x>'
-        uid = $(ui.draggable).attr("data-uid")
-        url = encodeURI "#{base_url}#{thumb_url}/#{geometry}?uid=#{uid}"
-        textile = "!#{url}!"
-        html = "<img src=\"#{url}\" />"
-        $(this).insertAtCaret (if $(this).hasClass('textile') then textile else html)
+        ref.target_textarea = this
+        ref.resize_modal(ui.draggable)
     
     $(".droppable").droppable
       activeClass: "asset-notice"
@@ -146,6 +143,21 @@ class window.AmpleAssets
         asset_id = $(ui.draggable).attr("id").split("-")[1]
         $(this).parent().children().first().val asset_id
         $(this).parent().find('a.asset-remove').removeClass('hide').show()
+  
+  resize_modal: (el) ->
+    uid = $(el).attr("data-uid")
+    size = $(el).attr("data-size")
+    orientation = $(el).attr("data-orientation")
+    base_url = @options.base_url
+    thumb_url = @options.thumb_url
+    geometry = '100x>'
+    opts = 
+      src: "#{base_url}#{thumb_url}/#{geometry}?uid=#{uid}"
+      orientation: orientation
+      dimensions: size
+      uid: uid
+    html = Mustache.to_html(@tpl('drop'), opts)
+    $.facebox("<div class=\"asset-detail\">#{html}</div>")
   
   activate: (i) ->
     @log "activate(#{i})"
@@ -280,6 +292,7 @@ class window.AmpleAssets
       .attr('id',"file-#{el.id}")
       .attr('data-uid',"#{el.uid}")
       .attr('data-orientation',el.orientation)
+      .attr('data-size',el.size)
       .addClass('draggable')
     link.addClass('document') if el.document == 'true'
     link.click ->
@@ -301,7 +314,6 @@ class window.AmpleAssets
       geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
       url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
       html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation })
-      console.log html
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     @touch(data)
   
@@ -382,6 +394,7 @@ class window.AmpleAssets
     @drop_events()
     @drag_events()
     @reload_events()
+    @resize_events()
     ref = this
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
@@ -430,6 +443,23 @@ class window.AmpleAssets
     reload = $('<a href="#" class="assets-reload"><span></span></a>')
     reload.appendTo('.asset-refresh').click (e) =>
       @reload(@current)
+  
+  resize_events: ->
+    $('.asset-resize').live 'click', =>
+      constraints = $('#asset-constraints').val()
+      uid = $('#asset-uid').val()
+      width = $('#asset-width').val()
+      height = $('#asset-height').val()
+      geometry = "#{width}x#{height}#{constraints}"
+      if constraints == '#' && (width == '' || height == '')
+        alert 'Can\'t resize image using this geometry. Please select another option or supply a value for both width and height.'
+      else 
+        url = encodeURI "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{uid}"
+        url = url.replace('#','%23')
+        textile = "!#{url}!"
+        html = "<img src=\"#{url}\" />"
+        $(@target_textarea).insertAtCaret (if $(@target_textarea).hasClass('textile') then textile else html)
+        $(document).trigger('close.facebox')
     
   modal_events: ->
     @modal_active = false
@@ -537,6 +567,28 @@ class window.AmpleAssets
     </div>'
     empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
     no_results: '<li class="empty">Sorry. Your search returned zero results.</li>'
+    drop: '
+    <div class="asset-selection">
+      <div class="asset-media {{ orientation }}">
+        <img src="{{ src }}" />
+      </div>
+      <div class="asset-dimensions">
+        <p><label>Image Dimensions</label> ({{ dimensions }}, {{ orientation }})</p>
+        <p><select id="asset-constraints" name="asset-constraints">
+            <option value="">Maintain aspect ratio</option>
+            <option value="!">Force resize, don\'t maintain aspect ratio</option>
+            <option value=">">Resize only if image larger than this</option>
+            <option value="<">Resize only if image smaller than this</option>
+            <option value="^">Resize to minimum x,y, maintain aspect ratio</option>
+            <option value="#">Resize, crop if necessary to maintain aspect ratio</option>
+           </select></p>
+        <p><input type="hidden" id="asset-dimensions-target" name="asset-dimensions-target" value="" />
+           <input type="hidden" id="asset-uid" name="asset-uid" value="{{ uid }}" />
+           <input type="text" id="asset-width" name="asset-width" value="480" /> <span>x</span> 
+           <input type="text" id="asset-height" name="asset-height" value="" />
+           <input type="submit" id="asset-resize" name="asset-resize" class="asset-resize" value="Insert" /></p>
+      </div>
+    </div>'
 
 jQuery.fn.liveDraggable = (opts) ->
   @live "mouseover", ->

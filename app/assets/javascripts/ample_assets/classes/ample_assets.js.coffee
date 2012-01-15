@@ -303,7 +303,7 @@ class window.AmpleAssets
   modal_open: (data) ->
     @modal_active = true
     if data.document == 'true'
-      html = Mustache.to_html(@tpl('pdf'),{ filename: data.uid })
+      html = Mustache.to_html(@tpl('pdf'),{ filename: data.uid, id: data.id })
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
       myPDF = new PDFObject(
         url: data.url
@@ -313,7 +313,8 @@ class window.AmpleAssets
     else
       geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
       url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
-      html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation })
+      delete_url = Mustache.to_html @options.show_url, { id: data.id }
+      html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation, id: data.id, delete_url: "#{@options.base_url}#{delete_url}" })
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     @touch(data)
   
@@ -381,6 +382,14 @@ class window.AmpleAssets
     parent.find('input').val('')
     $(el).hide()
   
+  delete: (id) ->
+    @log "delete(#{id})"
+    console.log $("a#file-#{id}")
+    $("a#file-#{id}").parent().remove()
+    $(document).trigger('close.facebox')
+    @reload(0)
+    false
+  
   collapse: ->
     @disable_panels()
   
@@ -396,6 +405,9 @@ class window.AmpleAssets
     @reload_events()
     @resize_events()
     ref = this
+    $("a.asset-delete").live 'ajax:success', ->
+      id = parseInt $(this).attr('data-id')
+      ref.delete(id)
     $("a.asset-remove").live 'click', ->
       ref.remove(this)
       false
@@ -559,11 +571,13 @@ class window.AmpleAssets
         <img src="{{ src }}" />
       </div>
       <h3>{{ filename }}</h3>
+      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete</a>
     </div>'
     pdf: '
     <div class="asset-detail">
       <div id="pdf" class="asset-media"></div>
       <h3>{{ filename }}</h3>
+      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete</a>
     </div>'
     empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
     no_results: '<li class="empty">Sorry. Your search returned zero results.</li>'

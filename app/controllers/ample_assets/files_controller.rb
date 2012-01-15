@@ -52,6 +52,16 @@ module AmpleAssets
       end
     end
     
+    def destroy
+      current_file.destroy
+      if request.xhr?
+        render :nothing => true
+      else
+        flash[:notice] = 'Asset deleted successfully.'
+        redirect_to request.referrer
+      end
+    end
+    
     def touch
       raise ActiveRecord::RecordNotFound if current_file.nil?
       current_file.touch
@@ -74,7 +84,7 @@ module AmpleAssets
       def current_files
         conditions = params[:type] ? current_file_conditions : nil
         pagination = { :page => params[:page], :per_page => per_page }
-        @current_files ||= File.find(:all, :conditions => conditions).paginate(pagination)
+        @current_files ||= File.find(:all, :conditions => conditions, :order => 'created_at DESC').paginate(pagination)
       end
       
       def current_documents

@@ -64,6 +64,7 @@ module AmpleAssets
         assert body.value.blank?
         image = page.find_by_id('recent-assets').find('img')
         image.drag_to(body)
+        click_button 'Insert'
         assert body.value.include?('!')
       end
       
@@ -73,6 +74,7 @@ module AmpleAssets
         assert body.value.blank?
         image = page.find_by_id('recent-assets').find('img')
         image.drag_to(body)
+        click_button 'Insert'
         assert body.value.include?('src')
       end
       

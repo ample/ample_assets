@@ -168,7 +168,8 @@ $link-focus-color       : #533d79;
       font-size: $base-font-size * 0.65;
     }
   }
-  hr {
+  hr.space {
+    visibility: hidden;
     clear: both;
   }
   label {

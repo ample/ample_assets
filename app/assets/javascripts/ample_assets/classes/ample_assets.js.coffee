@@ -588,6 +588,7 @@ class window.AmpleAssets
            <input type="text" id="asset-height" name="asset-height" value="" />
            <input type="submit" id="asset-resize" name="asset-resize" class="asset-resize" value="Insert" /></p>
       </div>
+      <hr class="space" />
     </div>'
 
 jQuery.fn.liveDraggable = (opts) ->

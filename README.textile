@@ -1,0 +1,9 @@
+h1. Ample Assets
+
+h3. Configuration
+
+<code>
+AmpleAssets.configure do |config|
+  config.mount_at = YOUR PATH PREFIX
+end
+</code>

@@ -1,9 +1,53 @@
 h1. Ample Assets
 
-h3. Configuration
+AmpleAssets is a gem that provides drag & drop functionality for Rails 3.1 applications.
+
+h3. Example Usage
+
+Add the following to your Gemfile and bundle...
 
 <code>
-AmpleAssets.configure do |config|
+gem 'ample_assets', :git => 'https://github.com/tcmacdonald/ample_assets.git'
+</code>
+
+Run the generator to copy over the necessary migrations... 
+
+<code>
+rails g ample_assets:install
+</code>
+
+Add following association to your model (this assumes you've also created the @file_id@ column on your model's table)... 
+
+<pre><code>class Post < ActiveRecord::Base
+  ...
+  belongs_to :file, :class_name => "AmpleAssets::File"
+  
+end
+</code></pre>
+
+In both of your manifest files (stylesheets & javascripts) require ample_assets, for example...
+
+<pre><code>/**
+ *= require ample_assets
+ */
+</code></pre>
+
+To invoke the asset toolbar, include the following in any view...
+
+<code>
+<%= assets_toolbar %>
+</code>
+
+To invoke a new drop_target, include the following within a form attached to your model... 
+
+<pre><code><%= form_for current_page do |f| %>
+  <%= f.asset_drop(:file_id) %>
+<% end %>
+</code></pre>
+
+h3. Configuration
+
+<pre><code>AmpleAssets.configure do |config|
   config.mount_at = YOUR PATH PREFIX
 end
-</code>
+</code></pre>

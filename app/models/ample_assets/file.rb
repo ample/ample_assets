@@ -36,7 +36,7 @@ module AmpleAssets
     end
     
     def thumbnail
-      attachment.thumb('75x75#').url if is_image?
+      attachment.process(:matte, :dimensions => '75x75', :background => 'white').url if is_image?
     end
     
     def medium

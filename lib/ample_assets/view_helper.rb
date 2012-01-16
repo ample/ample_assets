@@ -4,7 +4,7 @@ module AmpleAssets
     def assets_toolbar(pages = nil)
       pages = ample_assets_pages if pages.nil?
       script = "var ample_assets = {}; ample_assets.load = true; "
-      script += "ample_assets.mount_at = '#{AmpleAssets::Engine.config.mount_at}'; "
+      script += "ample_assets.mount_at = '#{AmpleAssets.mount_at}'; "
       script += pages
       content_tag :script, script, :type => "text/javascript"
     end

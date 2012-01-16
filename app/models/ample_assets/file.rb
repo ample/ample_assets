@@ -19,7 +19,7 @@ module AmpleAssets
     ###---------------------------------------------------- Validations
     
     validates_presence_of :attachment
-    validates_property :mime_type, :of => :attachment, :in => AmpleAssets::Engine.config.allowed_mime_types.collect{ |a| a[1] }.flatten
+    validates_property :mime_type, :of => :attachment, :in => AmpleAssets.allowed_mime_types.collect{ |a| a[1] }.flatten
 
     ###---------------------------------------------------- Instance Methods
     
@@ -28,11 +28,11 @@ module AmpleAssets
     end
     
     def is_image?
-      AmpleAssets::Engine.config.allowed_mime_types[:images].include?(attachment_mime_type)
+      AmpleAssets.allowed_mime_types[:images].include?(attachment_mime_type)
     end
     
     def is_doc?
-      AmpleAssets::Engine.config.allowed_mime_types[:documents].include?(attachment_mime_type)
+      AmpleAssets.allowed_mime_types[:documents].include?(attachment_mime_type)
     end
     
     def thumbnail

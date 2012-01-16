@@ -11,7 +11,7 @@ module AmpleAssets
     #   end
     # 
     #   should 'set the mout_at path' do
-    #     assert output_buffer.include? AmpleAssets::Engine.config.mount_at
+    #     assert output_buffer.include? AmpleAssets.mount_at
     #   end
     # 
     # end

@@ -1,10 +1,5 @@
 # **AmpleAssets** is drag and drop file management for Rails applications. 
 # 
-#     ample_assets.coffee v1.0
-#     http://github.com/ample/ample_assets
-#     Copyright (c) Ample, http://helloample.com
-#     MIT-style license: http://pipwerks.mit-license.org/
-# 
 class window.AmpleAssets
   
   # Standard issue constructor method, called upon object instantiation.

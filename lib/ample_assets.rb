@@ -1,5 +1,8 @@
+require 'ample_assets/configuration'
+
 module AmpleAssets
   require 'ample_assets/engine' if defined?(Rails)
+  extend Configuration
   class << self
 
     # hooks AmpleAssets::ViewHelpers into ActionView::Base

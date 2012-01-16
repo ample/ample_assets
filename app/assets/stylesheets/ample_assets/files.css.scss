@@ -12,9 +12,9 @@ $text-error-color       : #c00d0d;
 $border-radius          : 3px;
 
 /* Asset border configuration */
-$asset-border-color     : #FFF;
+$asset-border-color     : #999999;
 $asset-border           : 3px solid $asset-border-color;
-$asset-border-hover     : 3px solid darken($asset-border-color, 10%);
+$asset-border-hover     : 3px solid #FFF;
 
 @import 'custom_mixins';
 
@@ -44,6 +44,17 @@ $asset-border-hover     : 3px solid darken($asset-border-color, 10%);
 	 100% {
 	   @include box-shadow((inset rgba(0,0,0,.2) 0 2px 4px, rgba(62,110,155, 1) 0 0 16px));
 	 }
+   
+.asset-notice {
+  border: 1px solid #3e7532;
+  
+  background: #6ca852;
+  background: -moz-linear-gradient(top, #6ca852 0%, #3e7532 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6ca852), color-stop(100%,#3e7532));
+  background: -webkit-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+  background: -o-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+  background: -ms-linear-gradient(top, #6ca852 0%,#3e7532 100%);
+  background: linear-gradient(top, #6ca852 0%,#3e7532 100%);
 }
 
 /* ------------------------------------------- */
@@ -84,7 +95,8 @@ $asset-border-hover     : 3px solid darken($asset-border-color, 10%);
     } //span
      
      
-    &.drag-notice {
+
+    &.asset-notice {
       border: 1px solid #3e7532;
       
       background: #6ca852;
@@ -123,8 +135,7 @@ $asset-border-hover     : 3px solid darken($asset-border-color, 10%);
         -webkit-animation-iteration-count: infinite;
       }
       
-      
-    } //drag-notice
+    } //asset-notice
   } //droppable
   
   .asset-action {
@@ -133,7 +144,7 @@ $asset-border-hover     : 3px solid darken($asset-border-color, 10%);
     width: calc-em(20px, $base-font-size);
     height: calc-em(20px, $base-font-size);
     position: absolute;
-    left: calc-em(75px, $base-font-size);
+    margin-left: calc-em(65px, $base-font-size);
     margin-top: calc-em(65px, $base-font-size);
     &.asset-select {
       margin-top: calc-em(20px, $base-font-size);
@@ -149,12 +160,13 @@ $asset-border-hover     : 3px solid darken($asset-border-color, 10%);
   
 } //asset-drop
  
+.asset-selection, 
 .asset-detail {
   font-family: $font-family;  
   font-size: $base-font-size;
+  margin-top: 20px;
   padding: 15px 10px 10px;
   width: 540px;
-  min-height: 500px;
   div.asset-media {
     width: 480px;
     min-height: 300px;
@@ -162,6 +174,56 @@ $asset-border-hover     : 3px solid darken($asset-border-color, 10%);
     padding: 20px;
     background: #f2f2f2;
     border: 1px solid #d4d4d4;
+  }
+  .asset-detail {
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.asset-selection {
+  @include clearfix;
+  min-height: 0;
+  font-size: $base-font-size * 0.8;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  div.asset-media {
+    width: 140px;
+    min-height: 0;
+  }
+  p {
+    text-transform: capitalize;
+    margin-top: 0;
+    span {
+      padding: 0 5px;
+      font-size: $base-font-size * 0.65;
+    }
+  }
+  hr.space {
+    visibility: hidden;
+    clear: both;
+  }
+  label {
+    font-weight: bold;
+  }
+  input#asset-width,
+  input#asset-height {
+    padding: calc-em(5px, 13px) calc-em(5px, 13px);
+    margin: 0;
+    border: 1px solid rgba(0,0,0,.4);
+    width: calc-em(39px, 13px);
+    font-size: calc-em(12px, $base-font-size);
+    text-align: center;
+  }
+  .asset-media,
+  .asset-dimensions {
+    float: left;
+  }
+  .asset-dimensions {
+    width: 285px;
+    padding: 0 20px;
   }
 }
 
@@ -228,7 +290,7 @@ textarea {
        border: none;
        @include imprint;
 
-       width: calc-em(930px,$base-font-size);
+       width: calc-em(940px,$base-font-size);
        margin: 0 auto;
        padding: calc-em(16px, $base-font-size) 0;
 
@@ -269,6 +331,29 @@ textarea {
   
   
 
+
+  input#asset-search {
+    width: 215px;
+  }
+  
+  .ampn {
+    margin-left: calc-em(14px, $base-font-size);
+    position: relative;
+    z-index: 100;
+    .empty {
+      color: #D4D4D4;
+      font-size: 14px;
+      text-align: center;
+      padding: calc-em(36px, $base-font-size);
+      a {
+        color: #7799b8;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
   
   // ---- Handle to Collapse/Expand ------------------------------------ //
   .handle {
@@ -292,7 +377,8 @@ textarea {
   } //handle
    
    // ---- Search Box ------------------------------------ //    
-  .search {
+
+  .asset-search {
     @include clearfix;
     float: right;
     margin: calc-em(10px, $base-font-size) 0 0 0;
@@ -345,11 +431,57 @@ textarea {
       
       @include border-right-radius(4px);
       @include box-shadow((inset rgba(255,255,255,.3) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
+
     } //label
     
-  } //search
 
   // ---- Tab Navigation ------------------------------------ //
+      
+    }
+  }
+
+  .container {
+    width: 950px;
+    margin: 0 auto;
+  }
+
+  .asset-pages {
+    width: 100%;
+  }
+  
+  .assets-empty {
+    display: none;
+  }
+  
+  .assets-reload {
+    
+  }
+
+  .page {
+    @include clearfix; 
+    &.panels {
+      width: calc-em(930px,$base-font-size);
+      margin: 0 auto;
+      padding: calc-em(16px, $base-font-size) 0;
+      @include border-radius(4px);
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+
+      background: #141414;
+      background: -moz-linear-gradient(top, #141414 0%, #070707 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141414), color-stop(100%,#070707));
+      background: -webkit-linear-gradient(top, #141414 0%,#070707 100%);
+      background: -o-linear-gradient(top, #141414 0%,#070707 100%);
+      background: -ms-linear-gradient(top, #141414 0%,#070707 100%);
+      background: linear-gradient(top, #141414 0%,#070707 100%);
+      @include box-shadow((inset rgba(0,0,0,1) 1px 2px 3px));
+    }
+    ul {
+      display: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
 
   .tabs {
     @include clearfix; 
@@ -357,7 +489,7 @@ textarea {
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     font-weight: bold;
     margin-bottom: calc-em(16px, $base-font-size);
-    span.loading {
+    span.asset-loading {
       display: none; 
       float: left;
       background: url('loading.gif') no-repeat center center;
@@ -365,8 +497,12 @@ textarea {
       height: calc-em(20px, 13px); 
       margin: calc-em(10px, 13px) 0 0 calc-em(10px, 13px);
     }
+    .asset-results {
+      display: none;
+    }
   } //tabs
 
+  a.assets-reload,
   a.tab {
     float: left; 
     display: block;
@@ -393,23 +529,29 @@ textarea {
     
     @include box-shadow((inset rgba(255,255,255,.1) 0 1px 0, inset rgba(255,255,255,.1) -1px 0 0, inset rgba(255,255,255,.1) 1px 0 0, rgba(0,0,0,.6) 0 1px 2px));
     
-    &.on {
+    &.on, &:active {
       color: #E5E5E5;
       line-height: calc-em(27px, 13px);
       text-shadow: rgba(0,0,0,1) 0 -1px 0;
-      
       border: none;
       
       @include imprint;
         
     } //on
     
-    &.first-child {
-      margin-left: 0;
-    }
   } //tab
-   
-  // ---- Asset Styling ------------------------------------ //
+  
+  a.assets-reload {
+    margin-left: 0;
+    span {
+      display: block;
+      background: url('reload.png') no-repeat center center;
+      width: 16px;
+      height: 20px;
+      padding: 3px 0;
+    }
+  }
+  
   li {
     display: block;
     float: left;
@@ -424,9 +566,15 @@ textarea {
       
       @include border-radius($border-radius);
       @include box-shadow(rgba(0,0,0,1) 0 2px 3px);
-      
+      opacity: 1;
+
+      -webkit-transition: .3s linear border;
+      -moz-transition: .3s linear border;
+      transition: .3s linear border;
+
       &:hover {
        border: $asset-border-hover; 
+       cursor: move; 
       }
       
     } //file a

@@ -5,7 +5,10 @@ module AmpleAssets
     
     ###---------------------------------------------------- Plugins
     
-    image_accessor :attachment
+    image_accessor :attachment do
+        after_assign { |a| self.keywords = a.name.gsub(/[^a-zA-Z0-9]/,' ').humanize unless a.name.nil? }
+    end
+    
     self.per_page = 20
     acts_as_indexed :fields => [:keywords]
     
@@ -16,8 +19,8 @@ module AmpleAssets
     ###---------------------------------------------------- Validations
     
     validates_presence_of :attachment
-    validates_property :mime_type, :of => :attachment, :in => AmpleAssets::Engine.config.allowed_mime_types.collect{ |a| a[1] }.flatten
-    
+    validates_property :mime_type, :of => :attachment, :in => AmpleAssets.allowed_mime_types.collect{ |a| a[1] }.flatten
+
     ###---------------------------------------------------- Instance Methods
     
     def is_swf?
@@ -25,11 +28,11 @@ module AmpleAssets
     end
     
     def is_image?
-      AmpleAssets::Engine.config.allowed_mime_types[:images].include?(attachment_mime_type)
+      AmpleAssets.allowed_mime_types[:images].include?(attachment_mime_type)
     end
     
     def is_doc?
-      AmpleAssets::Engine.config.allowed_mime_types[:documents].include?(attachment_mime_type)
+      AmpleAssets.allowed_mime_types[:documents].include?(attachment_mime_type)
     end
     
     def thumbnail
@@ -51,6 +54,7 @@ module AmpleAssets
         document: '#{is_doc?}',
         orientation: '#{orientation}',
         url: '#{attachment.url}',
+        size: '#{attachment.width}x#{attachment.height}',
         sizes: { 
           tn: '#{thumbnail}', 
           md: '#{medium}' 

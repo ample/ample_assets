@@ -30,8 +30,12 @@ module AmpleAssets
     end
     
     def create
-      filename, filedata = params['Filename'], params['Filedata'] 
-      file = File.new(:keywords => filename.gsub(/[^a-zA-Z0-9]/,' ').humanize, :attachment => filedata) 
+      if params['Filename'] && params['Filedata'] 
+        filename, filedata = params['Filename'], params['Filedata'] 
+        file = File.new(:attachment => filedata)
+      else
+        file = File.new(params[:file])
+      end
       if file.save
         render file
       else 
@@ -48,6 +52,16 @@ module AmpleAssets
       end
     end
     
+    def destroy
+      current_file.destroy
+      if request.xhr?
+        render :nothing => true
+      else
+        flash[:notice] = 'Asset deleted successfully.'
+        redirect_to request.referrer
+      end
+    end
+    
     def touch
       raise ActiveRecord::RecordNotFound if current_file.nil?
       current_file.touch
@@ -55,7 +69,7 @@ module AmpleAssets
     end
     
     def search
-      @current_files = File.with_query(params[:q])
+      @current_files = File.with_query("^#{params[:q]}")
       respond_to do |format|
         format.js { render current_files, :content_type => :html }
         format.json { render :json => collection_to_json(current_files) }
@@ -70,7 +84,7 @@ module AmpleAssets
       def current_files
         conditions = params[:type] ? current_file_conditions : nil
         pagination = { :page => params[:page], :per_page => per_page }
-        @current_files ||= File.find(:all, :conditions => conditions).paginate(pagination)
+        @current_files ||= File.find(:all, :conditions => conditions, :order => 'created_at DESC').paginate(pagination)
       end
       
       def current_documents
@@ -85,7 +99,7 @@ module AmpleAssets
       
       def current_file_conditions
         are = params[:type] == 'documents' ? 'NOT in' : 'in'
-        [ "attachment_mime_type #{are} (?)", AmpleAssets::Engine.config.allowed_mime_types[:images] ]
+        [ "attachment_mime_type #{are} (?)", AmpleAssets.allowed_mime_types[:images] ]
       end
       
       def recent_files

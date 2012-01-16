@@ -12,7 +12,7 @@ module AmpleAssets
 
     initializer 'ample_assets: configure rack/cache' do |app|
       app.middleware.insert 0, ::Rack::Cache, {
-        :verbose     => true,
+        :verbose     => false,
         :metastore   => "file:#{Rails.root}/tmp/dragonfly/cache/meta",
         :entitystore => "file:#{Rails.root}/tmp/dragonfly/cache/body"
       }

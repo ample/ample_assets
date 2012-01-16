@@ -9,13 +9,6 @@ require 'will_paginate/array'
 module AmpleAssets
   class Engine < Rails::Engine
     isolate_namespace AmpleAssets
-    
-    config.mount_at = '/ample_assets/'
-    config.allowed_mime_types = {
-      :images => %w(image/jpeg image/png image/gif),
-      :documents => %w(application/pdf),
-      :other => %w(application/x-shockwave-flash)
-    }
 
     initializer 'ample_assets: configure rack/cache' do |app|
       app.middleware.insert 0, ::Rack::Cache, {
@@ -35,7 +28,7 @@ module AmpleAssets
     end
     
     initializer 'ample_assets: cleanup configuration' do |app|
-      config.mount_at += '/'  unless config.mount_at.last == '/'
+      AmpleAssets.mount_at += '/'  unless AmpleAssets.mount_at.last == '/'
     end
     
   end

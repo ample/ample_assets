@@ -78,6 +78,18 @@ module AmpleAssets
         assert body.value.include?('src')
       end
       
+      should 'allow users to delete an asset' do
+        link = page.find_by_id('recent-assets').find('a').click
+        id = link['id']
+        within('#facebox') do
+          click_link 'Delete'
+        end
+        confirm_dialog if selenium?
+        within('#recent-assets') do
+          assert page.has_no_selector?("#file-#{id}")
+        end
+      end
+      
     end
   
   end

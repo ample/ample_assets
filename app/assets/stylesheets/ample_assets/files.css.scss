@@ -111,7 +111,7 @@ $link-focus-color       : #533d79;
     width: calc-em(20px, $base-font-size);
     height: calc-em(20px, $base-font-size);
     position: absolute;
-    left: calc-em(75px, $base-font-size);
+    margin-left: calc-em(65px, $base-font-size);
     margin-top: calc-em(65px, $base-font-size);
     &.asset-select {
       margin-top: calc-em(20px, $base-font-size);

@@ -273,12 +273,6 @@ textarea {
   } //background
    
    // ---- Ample Panels Styles ------------------------------------ //
-    
-   .ampn {
-     margin-left: calc-em(14px, $base-font-size);
-     position: relative;
-     z-index: 100;
-   } //ampn
    
    .pages {
      width: 100%;
@@ -337,7 +331,7 @@ textarea {
   }
   
   .ampn {
-    margin-left: calc-em(14px, $base-font-size);
+    margin-left: calc-em(21px, $base-font-size);
     position: relative;
     z-index: 100;
     .empty {

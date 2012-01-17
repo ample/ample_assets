@@ -1,30 +1,16 @@
 module AmpleAssets
   class FilesController < ApplicationController
   
-    def index
-      render_collection(current_files)
-    end
-    
-    def recent
-      render_collection(recent_files)
-    end
-    
-    def documents
-      render_collection(current_documents)
-    end
-    
-    def images
-      render_collection(current_images)
-    end
-    
-    def render_collection(collection)
-      respond_to do |format|
-        format.js { render collection, :content_type => :html }
-        format.json { render :json => collection_to_json(collection) }
-        format.html { render :nothing => true }
+    ([:index, :recent] | AmpleAssets.allowed_mime_types.keys).compact.each do |key|
+      define_method key do
+        respond_to do |format|
+          format.js   { render current_files, :content_type => :html }
+          format.json { render :json => current_files.to_json }
+          format.html { render :nothing => true }
+        end
       end
     end
-    
+
     def new
       render 'ample_assets/files/new', :layout => false, :content_type => :html if request.xhr?
     end
@@ -47,7 +33,7 @@ module AmpleAssets
     def show
       raise ActiveRecord::RecordNotFound if current_file.nil?
       respond_to do |format|
-        format.json { render :json => current_file.json }
+        format.json { render :json => current_file.to_json }
         format.html
       end
     end
@@ -72,7 +58,7 @@ module AmpleAssets
       @current_files = File.with_query("^#{params[:q]}")
       respond_to do |format|
         format.js { render current_files, :content_type => :html }
-        format.json { render :json => collection_to_json(current_files) }
+        format.json { render :json => current_files.to_json }
         format.html { render :nothing => true }
       end
     end
@@ -82,38 +68,21 @@ module AmpleAssets
       helper_method :current_files, :recent_files, :current_file
       
       def current_files
-        conditions = params[:type] ? current_file_conditions : nil
+        conditions = AmpleAssets.allowed_mime_types.keys.include?(params[:action].intern) ? current_file_conditions : nil
         pagination = { :page => params[:page], :per_page => per_page }
         @current_files ||= File.find(:all, :conditions => conditions, :order => 'created_at DESC').paginate(pagination)
       end
-      
-      def current_documents
-        params[:type] = 'documents'
-        current_files
-      end
-      
-      def current_images
-        params[:type] = 'images'
-        current_files
-      end
-      
+
       def current_file_conditions
         are = params[:type] == 'documents' ? 'NOT in' : 'in'
-        [ "attachment_mime_type #{are} (?)", AmpleAssets.allowed_mime_types[:images] ]
+        type = params[:action].intern
+        [ "attachment_mime_type #{are} (?)", AmpleAssets.allowed_mime_types[type] ]
       end
       
       def recent_files
         @recent_files ||= File.recent.paginate(:page => params[:page], :per_page => per_page)
       end
-      
-      def recent_files_json
-        @recent_files_json ||= recent_files.collect{ |file| file.json }.to_json
-      end
 
-      def collection_to_json(collection)
-        collection.collect{ |file| file.json }.to_json
-      end
-      
       def per_page
         params[:per_page] || 20
       end

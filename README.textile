@@ -1,6 +1,6 @@
 h1. Ample Assets
 
-AmpleAssets is a gem that provides drag & drop functionality for Rails 3.1 applications.
+AmpleAssets is a mountable engine that provides drag & drop functionality for Rails 3.1 applications.
 
 h3. Example Usage
 
@@ -31,6 +31,12 @@ In both of your manifest files (stylesheets & javascripts) require ample_assets,
  *= require ample_assets
  */
 </code></pre>
+
+Add the engine to your app's routes.rb file... 
+
+<code>
+mount AmpleAssets::Engine => "/ample_assets", :as => "ample_assets"
+</code>
 
 To invoke the asset toolbar, include the following in any view...
 

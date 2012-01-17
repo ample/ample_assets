@@ -1,5 +1,7 @@
+require 'ample_assets'
+
 class Page < ActiveRecord::Base
 
-  belongs_to :file, :class_name => "AmpleAssets::File"
+  has_assets
 
 end

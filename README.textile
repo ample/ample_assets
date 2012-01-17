@@ -16,14 +16,21 @@ Run the generator to copy over the necessary migrations...
 rails g ample_assets:install
 </code>
 
-Add following association to your model (this assumes you've also created the @file_id@ column on your model's table)... 
+You'll need to create a foreign_key on the model with which you plan to integrate AmpleAssets. For the purposes of this example, let's assume your model is named @Post@...
+
+<code>rails g migration add_file_id_to_post file_id:integer</code>
+
+Now you're ready to migrate... 
+
+<code>rake db:migrate</code>
+
+Add the following plugin to your model... 
 
 <pre><code>class Post < ActiveRecord::Base
   ...
-  belongs_to :file, :class_name => "AmpleAssets::File"
-  
-end
-</code></pre>
+  has_assets
+  ...
+end</code></pre>
 
 In both of your manifest files (stylesheets & javascripts) require ample_assets, for example...
 

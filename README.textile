@@ -7,7 +7,7 @@ h3. Example Usage
 Add the following to your Gemfile and bundle...
 
 <code>
-gem 'ample_assets', :git => 'https://github.com/tcmacdonald/ample_assets.git'
+gem 'ample_assets', :git => 'https://github.com/ample/ample_assets.git'
 </code>
 
 Run the generator to copy over the necessary migrations... 

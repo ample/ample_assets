@@ -329,6 +329,7 @@ class window.AmpleAssets
     link = $("<a href=\"#{@options.base_url}#{show_url}\" draggable=\"true\"></a>")
       .attr('id',"file-#{el.id}")
       .attr('data-uid',"#{el.uid}")
+      .attr('data-filename',"#{el.filename}")
       .addClass('draggable')
     if el.document == 'true'
       link.addClass('document')
@@ -346,7 +347,10 @@ class window.AmpleAssets
     @modal_active = true
     if data.document == 'true'
       # Asset is a document, so lets instantiate PDFObject for viewing inline.
-      html = Mustache.to_html(@tpl('pdf'),{ filename: data.uid, id: data.id })
+      html = Mustache.to_html @tpl('pdf'),
+        filename: data.uid, 
+        id: data.id,
+        mime_type: data.mime_type
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
       myPDF = new PDFObject(
         url: data.url
@@ -672,6 +676,7 @@ class window.AmpleAssets
       <ul>
         <li>Original Dimensions: <strong>{{ size }}</strong></li>
         <li>MimeType: <strong>{{ mime_type }}</strong></li>
+        <li>Orientation: <strong>{{ orientation }}</strong></li>
       </ul>
       <p>{{ keywords }}</p>
     </div>'
@@ -679,8 +684,12 @@ class window.AmpleAssets
     pdf: '
     <div class="asset-detail">
       <div id="pdf" class="asset-media"></div>
-      <h3>{{ filename }}</h3>
-      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete</a>
+        <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
+        <h3>{{ filename }}</h3><hr />
+        <ul>
+          <li>MimeType: <strong>{{ mime_type }}</strong></li>
+        </ul>
+        <p>{{ keywords }}</p>
     </div>'
     # There's no content within this panels instance... 
     empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'

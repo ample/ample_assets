@@ -398,7 +398,7 @@ textarea {
       background: none;
       border: none;
       
-      width: calc-em(213px, 12px);
+      width: calc-em(210px, 12px);
       font-size: calc-em(12px, $base-font-size);
       
       @include border-left-radius(4px);
@@ -408,10 +408,10 @@ textarea {
     label {
       border-left: 1px solid #000;
       border-bottom: 1px solid #000;
-      float: left;
+      float: right;
       display: block;
       padding: 0 calc-em(14px, 13px);
-      line-height: calc-em(27px, 13px);
+      line-height: calc-em(28px, 13px);
       
       font-size: calc-em(13px, $base-font-size);
       
@@ -481,6 +481,7 @@ textarea {
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     font-weight: bold;
     margin-bottom: calc-em(16px, $base-font-size);
+    padding: 0 calc-em(11px, $base-font-size);
     span.asset-loading {
       display: none; 
       float: left;

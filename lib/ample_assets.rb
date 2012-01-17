@@ -1,4 +1,5 @@
 require 'ample_assets/configuration'
+require 'ample_assets/plugin_methods'
 
 module AmpleAssets
   require 'ample_assets/engine' if defined?(Rails)
@@ -21,4 +22,5 @@ end
 
 if defined? Rails
   AmpleAssets.enable_actionpack if defined? ActionController
+  ActiveRecord::Base.extend AmpleAssets::PluginMethods
 end

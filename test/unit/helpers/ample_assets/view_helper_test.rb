@@ -3,18 +3,35 @@ require 'test_helper'
 module AmpleAssets
   class ViewHelperTest < ActionView::TestCase
     
-    # TODO: Routes are not loaded in this context, so this test fails.
-    # context 'The assets_toolbar method' do
-    #   
-    #   setup do
-    #     render :text => assets_toolbar
-    #   end
-    # 
-    #   should 'set the mout_at path' do
-    #     assert output_buffer.include? AmpleAssets.mount_at
-    #   end
-    # 
-    # end
+    context 'The assets_toolbar method' do
+      
+      setup do
+        # TODO: Why is this needed?
+        AmpleAssets.mount_at = '/ample_assets/'
+        AmpleAssets.tabs = [
+          { :id => 'recent-assets', :title => 'Recently Viewed', :url => '/ample_assets/files/recent', :panels => true, :data_type => 'json' },
+          { :id => 'image-assets', :title => 'Images', :url => '/ample_assets/files/images', :panels => true, :data_type => 'json' },
+          { :id => 'document-assets', :title => 'Documents', :url => '/ample_assets/files/documents', :panels => true, :data_type => 'json' },
+          { :id => 'upload', :title => 'Upload', :url => '/ample_assets/files/new' }
+        ]
+        render :text => assets_toolbar
+      end
+    
+      should 'set the mount_at path' do
+        assert_select('script', :html => /mount_at = '#{AmpleAssets.mount_at.gsub('/', '\/')}'/)
+      end
+      
+      should 'set the tabs based on configuration options' do
+        AmpleAssets.tabs.each do |tab|
+          assert_select('script', :html => /#{tab[:url].gsub('/', '\/')}/)
+        end
+      end
+      
+      should 'not be html escaped' do
+        assert_select('script', :html => /&quot;/, :count => 0)
+      end
+    
+    end
     
     context 'The image_asset method' do
 

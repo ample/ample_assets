@@ -1,1 +1,19 @@
-<%= link_to image_tag(file.attachment.process(:matte, :dimensions => '75x75', :background => 'white').url, :size => '75x75'), ample_assets.file_path(file.id) %>
+<% if file.is_image? %>
+  <%= link_to image_tag(file.attachment.process(:matte, :dimensions => '75x75', :background => 'white').url, :size => '75x75'), ample_assets.file_path(file.id) %>
+<% elsif file.is_swf? %>
+  <div id="swf"></div>
+  <script type="text/javascript">
+  swfobject.embedSWF('<%= file.attachment.url %>', "swf", "400", "400", "9.0.0", {}, {scale: "noscale"});
+  </script>
+<% elsif file.is_pdf? %>
+  <div id="pdf"></div>
+  <script type="text/javascript">
+  window.onload = function (){
+    var success = new PDFObject({ 
+      url: '<%= file.attachment.url %>', 
+      width: "500px",
+      height: "300px",
+    }).embed('pdf');
+  }; 
+  </script>
+<% end %>

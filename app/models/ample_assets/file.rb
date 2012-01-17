@@ -27,6 +27,10 @@ module AmpleAssets
       attachment_mime_type == 'application/x-shockwave-flash'
     end
     
+    def is_pdf?
+      attachment_mime_type == 'application/pdf'
+    end
+    
     def is_image?
       AmpleAssets.allowed_mime_types[:images].include?(attachment_mime_type)
     end
@@ -36,7 +40,13 @@ module AmpleAssets
     end
     
     def thumbnail
-      attachment.process(:matte, :dimensions => '75x75', :background => 'white').url if is_image?
+      if is_image?
+        attachment.process(:matte, :dimensions => '75x75', :background => 'white').url
+      elsif is_pdf?
+        "/assets/ample_assets/icon_pdf.gif"
+      elsif is_swf?
+        "/assets/ample_assets/icon_swf.gif"
+      end
     end
     
     def medium

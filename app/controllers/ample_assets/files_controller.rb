@@ -37,7 +37,7 @@ module AmpleAssets
         file = File.new(params[:file])
       end
       if file.save
-        render file
+        redirect_to file_path(file)
       else 
         flash[:error] = "Whoops! There was a problem creating new asset."
         redirect_to :action => :index

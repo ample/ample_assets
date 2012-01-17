@@ -329,10 +329,12 @@ class window.AmpleAssets
     link = $("<a href=\"#{@options.base_url}#{show_url}\" draggable=\"true\"></a>")
       .attr('id',"file-#{el.id}")
       .attr('data-uid',"#{el.uid}")
-      .attr('data-orientation',el.orientation)
-      .attr('data-size',el.size)
       .addClass('draggable')
-    link.addClass('document') if el.document == 'true'
+    if el.document == 'true'
+      link.addClass('document')
+    else
+      link.attr('data-orientation',el.orientation)
+      link.attr('data-size',el.size)
     link.click ->
       # Open a modal window on any asset instance's click event.
       ref.modal_open(el)

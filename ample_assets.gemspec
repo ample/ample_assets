@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency "acts_as_indexed"
   
   s.add_development_dependency "sqlite3"
-  s.add_development_dependency "turn", "0.8.2"
+  s.add_development_dependency "turn", "~> 0.8.3"
   s.add_development_dependency "shoulda", ">= 3.0.0.beta"
   s.add_development_dependency "capybara"
   s.add_development_dependency "launchy"

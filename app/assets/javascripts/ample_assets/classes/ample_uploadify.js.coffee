@@ -23,7 +23,7 @@ class window.AmpleUploadify
     uploadify_script_data[csrf_param] = encodeURIComponent(encodeURIComponent(csrf_token)); 
     $('#uploadify').uploadify
       'uploader': '/assets/ample_assets/uploadify.swf'
-      'script': "#{ample_assets.mount_at}/files"
+      'script': "#{ample_assets.mount_at}files"
       'cancelImg': '/assets/ample_assets/cancel.png'
       'buttonImg': '/assets/ample_assets/btn-select-files.png'
       'height': 34

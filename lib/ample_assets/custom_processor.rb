@@ -10,7 +10,8 @@ module AmpleAssets
         :gravity => 'Center',
         :dimensions => '100x100'
       }.merge(args)
-      convert(temp_object, "-gravity #{opts[:gravity]} -crop #{opts[:dimensions]}+0+0\! -background #{opts[:background]} -flatten")
+      raise "Geometry of #{opts[:dimensions]} not supported for matte images" unless opts[:dimensions][/^(\d+)x(\d+)$/]
+      convert(temp_object, "-gravity #{opts[:gravity]} -resize #{opts[:dimensions]}^> -crop #{opts[:dimensions]}+0+0>\! -background #{opts[:background]} -flatten")
     end
 
   end

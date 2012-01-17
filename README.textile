@@ -1,6 +1,6 @@
 h1. Ample Assets
 
-AmpleAssets is a mountable engine that provides drag & drop functionality for Rails 3.1 applications.
+AmpleAssets is a mountable engine that provides drag & drop file-management for Rails 3.1 applications.
 
 h3. Example Usage
 

@@ -2,6 +2,6 @@ require 'ample_assets'
 
 class Page < ActiveRecord::Base
 
-  has_assets
+  has_asset
 
 end

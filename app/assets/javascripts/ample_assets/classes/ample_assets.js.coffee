@@ -358,7 +358,16 @@ class window.AmpleAssets
       geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
       url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
       delete_url = Mustache.to_html @options.show_url, { id: data.id }
-      html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation, id: data.id, delete_url: "#{@options.base_url}#{delete_url}" })
+      keywords = ""
+      html = Mustache.to_html @tpl('show'),
+        filename: data.filename, 
+        size: data.size,
+        mime_type: data.mime_type,
+        keywords: keywords,
+        src: url, 
+        orientation: data.orientation, 
+        id: data.id,
+        delete_url: "#{@options.base_url}#{delete_url}"
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     # Update the asset timestamp.
     @touch(data)
@@ -658,8 +667,13 @@ class window.AmpleAssets
       <div class="asset-media {{ orientation }}">
         <img src="{{ src }}" />
       </div>
-      <h3>{{ filename }}</h3>
-      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete</a>
+      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
+      <h3>{{ filename }}</h3><hr />
+      <ul>
+        <li>Original Dimensions: <strong>{{ size }}</strong></li>
+        <li>MimeType: <strong>{{ mime_type }}</strong></li>
+      </ul>
+      <p>{{ keywords }}</p>
     </div>'
     # PDF represents the HTML used within the modal window detail view for document assets.
     pdf: '

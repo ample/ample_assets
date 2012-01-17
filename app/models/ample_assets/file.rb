@@ -60,8 +60,11 @@ module AmpleAssets
     def as_json(options={})
       { :id => id,
         :uid => attachment_uid,
+        :filename => attachment_name,
         :document => is_doc? ? 'true' : 'false',
         :orientation => orientation,
+        :mime_type => attachment_mime_type,
+        :keywords => keywords.split(" "),
         :url => attachment.url,
         :size => "#{attachment.width}x#{attachment.height}",
         :sizes => { :tn => thumbnail, :md => medium }

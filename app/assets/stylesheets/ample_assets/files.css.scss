@@ -283,6 +283,7 @@ textarea {
    
    .pages {
      width: 100%;
+     margin-top: calc-em($base-font-size, $base-font-size);
    } //pages
 
    .page {
@@ -480,7 +481,6 @@ textarea {
     padding-top: 2px;
     text-shadow: rgba(0,0,0,1) 0 -1px 0, rgba(255,255,255,.1) 0 1px 0;
     font-weight: bold;
-    margin-bottom: calc-em(16px, $base-font-size);
     padding: 0 calc-em(11px, $base-font-size);
     span.asset-loading {
       display: none; 
@@ -579,6 +579,7 @@ textarea {
   // ---- Uploadify Styling ------------------------------------ //
   
   #upload {
+    padding: 0 calc-em(11px, $base-font-size);
      p {
        float: left;
        width: calc-em(113px, $base-font-size);

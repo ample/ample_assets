@@ -1,0 +1,41 @@
+<!DOCTYPE html>  <html> <head>   <title>ample_uploadify.js.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="ample_assets.js.html">                 ample_assets.js.coffee               </a>                                           <a class="source" href="ample_uploadify.js.html">                 ample_uploadify.js.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               ample_uploadify.js.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nb">window</span><span class="p">.</span><span class="nx">AmpleUploadify</span>
+
+  <span class="nv">constructor: </span><span class="nf">(opts=undefined) -&gt;</span>
+    <span class="nx">@set_options</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span>
+    <span class="nx">@init</span><span class="p">()</span>
+
+  <span class="nv">set_options: </span><span class="nf">(opts) -&gt;</span>
+    <span class="vi">@options = </span><span class="p">{</span>
+      <span class="nv">debug: </span><span class="kc">false</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="nx">k</span> <span class="k">of</span> <span class="nx">opts</span>
+      <span class="nx">@options</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span>
+
+  <span class="nv">init: </span><span class="o">-&gt;</span>
+    <span class="nx">@log</span> <span class="s2">&quot;init()&quot;</span>
+    <span class="nx">@html</span><span class="p">()</span>
+
+  <span class="nv">html: </span><span class="o">-&gt;</span>
+    <span class="nx">@log</span> <span class="s2">&quot;html()&quot;</span>
+    <span class="nv">csrf_token = </span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;meta[name=csrf-token]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">);</span>
+    <span class="nv">csrf_param = </span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;meta[name=csrf-param]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">);</span>
+    <span class="nv">uploadify_script_data = </span><span class="p">{};</span>
+    <span class="nx">uploadify_script_data</span><span class="p">[</span><span class="nx">csrf_param</span><span class="p">]</span> <span class="o">=</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">csrf_token</span><span class="p">));</span> 
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#uploadify&#39;</span><span class="p">).</span><span class="nx">uploadify</span>
+      <span class="s1">&#39;uploader&#39;</span><span class="o">:</span> <span class="s1">&#39;/assets/ample_assets/uploadify.swf&#39;</span>
+      <span class="s1">&#39;script&#39;</span><span class="o">:</span> <span class="s2">&quot;#{ample_assets.mount_at}/files&quot;</span>
+      <span class="s1">&#39;cancelImg&#39;</span><span class="o">:</span> <span class="s1">&#39;/assets/ample_assets/cancel.png&#39;</span>
+      <span class="s1">&#39;buttonImg&#39;</span><span class="o">:</span> <span class="s1">&#39;/assets/ample_assets/btn-select-files.png&#39;</span>
+      <span class="s1">&#39;height&#39;</span><span class="o">:</span> <span class="mi">34</span>
+      <span class="s1">&#39;scriptData&#39;</span><span class="o">:</span> <span class="nx">uploadify_script_data</span>
+      <span class="s1">&#39;queueID&#39;</span><span class="o">:</span> <span class="s1">&#39;fileQueue&#39;</span>
+      <span class="s1">&#39;auto&#39;</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="s1">&#39;multi&#39;</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="s1">&#39;wmode&#39;</span><span class="o">:</span> <span class="s1">&#39;transparent&#39;</span>
+      <span class="s1">&#39;onAllComplete&#39;</span><span class="o">:</span> <span class="o">-&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;ample_uploadify.complete&#39;</span><span class="p">);</span>
+
+  <span class="nv">log: </span><span class="nf">(msg) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s2">&quot;ample_uploadify.log: #{msg}&quot;</span> <span class="k">if</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">debug</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html>

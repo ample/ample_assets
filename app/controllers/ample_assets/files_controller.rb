@@ -16,14 +16,18 @@ module AmpleAssets
     end
     
     def create
-      if params['Filename'] && params['Filedata'] 
+      if uploadify?
         filename, filedata = params['Filename'], params['Filedata'] 
         file = File.new(:attachment => filedata)
       else
         file = File.new(params[:file])
       end
       if file.save
-        redirect_to file_path(file)
+        if uploadify?
+          render :nothing => true
+        else 
+          redirect_to file_path(file)
+        end
       else 
         flash[:error] = "Whoops! There was a problem creating new asset."
         redirect_to :action => :index
@@ -89,6 +93,10 @@ module AmpleAssets
       
       def current_file
         @current_file ||= File.find params[:id]
+      end
+      
+      def uploadify?
+        params['Filename'] && params['Filedata']
       end
       
   end

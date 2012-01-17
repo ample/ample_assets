@@ -1,2 +1,4 @@
 .sass-cache
 test
+_site
+.DS_Store

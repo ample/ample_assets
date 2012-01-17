@@ -32,6 +32,7 @@ Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
+  t.ruby_opts << '-rturn'
 end
 
 task :default => :test

@@ -1,1 +1,5 @@
-<%= link_to image_tag(file.attachment.process(:matte, :dimensions => '75x75', :background => 'white').url, :size => '75x75'), ample_assets.file_path(file.id) %>
+<% if file.is_image? %>
+    <%= link_to image_tag(file.thumbnail, :size => '75x75'), ample_assets.file_path(file) %>
+<% else %>
+    <div class="document">&nbsp;</div>
+<% end %>

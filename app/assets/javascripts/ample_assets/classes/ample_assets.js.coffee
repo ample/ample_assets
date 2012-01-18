@@ -164,7 +164,6 @@ class window.AmpleAssets
   # Executes when dropping a file into a textarea. The first argument is the response 
   # from the droppable callbacks defined above.
   resize_modal: (el) ->
-    console.log el
     uid = $(el).attr("data-uid")
     size = $(el).attr("data-size")
     orientation = $(el).attr("data-orientation")
@@ -539,14 +538,15 @@ class window.AmpleAssets
       uid = $('#asset-uid').val()
       width = $('#asset-width').val()
       height = $('#asset-height').val()
+      alt = $('#asset-alt').val()
       geometry = "#{width}x#{height}#{constraints}"
       if constraints == '#' && (width == '' || height == '')
         alert 'Can\'t resize image using this geometry. Please select another option or supply a value for both width and height.'
       else 
         url = encodeURI "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{uid}"
         url = url.replace('#','%23')
-        textile = "!#{url}!"
-        html = "<img src=\"#{url}\" />"
+        textile = "!#{url}(#{alt})!"
+        html = "<img src=\"#{url}\" alt=\"#{alt}\" />"
         $(@target_textarea).insertAtCaret (if $(@target_textarea).hasClass('textile') then textile else html)
         $(document).trigger('close.facebox')
   
@@ -714,8 +714,10 @@ class window.AmpleAssets
         <p><input type="hidden" id="asset-dimensions-target" name="asset-dimensions-target" value="" />
            <input type="hidden" id="asset-uid" name="asset-uid" value="{{ uid }}" />
            <input type="text" id="asset-width" name="asset-width" value="480" /> <span>x</span> 
-           <input type="text" id="asset-height" name="asset-height" value="" />
+           <input type="text" id="asset-height" name="asset-height" value="" /><br />
+           <input type="text" id="asset-alt" name="asset-alt" value="" placeholder="Alt text" />
            <input type="submit" id="asset-resize" name="asset-resize" class="asset-resize" value="Insert" /></p>
+        
       </div>
       <hr class="space" />
     </div>'

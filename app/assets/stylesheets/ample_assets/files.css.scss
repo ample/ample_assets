@@ -239,6 +239,7 @@ $asset-border-hover     : 3px solid #FFF;
     font-weight: bold;
   } //label
   input#asset-width,
+  input#asset-alt,
   input#asset-height {
     padding: calc-em(5px, 13px) calc-em(5px, 13px);
     margin: 0;
@@ -247,6 +248,11 @@ $asset-border-hover     : 3px solid #FFF;
     font-size: calc-em(12px, $base-font-size);
     text-align: center;
   } //asset-height, asset-width
+  input#asset-alt {
+    margin-top: 10px;
+    width: auto;
+    text-align: left;
+  }
   .asset-media,
   .asset-dimensions {
     float: left;

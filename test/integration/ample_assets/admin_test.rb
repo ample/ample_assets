@@ -28,10 +28,10 @@ module AmpleAssets
     
       should 'show a lightbox when a thumbnail is clicked' do
         link = page.find_by_id('recent-assets').find('a').click
-        assert_equal link['data-uid'], page.find('#facebox h3').value
+        assert_equal link['data-filename'], page.find('#facebox h3').value
         assert page.has_selector?('#facebox .asset-media img')
       end
-    
+      
       should 'allow users to search for assets by keyword' do
         assert !page.has_selector?('#asset-results img')
         fill_in 'asset-search', :with => 'rails'

@@ -164,7 +164,6 @@ class window.AmpleAssets
   # Executes when dropping a file into a textarea. The first argument is the response 
   # from the droppable callbacks defined above.
   resize_modal: (el) ->
-    console.log el
     uid = $(el).attr("data-uid")
     size = $(el).attr("data-size")
     orientation = $(el).attr("data-orientation")
@@ -329,6 +328,7 @@ class window.AmpleAssets
     link = $("<a href=\"#{@options.base_url}#{show_url}\" draggable=\"true\"></a>")
       .attr('id',"file-#{el.id}")
       .attr('data-uid',"#{el.uid}")
+      .attr('data-filename',"#{el.filename}")
       .addClass('draggable')
     if el.document == 'true'
       link.addClass('document')
@@ -346,7 +346,10 @@ class window.AmpleAssets
     @modal_active = true
     if data.document == 'true'
       # Asset is a document, so lets instantiate PDFObject for viewing inline.
-      html = Mustache.to_html(@tpl('pdf'),{ filename: data.uid, id: data.id })
+      html = Mustache.to_html @tpl('pdf'),
+        filename: data.uid, 
+        id: data.id,
+        mime_type: data.mime_type
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
       myPDF = new PDFObject(
         url: data.url
@@ -358,7 +361,16 @@ class window.AmpleAssets
       geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
       url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
       delete_url = Mustache.to_html @options.show_url, { id: data.id }
-      html = Mustache.to_html(@tpl('show'),{ filename: data.uid, src: url, orientation: data.orientation, id: data.id, delete_url: "#{@options.base_url}#{delete_url}" })
+      keywords = ""
+      html = Mustache.to_html @tpl('show'),
+        filename: data.filename, 
+        size: data.size,
+        mime_type: data.mime_type,
+        keywords: keywords,
+        src: url, 
+        orientation: data.orientation, 
+        id: data.id,
+        delete_url: "#{@options.base_url}#{delete_url}"
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     # Update the asset timestamp.
     @touch(data)
@@ -526,14 +538,15 @@ class window.AmpleAssets
       uid = $('#asset-uid').val()
       width = $('#asset-width').val()
       height = $('#asset-height').val()
+      alt = $('#asset-alt').val()
       geometry = "#{width}x#{height}#{constraints}"
       if constraints == '#' && (width == '' || height == '')
         alert 'Can\'t resize image using this geometry. Please select another option or supply a value for both width and height.'
       else 
         url = encodeURI "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{uid}"
         url = url.replace('#','%23')
-        textile = "!#{url}!"
-        html = "<img src=\"#{url}\" />"
+        textile = "!#{url}(#{alt})!"
+        html = "<img src=\"#{url}\" alt=\"#{alt}\" />"
         $(@target_textarea).insertAtCaret (if $(@target_textarea).hasClass('textile') then textile else html)
         $(document).trigger('close.facebox')
   
@@ -658,15 +671,25 @@ class window.AmpleAssets
       <div class="asset-media {{ orientation }}">
         <img src="{{ src }}" />
       </div>
-      <h3>{{ filename }}</h3>
-      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete</a>
+      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
+      <h3>{{ filename }}</h3><hr />
+      <ul>
+        <li>Original Dimensions: <strong>{{ size }}</strong></li>
+        <li>MimeType: <strong>{{ mime_type }}</strong></li>
+        <li>Orientation: <strong>{{ orientation }}</strong></li>
+      </ul>
+      <p>{{ keywords }}</p>
     </div>'
     # PDF represents the HTML used within the modal window detail view for document assets.
     pdf: '
     <div class="asset-detail">
       <div id="pdf" class="asset-media"></div>
-      <h3>{{ filename }}</h3>
-      <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete</a>
+        <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
+        <h3>{{ filename }}</h3><hr />
+        <ul>
+          <li>MimeType: <strong>{{ mime_type }}</strong></li>
+        </ul>
+        <p>{{ keywords }}</p>
     </div>'
     # There's no content within this panels instance... 
     empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
@@ -691,8 +714,10 @@ class window.AmpleAssets
         <p><input type="hidden" id="asset-dimensions-target" name="asset-dimensions-target" value="" />
            <input type="hidden" id="asset-uid" name="asset-uid" value="{{ uid }}" />
            <input type="text" id="asset-width" name="asset-width" value="480" /> <span>x</span> 
-           <input type="text" id="asset-height" name="asset-height" value="" />
+           <input type="text" id="asset-height" name="asset-height" value="" /><br />
+           <input type="text" id="asset-alt" name="asset-alt" value="" placeholder="Alt text" />
            <input type="submit" id="asset-resize" name="asset-resize" class="asset-resize" value="Insert" /></p>
+        
       </div>
       <hr class="space" />
     </div>'

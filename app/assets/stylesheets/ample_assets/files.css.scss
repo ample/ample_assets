@@ -176,7 +176,6 @@ $asset-border-hover     : 3px solid #FFF;
   width: 540px;
   div.asset-media {
     width: 480px;
-    min-height: 300px;
     text-align: center;
     padding: 20px;
     background: #f2f2f2;
@@ -188,6 +187,36 @@ $asset-border-hover     : 3px solid #FFF;
     padding-bottom: 0;
   } //asset-details
 } //asset-detail
+
+.asset-detail {
+  font-size: $base-font-size * 0.8;
+  .asset-delete {
+    float: right;
+    margin: 10px 20px 0 0;
+    background: url('remove.png') no-repeat center left;
+    padding: 5px 0 5px 25px;
+    color: #91291a;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  hr {
+    width: 520px;
+    margin: 0 0 10px; 
+    padding: 0;
+    border: none; 
+    color: #D4D4D4;
+    background-color: #D4D4D4;
+    height: 1px;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  li {
+    color: #999;
+  }
+}
 
 .asset-selection {
   @include clearfix;
@@ -216,6 +245,7 @@ $asset-border-hover     : 3px solid #FFF;
     font-weight: bold;
   } //label
   input#asset-width,
+  input#asset-alt,
   input#asset-height {
     padding: calc-em(5px, 13px) calc-em(5px, 13px);
     margin: 0;
@@ -224,6 +254,11 @@ $asset-border-hover     : 3px solid #FFF;
     font-size: calc-em(12px, $base-font-size);
     text-align: center;
   } //asset-height, asset-width
+  input#asset-alt {
+    margin-top: 10px;
+    width: auto;
+    text-align: left;
+  }
   .asset-media,
   .asset-dimensions {
     float: left;

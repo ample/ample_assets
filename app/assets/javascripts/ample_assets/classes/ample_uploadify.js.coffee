@@ -1,3 +1,5 @@
+# **AmpleAssets** is drag and drop file management for Rails applications. 
+# 
 class window.AmpleUploadify
 
   constructor: (opts=undefined) ->

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "dragonfly", "~> 0.9.8"
   s.add_dependency "jquery-rails"
   s.add_dependency "rack-cache"
-  s.add_dependency "sass-rails"
+  s.add_dependency "sass-rails", "~> 3.1.5"
   s.add_dependency "coffee-rails", "~> 3.1.1"
   s.add_dependency "uglifier"
   s.add_dependency "therubyracer"

@@ -1,22 +1,12 @@
 module AmpleAssets
   module ViewHelper
     
-    def assets_toolbar(pages = nil)
-      pages = ample_assets_pages if pages.nil?
+    def assets_toolbar(tabs = nil)
+      tabs = AmpleAssets.tabs if tabs.nil?
       script = "var ample_assets = {}; ample_assets.load = true; "
       script += "ample_assets.mount_at = '#{AmpleAssets.mount_at}'; "
-      script += pages
-      content_tag :script, script, :type => "text/javascript"
-    end
-    
-    # TODO: move this to YAML
-    def ample_assets_pages
-      "\nample_assets.pages = [
-        { id: 'recent-assets', title: 'Recently Viewed', url: '#{ample_assets.recent_files_path}', panels: true, data_type: 'json' },
-        { id: 'image-assets', title: 'Images', url: '#{ample_assets.images_files_path}', panels: true, data_type: 'json' },
-        { id: 'document-assets', title: 'Documents', url: '#{ample_assets.documents_files_path}', panels: true, data_type: 'json' },
-        { id: 'upload', title: 'Upload', url: '#{ample_assets.new_file_path}' }
-      ];".gsub(/\s+/, "")
+      script += "ample_assets.pages = #{tabs.to_json}"
+      content_tag :script, script.html_safe, :type => "text/javascript"
     end
     
     # Returns image tag for an object's attachment, with optional link element wrapped around it. 

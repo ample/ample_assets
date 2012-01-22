@@ -5,10 +5,19 @@ module AmpleAssets
     # An array of valid keys in the options hash when configuring
     VALID_OPTIONS_KEYS = [
       :mount_at,
+      :tabs,
       :allowed_mime_types].freeze
      
     # Route path prefix
     DEFAULT_MOUNT_AT = '/ample_assets/'
+    
+    # Tabs available in the Assets Toolbar
+    DEFAULT_TABS = [
+      { :id => 'recent-assets', :title => 'Recently Viewed', :url => '/ample_assets/files/recent', :panels => true, :data_type => 'json' },
+      { :id => 'image-assets', :title => 'Images', :url => '/ample_assets/files/images', :panels => true, :data_type => 'json' },
+      { :id => 'document-assets', :title => 'Documents', :url => '/ample_assets/files/documents', :panels => true, :data_type => 'json' },
+      { :id => 'upload', :title => 'Upload', :url => '/ample_assets/files/new' }
+    ]
     
     # File types available for upload
     DEFAULT_ALLOWED_MIME_TYPES = {
@@ -40,6 +49,7 @@ module AmpleAssets
     # Reset all configuration options to defaults
     def reset
       self.mount_at = DEFAULT_MOUNT_AT
+      self.tabs = DEFAULT_TABS
       self.allowed_mime_types = DEFAULT_ALLOWED_MIME_TYPES
       self
     end

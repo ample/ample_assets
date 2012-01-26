@@ -12,7 +12,6 @@ class window.AmpleGravity
       uid: false
       url: "/ample_assets/files/{{ id }}/gravity"
     }
-    console.log opts
     for k of opts
       @options[k] = opts[k]
   

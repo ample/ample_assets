@@ -329,6 +329,7 @@ class window.AmpleAssets
       .attr('id',"file-#{el.id}")
       .attr('data-uid',"#{el.uid}")
       .attr('data-filename',"#{el.filename}")
+      .attr('data-gravity', el.gravity)
       .addClass('draggable')
     if el.document == 'true'
       link.addClass('document')
@@ -671,6 +672,13 @@ class window.AmpleAssets
       <div class="asset-media {{ orientation }}">
         <img src="{{ src }}" />
       </div>
+      <input id="file_attachment_gravity" name="file[attachment_gravity]" type="hidden" value="{{ gravity }}">
+      <div id="asset-gravity-handle" style="display:none"></div>
+      <script type="text/javascript">
+        $(document).ready(function() {
+        	new AmpleGravity();
+        });
+      </script>
       <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
       <h3>{{ filename }}</h3><hr />
       <ul>

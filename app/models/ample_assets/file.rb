@@ -66,6 +66,7 @@ module AmpleAssets
         :mime_type => attachment_mime_type,
         :keywords => keywords.split(" "),
         :url => attachment.url,
+        :gravity => attachment_gravity,
         :size => "#{attachment.width}x#{attachment.height}",
         :sizes => { :tn => thumbnail, :md => medium }
       }

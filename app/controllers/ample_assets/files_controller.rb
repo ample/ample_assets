@@ -58,6 +58,12 @@ module AmpleAssets
       render :nothing => true
     end
     
+    def gravity
+      raise ActiveRecord::RecordNotFound if current_file.nil?
+      current_file.update_attribute :attachment_gravity, params[:gravity]
+      render :nothing => true
+    end
+    
     def search
       @current_files = File.with_query("^#{params[:q]}")
       respond_to do |format|

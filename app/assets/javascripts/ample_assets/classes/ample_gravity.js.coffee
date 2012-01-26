@@ -5,27 +5,30 @@ class window.AmpleGravity
   constructor: (opts=undefined) ->
     @set_options(opts)
     @init()
-
+  
   set_options: (opts) ->
     @options = {
       debug: true
+      uid: false
+      url: "/ample_assets/files/{{ id }}/gravity"
     }
+    console.log opts
     for k of opts
       @options[k] = opts[k]
-
+  
   init: ->
     @log "init()"
     @handle = $("#asset-gravity-handle")
     @image = $(".asset-media img")
     @test()
-    
+  
   test: ->
     if @image.width() > 0
       @html()
     else
       @log "@image not loaded"
       setTimeout (=> @test()), 500
-    
+  
   html: ->
     @log "html()"
     @gravity = $("#file_attachment_gravity").val() || "c"
@@ -51,12 +54,19 @@ class window.AmpleGravity
             gravity = key
             break
         $("#file_attachment_gravity").val(gravity);
+        @submit(gravity)
         @log gravity
     @handle.fadeIn()
-    
+  
+  submit: (gravity) ->
+    @log "submit(#{gravity})"
+    $.post @options.url, { gravity: gravity }, (e) =>
+      $("a[data-uid='#{@options.uid}']").attr('data-gravity',gravity)
+      $('#asset-gravity-notification').show().delay(2500).fadeOut()
+  
   log: (msg) ->
     console.log "ample_gravity.log: #{msg}" if @options.debug
-
+  
   gravities: ->
     nw: [ 0, 0 ]
     n:  [ 1, 0 ]
@@ -67,3 +77,4 @@ class window.AmpleGravity
     sw: [ 0, 2 ]
     s:  [ 1, 2 ]
     se: [ 2, 2 ]
+  

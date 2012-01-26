@@ -35,6 +35,7 @@ class window.AmpleAssets
       thumb_url: '/files/thumbs'
       show_url: '/files/{{ id }}'
       touch_url: '/files/{{ id }}/touch'
+      gravity_url: '/files/{{ id }}/gravity'
       onInit: ->
         ref.log 'onInit()'
       onExpand: ->
@@ -362,6 +363,8 @@ class window.AmpleAssets
       geometry = if data.orientation == 'portrait' then 'x300>' else '480x>'
       url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
       delete_url = Mustache.to_html @options.show_url, { id: data.id }
+      gravity_url = Mustache.to_html @options.gravity_url, { id: data.id }
+      gravity = $("a[data-uid='#{data.uid}']").first().attr('data-gravity')
       keywords = ""
       html = Mustache.to_html @tpl('show'),
         filename: data.filename, 
@@ -371,7 +374,10 @@ class window.AmpleAssets
         src: url, 
         orientation: data.orientation, 
         id: data.id,
-        delete_url: "#{@options.base_url}#{delete_url}"
+        uid: data.uid,
+        gravity: gravity,
+        delete_url: "#{@options.base_url}#{delete_url}",
+        gravity_url: "#{@options.base_url}#{gravity_url}"
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
     # Update the asset timestamp.
     @touch(data)
@@ -676,9 +682,10 @@ class window.AmpleAssets
       <div id="asset-gravity-handle" style="display:none"></div>
       <script type="text/javascript">
         $(document).ready(function() {
-        	new AmpleGravity();
+        	new AmpleGravity({url: "{{ gravity_url }}", uid: "{{ uid }}"});
         });
       </script>
+      <div id="asset-gravity-notification">Asset updated successfully.</div>
       <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
       <h3>{{ filename }}</h3><hr />
       <ul>

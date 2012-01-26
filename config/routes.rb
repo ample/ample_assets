@@ -3,9 +3,9 @@ AmpleAssets::Engine.routes.draw do
   dfly = Dragonfly[:images]
   
   resources :files do
-    
     member do
       post :touch
+      post :gravity
     end
     
     collection do

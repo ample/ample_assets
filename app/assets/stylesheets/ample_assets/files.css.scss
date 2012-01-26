@@ -206,6 +206,17 @@ $asset-border-hover     : 3px solid #FFF;
     text-decoration: none;
     font-weight: bold;
   }
+  #asset-gravity-notification {
+    background: #60b84b;
+    border: 1px solid #509940;
+    color: #FFF;
+    padding: 3px 10px;
+    margin: 3px 0 5px 0;
+    width: 502px;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+  }
   hr {
     width: 520px;
     margin: 0 0 10px; 

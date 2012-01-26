@@ -144,6 +144,10 @@ class window.AmpleAssets
     $(".draggable").liveDraggable
       appendTo: "body"
       helper: "clone"
+      start: ->
+        $('div.ui-droppable, textarea.ui-droppable').addClass('asset-drop-target')
+      stop: ->
+        $('div.ui-droppable, textarea.ui-droppable').removeClass('asset-drop-target')
     
     $("textarea").droppable
       activeClass: "asset-notice"

@@ -23,15 +23,15 @@ ActiveRecord::Schema.define(:version => 20120106192233) do
     t.integer  "attachment_width"
     t.integer  "attachment_height"
     t.string   "attachment_gravity"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   create_table "pages", :force => true do |t|
     t.string   "title"
     t.integer  "file_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end

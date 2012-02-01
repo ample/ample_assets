@@ -2,6 +2,8 @@ h1. Ample Assets
 
 AmpleAssets is a mountable engine that provides drag & drop file-management for Rails 3.1 applications.
 
+!http://ample.github.com/ample_assets/images/screen-shot.png!
+
 h3. Example Usage
 
 Add the following to your Gemfile and bundle...

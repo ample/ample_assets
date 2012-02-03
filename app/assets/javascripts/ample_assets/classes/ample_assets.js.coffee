@@ -222,12 +222,14 @@ class window.AmpleAssets
       el.animate {height: @options.collapsed_height}, "fast", =>
         @collapse()
         @options.onCollapse()
+        el.trigger('collapse')
     else
       @options.expanded = true
       $('body').animate {'padding-bottom': @options.expanded_height}, "fast"
       el.animate {height: @options.expanded_height}, "fast", =>
         @expand()
         @options.onExpand()
+        el.trigger('expand')
   
   # Loads contents of page identified by `i`
   load: (i) ->

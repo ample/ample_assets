@@ -1,16 +1,56 @@
 # **AmpleAssets** is drag and drop file management for Rails applications. 
 # 
-class window.AmpleAssets
+class window.AmpleAssetsToolbar extends AmpleAssets
   
-  # Standard issue constructor method, called upon object instantiation.
-  constructor: (opts=undefined) ->
-    @set_options(opts)
-    @init()
+  default_options: 
+    debug: false
+    expanded: false
+    id: "ample-assets"
+    handle_text: 'Assets'
+    expanded_height: 215
+    collapsed_height: 35
+    base_url: '/ample_assets'
+    search_url: '/files/search'
+    thumb_url: '/files/thumbs'
+    show_url: '/files/{{ id }}'
+    touch_url: '/files/{{ id }}/touch'
+    gravity_url: '/files/{{ id }}/gravity'
+    onInit: ->
+    onExpand: ->
+    onCollapse: ->
+    panels_options:
+      debug: false
+      width: 950
+      height: 100
+      orientation: 'vertical'
+      key_orientation: 'vertical'
+      keyboard_nav: true
+      auto: false
+      parent: 'div'
+      children: 'div.page'
+    pages_options:
+      interval: 5000
+      width: 81 
+      height: 81
+      enabled: true
+      distance: 10
+      auto: false
+      orientation: 'horizontal'
+      key_orientation: 'horizontal'
+      per_page: 10
+    pages: [
+      { 
+        id: 'recent-assets', 
+        title: 'Recently Viewed',
+        url: '',
+        panels: false
+      }
+    ]
   
-  # Triggers onInit method. 
   # Initialize product toolbar and drop targets. 
   init: ->
     @options.onInit()
+    super
     @setup()
     @events()
   
@@ -21,64 +61,7 @@ class window.AmpleAssets
     @reloading = false
     @searching = false
     @loaded = false
-    ref = this
-    # Define defaults.
-    default_options = 
-      debug: false
-      expanded: false
-      id: "ample-assets"
-      handle_text: 'Assets'
-      expanded_height: 215
-      collapsed_height: 35
-      base_url: '/ample_assets'
-      search_url: '/files/search'
-      thumb_url: '/files/thumbs'
-      show_url: '/files/{{ id }}'
-      touch_url: '/files/{{ id }}/touch'
-      gravity_url: '/files/{{ id }}/gravity'
-      onInit: ->
-        ref.log 'onInit()'
-      onExpand: ->
-        ref.log 'onExpand()'
-      onCollapse: ->
-        ref.log 'onCollapse()'
-      panels_options:
-        debug: false
-        width: 950
-        height: 100
-        orientation: 'vertical'
-        key_orientation: 'vertical'
-        keyboard_nav: true
-        auto: false
-        parent: 'div'
-        children: 'div.page'
-      pages_options:
-        interval: 5000
-        width: 81 
-        height: 81
-        enabled: true
-        distance: 10
-        auto: false
-        orientation: 'horizontal'
-        key_orientation: 'horizontal'
-        per_page: 10
-      pages: [
-        { 
-          id: 'recent-assets', 
-          title: 'Recently Viewed',
-          url: '',
-          panels: false
-        }
-      ]
-    
-    # Override defaults with user defined options.
-    @options = default_options
-    for k of opts
-      @options[k] = opts[k]
-  
-  # Log debug output to JS console.
-  log: (msg) ->
-    console.log "ample_assets.log: #{msg}" if @options.debug
+    super
   
   # Build structure and stylize layout of toolbar, setup drag, drop and search logic.
   # Opens first tab if toolbar is expanded on init.
@@ -222,12 +205,14 @@ class window.AmpleAssets
       el.animate {height: @options.collapsed_height}, "fast", =>
         @collapse()
         @options.onCollapse()
+        el.trigger('collapse')
     else
       @options.expanded = true
       $('body').animate {'padding-bottom': @options.expanded_height}, "fast"
       el.animate {height: @options.expanded_height}, "fast", =>
         @expand()
         @options.onExpand()
+        el.trigger('expand')
   
   # Loads contents of page identified by `i`
   load: (i) ->
@@ -686,7 +671,7 @@ class window.AmpleAssets
       <div id="asset-gravity-handle" style="display:none"></div>
       <script type="text/javascript">
         $(document).ready(function() {
-        	new AmpleGravity({url: "{{ gravity_url }}", uid: "{{ uid }}"});
+        	new AmpleAssetsGravity({url: "{{ gravity_url }}", uid: "{{ uid }}"});
         });
       </script>
       <div id="asset-gravity-notification">Asset updated successfully.</div>
@@ -740,6 +725,7 @@ class window.AmpleAssets
       </div>
       <hr class="space" />
     </div>'
+    
 
 # Extend draggable to elements added to the DOM after page load. 
 jQuery.fn.liveDraggable = (opts) ->

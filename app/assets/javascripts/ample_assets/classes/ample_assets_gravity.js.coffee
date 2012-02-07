@@ -1,19 +1,11 @@
 # **AmpleAssets** is drag and drop file management for Rails applications. 
 # 
-class window.AmpleGravity
-
-  constructor: (opts=undefined) ->
-    @set_options(opts)
-    @init()
+class window.AmpleAssetsGravity extends AmpleAssets
   
-  set_options: (opts) ->
-    @options = {
-      debug: true
-      uid: false
-      url: "/ample_assets/files/{{ id }}/gravity"
-    }
-    for k of opts
-      @options[k] = opts[k]
+  default_options: 
+    debug: true
+    uid: false
+    url: "/ample_assets/files/{{ id }}/gravity"
   
   init: ->
     @log "init()"
@@ -62,9 +54,6 @@ class window.AmpleGravity
     $.post @options.url, { gravity: gravity }, (e) =>
       $("a[data-uid='#{@options.uid}']").attr('data-gravity',gravity)
       $('#asset-gravity-notification').show().delay(2500).fadeOut()
-  
-  log: (msg) ->
-    console.log "ample_gravity.log: #{msg}" if @options.debug
   
   gravities: ->
     nw: [ 0, 0 ]

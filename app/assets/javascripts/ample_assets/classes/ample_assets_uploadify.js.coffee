@@ -1,17 +1,6 @@
 # **AmpleAssets** is drag and drop file management for Rails applications. 
 # 
-class window.AmpleUploadify
-
-  constructor: (opts=undefined) ->
-    @set_options(opts)
-    @init()
-
-  set_options: (opts) ->
-    @options = {
-      debug: false
-    }
-    for k of opts
-      @options[k] = opts[k]
+class window.AmpleAssetsUploadify extends AmpleAssets
 
   init: ->
     @log "init()"
@@ -36,7 +25,4 @@ class window.AmpleUploadify
       'wmode': 'transparent'
       'onAllComplete': ->
         $('body').trigger('ample_uploadify.complete');
-
-  log: (msg) ->
-    console.log "ample_uploadify.log: #{msg}" if @options.debug
 

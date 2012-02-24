@@ -1,6 +1,6 @@
 # **AmpleAssets** is drag and drop file management for Rails applications. 
 # 
-class window.AmpleAssetsToolbar extends AmpleAssets
+class window.AmpleAssetsToolbar extends CoffeeCup
   
   default_options: 
     debug: false

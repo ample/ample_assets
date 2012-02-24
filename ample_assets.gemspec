@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "therubyracer"
   s.add_dependency "will_paginate"
   s.add_dependency "acts_as_indexed"
+  s.add_dependency "coffee_cup"
   
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "turn", "~> 0.9.3"

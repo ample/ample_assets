@@ -7,6 +7,12 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require_tree ./lib
+//= require jquery.ample_panels
+//= require jquery.facebox
+//= require jquery.uploadify
+//= require moustache
+//= require pdfobject
+//= require swfobject
+//= require coffee_cup
 //= require_tree ./classes
 //= require ./files

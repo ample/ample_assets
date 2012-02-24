@@ -6,6 +6,7 @@ require 'dragonfly'
 require 'ample_assets/custom_processor'
 require 'will_paginate'
 require 'will_paginate/array'
+require 'coffee_cup'
 
 module AmpleAssets
   class Engine < Rails::Engine

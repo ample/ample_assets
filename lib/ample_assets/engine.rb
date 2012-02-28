@@ -2,7 +2,6 @@ require 'ample_assets'
 require 'rails'
 require 'rack/cache'
 require 'acts_as_indexed'
-require 'dragonfly'
 require 'ample_assets/custom_processor'
 require 'will_paginate'
 require 'will_paginate/array'
@@ -21,12 +20,11 @@ module AmpleAssets
     end
     
     initializer 'ample_assets: configure dragonfly' do |app|
-      dfly = Dragonfly[:images]
-      dfly.define_macro ActiveRecord::Base, :image_accessor
-      dfly.register_mime_type(:swf, 'application/x-shockwave-flash')
-      dfly.configure_with(:imagemagick)
-      dfly.configure_with(:rails)
-      dfly.processor.register(CustomProcessor)
+      AmpleAssets.dfly.define_macro ActiveRecord::Base, :image_accessor
+      AmpleAssets.dfly.register_mime_type(:swf, 'application/x-shockwave-flash')
+      AmpleAssets.dfly.configure_with(:imagemagick)
+      AmpleAssets.dfly.configure_with(:rails)
+      AmpleAssets.dfly.processor.register(CustomProcessor)
       app.middleware.insert_after ::Rack::Cache, ::Dragonfly::Middleware, :images
     end
     

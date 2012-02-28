@@ -1,8 +1,7 @@
 AmpleAssets::Engine.routes.draw do
 
-  dfly = Dragonfly[:images]
-  
   resources :files do
+    
     member do
       post :touch
       post :gravity
@@ -11,8 +10,8 @@ AmpleAssets::Engine.routes.draw do
     collection do
       post :search
       get :recent
-      match '/thumbs/:geometry' => dfly.endpoint { |params, app|
-        dfly.fetch(params[:uid]).thumb(params[:geometry])
+      match '/thumbs/:geometry' => AmpleAssets.dfly.endpoint { |params, app|
+        AmpleAssets.dfly.fetch(params[:uid]).thumb(params[:geometry])
       }
       AmpleAssets.allowed_mime_types.keys.each do |key|
         get key

@@ -1,3 +1,5 @@
+require 'dragonfly'
+
 module AmpleAssets
   # Defines constants and methods related to configuration
   module Configuration
@@ -5,11 +7,15 @@ module AmpleAssets
     # An array of valid keys in the options hash when configuring
     VALID_OPTIONS_KEYS = [
       :mount_at,
+      :dfly,
       :tabs,
       :allowed_mime_types].freeze
      
     # Route path prefix
     DEFAULT_MOUNT_AT = '/ample_assets/'
+    
+    # Access to Dragonfly
+    DEFAULT_DFLY = ::Dragonfly[:images]
     
     # Tabs available in the Assets Toolbar
     DEFAULT_TABS = [
@@ -49,6 +55,7 @@ module AmpleAssets
     # Reset all configuration options to defaults
     def reset
       self.mount_at = DEFAULT_MOUNT_AT
+      self.dfly = DEFAULT_DFLY
       self.tabs = DEFAULT_TABS
       self.allowed_mime_types = DEFAULT_ALLOWED_MIME_TYPES
       self

@@ -464,7 +464,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
   
   # Upon collapse, we disable panels.
   collapse: ->
-    $("##{@options.id}-handle").show()
+    $("##{@options.id}-handle").css('bottom',-35).show().animate({'bottom': 0},'fast')
     @disable_panels()
   
   # Expands the asset toolbar and reenables the currently loaded tab. 

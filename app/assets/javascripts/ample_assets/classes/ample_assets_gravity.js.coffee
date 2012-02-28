@@ -17,7 +17,7 @@ class window.AmpleAssetsGravity extends CoffeeCup
   
   test: ->
     if @image.width() > 0
-      @html() if @image.height() > @options.min_width && @image.height() > @options.min_height
+      @html()
     else
       @log "@image not loaded"
       setTimeout (=> @test()), 500
@@ -25,7 +25,7 @@ class window.AmpleAssetsGravity extends CoffeeCup
   html: ->
     @log "html()"
     # Don't show this for tiny images
-    return false unless @image.width() > 100 && @image.width() > 100
+    return false unless @image.height() > @options.min_width && @image.height() > @options.min_height
     @gravity = $("#file_attachment_gravity").val() || "c"
     @gravity_grid =
       top: @image.height() / 3

@@ -6,6 +6,8 @@ class window.AmpleAssetsGravity extends CoffeeCup
     debug: true
     uid: false
     url: "/ample_assets/files/{{ id }}/gravity"
+    min_width: 100
+    min_height: 100
   
   init: ->
     @log "init()"
@@ -15,7 +17,7 @@ class window.AmpleAssetsGravity extends CoffeeCup
   
   test: ->
     if @image.width() > 0
-      @html()
+      @html() if @image.height() > @options.min_width && @image.height() > @options.min_height
     else
       @log "@image not loaded"
       setTimeout (=> @test()), 500

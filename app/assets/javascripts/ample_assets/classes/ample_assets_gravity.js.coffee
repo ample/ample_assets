@@ -22,6 +22,8 @@ class window.AmpleAssetsGravity extends CoffeeCup
   
   html: ->
     @log "html()"
+    # Don't show this for tiny images
+    return false unless @image.width() > 100 && @image.width() > 100
     @gravity = $("#file_attachment_gravity").val() || "c"
     @gravity_grid =
       top: @image.height() / 3

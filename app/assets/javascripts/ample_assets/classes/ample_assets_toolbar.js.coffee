@@ -7,8 +7,8 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     expanded: false
     id: "ample-assets"
     handle_text: 'Assets'
-    expanded_height: 215
-    collapsed_height: 35
+    expanded_height: 180
+    collapsed_height: 0
     base_url: '/ample_assets'
     search_url: '/files/search'
     thumb_url: '/files/thumbs'
@@ -69,8 +69,8 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     id = @options.id
     layout = Mustache.to_html(@tpl('layout'),{ id: id, pages: @get_pages(), tabs: @get_pages('tab') })
     @handle = Mustache.to_html(@tpl('handle'),{ id: id, title: @options.handle_text })
-    html = $(layout).prepend(@handle)
-    $('body').append html
+    html = $(layout)
+    $('body').append(html).append(@handle)
     @style()
     @drag_drop()
     @search()
@@ -78,6 +78,12 @@ class window.AmpleAssetsToolbar extends CoffeeCup
   
   # Set initial styles on toolbar elements.
   style: ->
+    handle_opts = 
+      position: 'absolute'
+      bottom: 0
+      right: 0
+    $("##{@options.id}-handle").css(handle_opts)
+    
     @loading = $("##{@options.id}-tabs span.asset-loading")
     $("##{@options.id} .container").css('height',200)
     if @options.expanded
@@ -207,6 +213,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
         @options.onCollapse()
         el.trigger('collapse')
     else
+      $("##{@options.id}-handle").hide()
       @options.expanded = true
       $('body').animate {'padding-bottom': @options.expanded_height}, "fast"
       el.animate {height: @options.expanded_height}, "fast", =>
@@ -457,6 +464,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
   
   # Upon collapse, we disable panels.
   collapse: ->
+    $("##{@options.id}-handle").show()
     @disable_panels()
   
   # Expands the asset toolbar and reenables the currently loaded tab. 
@@ -475,6 +483,9 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     @key_events()
     @tab_events()
     ref = this
+    # Collapse toolbar
+    $("##{@options.id} a.collapse").live 'click', =>
+      @toggle()
     # Reload the first tab following a successful upload. 
     $('body').bind 'ample_uploadify.complete', =>
       @reload(0)
@@ -629,6 +640,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     # Layout returns the HTML structure of the main asset toolbar.
     layout: '
     <div id="{{ id }}"><div class="background">
+      <a href="#" class="collapse">Close</a>
       <div class="container">
         <div id="{{ id }}-tabs" class="tabs">
           <div class="asset-refresh"></div>

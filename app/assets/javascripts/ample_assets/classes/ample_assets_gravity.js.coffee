@@ -6,6 +6,8 @@ class window.AmpleAssetsGravity extends CoffeeCup
     debug: true
     uid: false
     url: "/ample_assets/files/{{ id }}/gravity"
+    min_width: 100
+    min_height: 100
   
   init: ->
     @log "init()"
@@ -23,7 +25,7 @@ class window.AmpleAssetsGravity extends CoffeeCup
   html: ->
     @log "html()"
     # Don't show this for tiny images
-    return false unless @image.width() > 100 && @image.width() > 100
+    return false unless @image.height() > @options.min_width && @image.height() > @options.min_height
     @gravity = $("#file_attachment_gravity").val() || "c"
     @gravity_grid =
       top: @image.height() / 3

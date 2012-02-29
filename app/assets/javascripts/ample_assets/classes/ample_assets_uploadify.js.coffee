@@ -8,10 +8,12 @@ class window.AmpleAssetsUploadify extends CoffeeCup
 
   html: ->
     @log "html()"
-    csrf_token = $('meta[name=csrf-token]').attr('content');
-    csrf_param = $('meta[name=csrf-param]').attr('content');
-    uploadify_script_data = {};
-    uploadify_script_data[csrf_param] = encodeURIComponent(encodeURIComponent(csrf_token)); 
+    csrf_token = $('meta[name=csrf-token]').attr('content')
+    csrf_param = $('meta[name=csrf-param]').attr('content')
+    auth_token = $('meta[name=auth-token]').attr('content')
+    uploadify_script_data = {}
+    uploadify_script_data[csrf_param] = encodeURIComponent(encodeURIComponent(csrf_token))
+    uploadify_script_data['auth_token'] = auth_token
     $('#uploadify').uploadify
       'uploader': '/assets/ample_assets/uploadify.swf'
       'script': "#{ample_assets.mount_at}files"

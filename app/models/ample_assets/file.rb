@@ -47,7 +47,7 @@ module AmpleAssets
       elsif AmpleAssets.icons.has_key?(self.attachment_mime_type)
         AmpleAssets.icons[self.attachment_mime_type]
       else
-        "/assets/ample_assets/icon_other.gif"
+        AmpleAssets.icons[:other]
       end
     end
     

@@ -9,6 +9,7 @@ module AmpleAssets
       :mount_at,
       :dfly,
       :tabs,
+      :icons,
       :allowed_mime_types].freeze
      
     # Route path prefix
@@ -30,6 +31,12 @@ module AmpleAssets
       :images => %w(image/jpeg image/png image/gif),
       :documents => %w(application/pdf),
       :other => %w(application/x-shockwave-flash)
+    }
+    
+    DEFAULT_ICONS = {
+      'application/x-shockwave-flash' => '/assets/ample_assets/icon_swf.gif',
+      'application/pdf' => '/assets/ample_assets/icon_pdf.gif',
+      :other => '/assets/ample_assets/icon_other.gif'
     }
     
     # @private
@@ -58,6 +65,7 @@ module AmpleAssets
       self.dfly = DEFAULT_DFLY
       self.tabs = DEFAULT_TABS
       self.allowed_mime_types = DEFAULT_ALLOWED_MIME_TYPES
+      self.icons = DEFAULT_ICONS
       self
     end
     

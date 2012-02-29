@@ -1,16 +1,16 @@
 module AmpleAssets
   class FilesController < ApplicationController
-  
+    
     ([:index, :recent] | AmpleAssets.allowed_mime_types.keys).compact.each do |key|
       define_method key do
         respond_to do |format|
           format.js   { render current_files, :content_type => :html }
           format.json { render :json => current_files.to_json }
-          format.html { render :nothing => true }
+          format.html
         end
       end
     end
-
+    
     def new
       render 'ample_assets/files/new', :layout => false, :content_type => :html if request.xhr?
     end
@@ -82,7 +82,7 @@ module AmpleAssets
         pagination = { :page => params[:page], :per_page => per_page }
         @current_files ||= File.find(:all, :conditions => conditions, :order => 'created_at DESC').paginate(pagination)
       end
-
+      
       def current_file_conditions
         are = params[:type] == 'documents' ? 'NOT in' : 'in'
         type = params[:action].intern
@@ -92,7 +92,7 @@ module AmpleAssets
       def recent_files
         @recent_files ||= File.recent.paginate(:page => params[:page], :per_page => per_page)
       end
-
+      
       def per_page
         params[:per_page] || 20
       end

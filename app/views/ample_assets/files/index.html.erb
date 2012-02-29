@@ -1,3 +1,6 @@
-<%# asset_drop(current_feature, :asset) %>
-
-<%= ample_assets %>
+<%= content_tag :ul do %>
+	<% current_files.each do |file| %>
+		<%= content_tag :li, render(file) %>
+	<% end %>
+<% end %>
+<%= will_paginate current_files %>

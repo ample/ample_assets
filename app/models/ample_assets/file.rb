@@ -43,9 +43,11 @@ module AmpleAssets
       if is_image?
         attachment.process(:matte, :dimensions => '75x75', :background => 'white').url
       elsif is_swf?
-        "/assets/ample_assets/icon_swf.gif"  
+        AmpleAssets.icons[self.attachment_mime_type]
+      elsif AmpleAssets.icons.has_key?(self.attachment_mime_type)
+        AmpleAssets.icons[self.attachment_mime_type]
       else
-        "/assets/ample_assets/icon_pdf.gif"
+        "/assets/ample_assets/icon_other.gif"
       end
     end
     

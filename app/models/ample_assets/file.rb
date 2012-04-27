@@ -60,13 +60,14 @@ module AmpleAssets
     end
     
     def as_json(options={})
+      search_terms = keywords.split(" ") rescue nil
       { :id => id,
         :uid => attachment_uid,
         :filename => attachment_name,
         :document => is_doc? ? 'true' : 'false',
         :orientation => orientation,
         :mime_type => attachment_mime_type,
-        :keywords => keywords.split(" "),
+        :keywords => search_terms,
         :url => attachment.url,
         :gravity => attachment_gravity,
         :size => "#{attachment.width}x#{attachment.height}",

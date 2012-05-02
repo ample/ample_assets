@@ -3,11 +3,13 @@
 class window.AmpleAssetsGravity extends CoffeeCup
   
   default_options: 
-    debug: true
+    debug: false
     uid: false
     url: "/ample_assets/files/{{ id }}/gravity"
     min_width: 100
     min_height: 100
+    max_width: 480
+    max_height: 300  
   
   init: ->
     @log "init()"
@@ -43,7 +45,15 @@ class window.AmpleAssetsGravity extends CoffeeCup
       grid: [@gravity_grid.left, @gravity_grid.top]
       scroll: false,
       stop: (event, ui) =>
-        gravity_pos = [ Math.floor(ui.position.left / @gravity_grid.left), Math.floor(ui.position.top / @gravity_grid.top) ]
+        left = ui.position.left
+        top = ui.position.top
+        
+        # Account for images smaller than max width and/or height. 
+        left = Math.abs(((@options.max_width - @image.width()) / 2) - left) if @image.width() < @options.max_width
+        top = Math.abs(((@options.max_height - @image.height()) / 2) - top) if @image.height() < @options.max_height
+        
+        gravity_pos = [ Math.floor(left / @gravity_grid.left), Math.floor(top / @gravity_grid.top) ]
+        
         for key, value of @gravities()
           if value[0] is gravity_pos[0] and value[1] is gravity_pos[1]
             gravity = key

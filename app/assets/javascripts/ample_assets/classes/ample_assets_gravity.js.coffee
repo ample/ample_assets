@@ -44,7 +44,11 @@ class window.AmpleAssetsGravity extends CoffeeCup
       containment: @image
       grid: [@gravity_grid.left, @gravity_grid.top]
       scroll: false,
+      start: (event, ui) =>
+        $('div.ui-droppable, textarea.ui-droppable').addClass('asset-inactive-target')
       stop: (event, ui) =>
+        $('div.ui-droppable, textarea.ui-droppable').removeClass('asset-inactive-target')
+        
         left = ui.position.left
         top = ui.position.top
         

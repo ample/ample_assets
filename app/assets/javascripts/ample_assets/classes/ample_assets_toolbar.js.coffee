@@ -142,17 +142,19 @@ class window.AmpleAssetsToolbar extends CoffeeCup
       activeClass: "asset-notice"
       hoverClass: "asset-success"
       drop: (event, ui) ->
-        ref.target_textarea = this
-        ref.resize_modal(ui.draggable)
+        unless $(ui.helper).data('role') == 'gravity'
+          ref.target_textarea = this
+          ref.resize_modal(ui.draggable)
     
     $(".droppable").droppable
       activeClass: "asset-notice"
       hoverClass: "asset-success"
       drop: (event, ui) ->
-        $(this).html ui.draggable.clone()
-        asset_id = $(ui.draggable).attr("id").split("-")[1]
-        $(this).parent().children().first().val asset_id
-        $(this).parent().find('a.asset-remove').removeClass('hide').show()
+        unless $(ui.helper).data('role') == 'gravity'
+          $(this).html ui.draggable.clone()
+          asset_id = $(ui.draggable).attr("id").split("-")[1]
+          $(this).parent().children().first().val asset_id
+          $(this).parent().find('a.asset-remove').removeClass('hide').show()
   
   # Build html for modal windows wherein users can resize the asset's dimensions & geometry.
   # Executes when dropping a file into a textarea. The first argument is the response 
@@ -680,7 +682,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
         <img src="{{ src }}" />
       </div>
       <input id="file_attachment_gravity" name="file[attachment_gravity]" type="hidden" value="{{ gravity }}">
-      <div id="asset-gravity-handle" style="display:none"></div>
+      <div id="asset-gravity-handle" style="display:none" data-role="gravity"></div>
       <script type="text/javascript">
         $(document).ready(function() {
         	new AmpleAssetsGravity({url: "{{ gravity_url }}", uid: "{{ uid }}"});

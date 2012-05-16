@@ -7,12 +7,12 @@ require "ample_assets/version"
 Gem::Specification.new do |s|
   s.name        = "ample_assets"
   s.version     = AmpleAssets::VERSION
-  s.authors     = ["Taylor C. MacDonald"]
-  s.email       = ["taylor@helloample.com"]
+  s.authors     = ["Taylor C. MacDonald", "Bobby Uhlenbrock", "Ryan Merrill"]
+  s.email       = ["developers@helloample.com"]
   s.homepage    = "http://helloample.com"
   s.summary     = "Drag and Drop Asset Management"
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.textile"]
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.0"

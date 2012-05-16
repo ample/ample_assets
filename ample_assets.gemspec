@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://helloample.com"
   s.summary     = "Drag and Drop Asset Management"
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.textile"]
+  s.files = Dir["{app,config,db,lib,vendor}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.textile"]
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.0"

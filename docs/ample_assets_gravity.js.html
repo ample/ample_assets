@@ -1,0 +1,82 @@
+<!DOCTYPE html>  <html> <head>   <title>ample_assets_gravity.js.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               ample_assets_gravity.js.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p><strong>AmpleAssets</strong> is drag and drop file management for Rails applications. </p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nb">window</span><span class="p">.</span><span class="nx">AmpleAssetsGravity</span> <span class="k">extends</span> <span class="nx">CoffeeCup</span>
+  
+  <span class="nv">default_options: </span>
+    <span class="nv">debug: </span><span class="kc">false</span>
+    <span class="nv">uid: </span><span class="kc">false</span>
+    <span class="nv">url: </span><span class="s2">&quot;/ample_assets/files/{{ id }}/gravity&quot;</span>
+    <span class="nv">min_width: </span><span class="mi">100</span>
+    <span class="nv">min_height: </span><span class="mi">100</span>
+    <span class="nv">max_width: </span><span class="mi">480</span>
+    <span class="nv">max_height: </span><span class="mi">300</span>  
+  
+  <span class="nv">init: </span><span class="o">-&gt;</span>
+    <span class="nx">@log</span> <span class="s2">&quot;init()&quot;</span>
+    <span class="vi">@handle = </span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#asset-gravity-handle&quot;</span><span class="p">)</span>
+    <span class="vi">@image = </span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.asset-media img&quot;</span><span class="p">)</span>
+    <span class="nx">@test</span><span class="p">()</span>
+  
+  <span class="nv">test: </span><span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="nx">@image</span><span class="p">.</span><span class="nx">width</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+      <span class="nx">@html</span><span class="p">()</span>
+    <span class="k">else</span>
+      <span class="nx">@log</span> <span class="s2">&quot;@image not loaded&quot;</span>
+      <span class="nx">setTimeout</span> <span class="p">(</span><span class="o">=&gt;</span> <span class="nx">@test</span><span class="p">()),</span> <span class="mi">500</span>
+  
+  <span class="nv">html: </span><span class="o">-&gt;</span>
+    <span class="nx">@log</span> <span class="s2">&quot;html()&quot;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Don't show this for tiny images</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">@image</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">min_width</span> <span class="o">&amp;&amp;</span> <span class="nx">@image</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">min_height</span>
+    <span class="vi">@gravity = </span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#file_attachment_gravity&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="s2">&quot;c&quot;</span>
+    <span class="vi">@gravity_grid =</span>
+      <span class="nv">top: </span><span class="nx">@image</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">/</span> <span class="mi">3</span>
+      <span class="nv">left: </span><span class="nx">@image</span><span class="p">.</span><span class="nx">width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">3</span>
+    <span class="vi">@image_pos = </span><span class="nx">@image</span><span class="p">.</span><span class="nx">position</span><span class="p">()</span>
+    <span class="vi">@image_center =</span>
+      <span class="nv">top: </span> <span class="p">(</span><span class="nx">@image_pos</span><span class="p">.</span><span class="nx">top</span>  <span class="o">+</span> <span class="p">(</span><span class="nx">@image</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nx">@handle</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+      <span class="nv">left: </span><span class="p">(</span><span class="nx">@image_pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">+</span> <span class="p">(</span><span class="nx">@image</span><span class="p">.</span><span class="nx">width</span><span class="p">()</span>  <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nx">@handle</span><span class="p">.</span><span class="nx">width</span><span class="p">()</span>  <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="nx">@handle</span><span class="p">.</span><span class="nx">css</span>
+      <span class="nv">position: </span><span class="s2">&quot;absolute&quot;</span>
+      <span class="nv">left: </span><span class="p">(</span><span class="nx">@image_center</span><span class="p">.</span><span class="nx">left</span> <span class="o">-</span> <span class="nx">@gravity_grid</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nx">@gravity_grid</span><span class="p">.</span><span class="nx">left</span> <span class="o">*</span> <span class="nx">@gravities</span><span class="p">()[</span><span class="nx">@gravity</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+      <span class="nv">top: </span> <span class="p">(</span><span class="nx">@image_center</span><span class="p">.</span><span class="nx">top</span>  <span class="o">-</span> <span class="nx">@gravity_grid</span><span class="p">.</span><span class="nx">top</span><span class="p">)</span>  <span class="o">+</span> <span class="p">(</span><span class="nx">@gravity_grid</span><span class="p">.</span><span class="nx">top</span>  <span class="o">*</span> <span class="nx">@gravities</span><span class="p">()[</span><span class="nx">@gravity</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nx">@handle</span><span class="p">.</span><span class="nx">draggable</span>
+      <span class="nv">containment: </span><span class="nx">@image</span>
+      <span class="nv">grid: </span><span class="p">[</span><span class="nx">@gravity_grid</span><span class="p">.</span><span class="nx">left</span><span class="p">,</span> <span class="nx">@gravity_grid</span><span class="p">.</span><span class="nx">top</span><span class="p">]</span>
+      <span class="nv">scroll: </span><span class="kc">false</span><span class="p">,</span>
+      <span class="nv">start: </span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">ui</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div.ui-droppable, textarea.ui-droppable&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;asset-inactive-target&#39;</span><span class="p">)</span>
+      <span class="nv">stop: </span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">ui</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div.ui-droppable, textarea.ui-droppable&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;asset-inactive-target&#39;</span><span class="p">)</span>
+        
+        <span class="nv">left = </span><span class="nx">ui</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">left</span>
+        <span class="nv">top = </span><span class="nx">ui</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">top</span>
+        </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Account for images smaller than max width and/or height. </p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nv">left = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(((</span><span class="nx">@options</span><span class="p">.</span><span class="nx">max_width</span> <span class="o">-</span> <span class="nx">@image</span><span class="p">.</span><span class="nx">width</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="nx">left</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@image</span><span class="p">.</span><span class="nx">width</span><span class="p">()</span> <span class="o">&lt;</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">max_width</span>
+        <span class="nv">top = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(((</span><span class="nx">@options</span><span class="p">.</span><span class="nx">max_height</span> <span class="o">-</span> <span class="nx">@image</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="nx">top</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@image</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">&lt;</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">max_height</span>
+        
+        <span class="nv">gravity_pos = </span><span class="p">[</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">left</span> <span class="sr">/ @gravity_grid.left), Math.floor(top /</span> <span class="nx">@gravity_grid</span><span class="p">.</span><span class="nx">top</span><span class="p">)</span> <span class="p">]</span>
+        
+        <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="k">of</span> <span class="nx">@gravities</span><span class="p">()</span>
+          <span class="k">if</span> <span class="nx">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="nx">gravity_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">and</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">is</span> <span class="nx">gravity_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="nv">gravity = </span><span class="nx">key</span>
+            <span class="k">break</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#file_attachment_gravity&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">gravity</span><span class="p">);</span>
+        <span class="nx">@submit</span><span class="p">(</span><span class="nx">gravity</span><span class="p">)</span>
+        <span class="nx">@log</span> <span class="nx">gravity</span>
+    <span class="nx">@handle</span><span class="p">.</span><span class="nx">fadeIn</span><span class="p">()</span>
+  
+  <span class="nv">submit: </span><span class="nf">(gravity) -&gt;</span>
+    <span class="nx">@log</span> <span class="s2">&quot;submit(#{gravity})&quot;</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">post</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span> <span class="nv">gravity: </span><span class="nx">gravity</span> <span class="p">},</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;a[data-uid=&#39;#{@options.uid}&#39;]&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-gravity&#39;</span><span class="p">,</span><span class="nx">gravity</span><span class="p">)</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#asset-gravity-notification&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">().</span><span class="nx">delay</span><span class="p">(</span><span class="mi">2500</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">()</span>
+  
+  <span class="nv">gravities: </span><span class="o">-&gt;</span>
+    <span class="nv">nw: </span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span>
+    <span class="nv">n: </span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span>
+    <span class="nv">ne: </span><span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span>
+    <span class="nv">w: </span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span>
+    <span class="nv">c: </span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span>
+    <span class="nv">e: </span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span>
+    <span class="nv">sw: </span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="p">]</span>
+    <span class="nv">s: </span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">]</span>
+    <span class="nv">se: </span><span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">]</span>
+  
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

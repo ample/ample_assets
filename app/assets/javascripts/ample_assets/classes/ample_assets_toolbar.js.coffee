@@ -141,6 +141,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     $("textarea").droppable
       activeClass: "asset-notice"
       hoverClass: "asset-success"
+      accept: ".draggable"
       drop: (event, ui) ->
         unless $(ui.helper).data('role') == 'gravity'
           ref.target_textarea = this
@@ -149,6 +150,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     $(".droppable").droppable
       activeClass: "asset-notice"
       hoverClass: "asset-success"
+      accept: ".draggable"
       drop: (event, ui) ->
         unless $(ui.helper).data('role') == 'gravity'
           $(this).html ui.draggable.clone()

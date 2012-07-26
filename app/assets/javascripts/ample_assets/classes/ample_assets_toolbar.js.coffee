@@ -351,7 +351,8 @@ class window.AmpleAssetsToolbar extends CoffeeCup
       html = Mustache.to_html @tpl('pdf'),
         filename: data.uid, 
         id: data.id,
-        mime_type: data.mime_type
+        mime_type: data.mime_type,
+        url: data.url
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
       myPDF = new PDFObject(
         url: data.url
@@ -379,6 +380,8 @@ class window.AmpleAssetsToolbar extends CoffeeCup
         delete_url: "#{@options.base_url}#{delete_url}",
         gravity_url: "#{@options.base_url}#{gravity_url}"
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
+    # Instantiate Clippy
+    $('.clippy').clippy clippy_path: '/assets/ample_assets/clippy.swf'
     # Update the asset timestamp.
     @touch(data)
   
@@ -692,7 +695,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
       </script>
       <div id="asset-gravity-notification">Asset updated successfully.</div>
       <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
-      <h3>{{ filename }}</h3><hr />
+      <h3>{{ filename }} <span class="clippy">{{ src }}</span></h3><hr />
       <ul>
         <li>Original Dimensions: <strong>{{ size }}</strong></li>
         <li>MimeType: <strong>{{ mime_type }}</strong></li>
@@ -705,7 +708,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     <div class="asset-detail">
       <div id="pdf" class="asset-media"></div>
         <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
-        <h3>{{ filename }}</h3><hr />
+        <h3>{{ filename }} <span class="clippy">{{ url }}</span></h3><hr />
         <ul>
           <li>MimeType: <strong>{{ mime_type }}</strong></li>
         </ul>

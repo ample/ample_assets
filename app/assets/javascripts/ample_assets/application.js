@@ -10,6 +10,7 @@
 //= require jquery.ample_panels
 //= require jquery.facebox
 //= require jquery.uploadify
+//= require jquery.clippy
 //= require moustache
 //= require pdfobject
 //= require swfobject

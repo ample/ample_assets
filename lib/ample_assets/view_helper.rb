@@ -57,9 +57,6 @@ module AmpleAssets
         image = opts.try(:[], :dimensions) ? attachment.process(:thumb, opts[:dimensions]).encode(opts[:encode]) : attachment.encode(opts[:encode])
       end
 
-      # Create default rails image_tag dimension
-      opts[:size] ||= "#{image.width}x#{image.height}"
-
       # Determine which opts ultimately get passed to image_tag
       valid_opts = [:alt, :class, :style, :title]
       valid_opts.push(:size) unless args[:size] == false

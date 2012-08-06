@@ -37,7 +37,7 @@ module AmpleAssets
 
       # Override alt text with object title if it exists
       opts[:alt] = escape_javascript(object.title) if object.respond_to?('title')
-      
+
       # See if optional file object actually contains a dfly instance
       if opts[:object]
         attachment = opts[:object].attachment

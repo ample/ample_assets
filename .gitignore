@@ -9,3 +9,4 @@ test/dummy/tmp/
 test/dummy/.sass-cache
 test/dummy/public/system
 .sass-cache
+tmp

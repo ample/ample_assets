@@ -348,9 +348,11 @@ class window.AmpleAssetsToolbar extends CoffeeCup
     @modal_active = true
     if data.document == 'true'
       # Asset is a document, so lets instantiate PDFObject for viewing inline.
+      delete_url = Mustache.to_html @options.show_url, { id: data.id }
       html = Mustache.to_html @tpl('pdf'),
         filename: data.uid, 
         id: data.id,
+        delete_url: "#{@options.base_url}#{delete_url}",
         mime_type: data.mime_type,
         url: data.url
       $.facebox("<div class=\"asset-detail\">#{html}</div>")

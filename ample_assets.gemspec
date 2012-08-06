@@ -32,4 +32,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "shoulda", ">= 3.0.0.beta"
   s.add_development_dependency "capybara"
   s.add_development_dependency "launchy"
+  s.add_development_dependency "selenium-webdriver", ">= 2.5.0"
 end

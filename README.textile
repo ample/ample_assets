@@ -2,7 +2,7 @@ h1. Ample Assets
 
 AmpleAssets is a mountable engine that provides drag & drop file-management for Rails 3.2 applications.
 
-!http://ample.github.com/ample_assets/images/assets.png!
+!http://helloample.com/images/work/screen-shot.png!
 
 h3. Example Usage
 
@@ -65,4 +65,19 @@ h3. Configuration
 <pre><code>AmpleAssets.configure do |config|
   config.mount_at = YOUR PATH PREFIX
 end
+</code></pre>
+
+If your model's attribute is named something different, you can still create the association by passing a symbol to the has_asset plugin, like so... 
+
+<pre><code>class Post < ActiveRecord::Base
+  ...
+  has_asset :some_attr
+  ...
+end</code></pre>
+
+Now you can invoke a drop target for your unique attribute like so...
+
+<pre><code><%= form_for current_page do |f| %>
+  <%= asset_drop(:post, :some_attr_id, :object => f.object.some_attr) %>
+<% end %>
 </code></pre>

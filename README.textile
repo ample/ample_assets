@@ -69,15 +69,15 @@ end
 
 If your model's attribute is named something different, you can still create the association by passing a symbol to the has_asset plugin, like so... 
 
-<pre><code>class Post < ActiveRecord::Base
+<pre><code>class YourModel < ActiveRecord::Base
   ...
   has_asset :some_attr
   ...
 end</code></pre>
 
-Now you can invoke a drop target for your unique attribute like so...
+Now you can invoke a drop target for your unique attribute like this...
 
-<pre><code><%= form_for current_page do |f| %>
-  <%= asset_drop(:post, :some_attr_id, :object => f.object.some_attr) %>
+<pre><code><%= form_for @object do |f| %>
+  <%= asset_drop(:your_model, :some_attr_id, :object => f.object.some_attr) %>
 <% end %>
 </code></pre>

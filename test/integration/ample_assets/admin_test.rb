@@ -89,7 +89,11 @@ module AmpleAssets
           assert page.has_no_selector?("#file-#{id}")
         end
       end
-      
+
+      should 'allow users to grab original file url from clippy inside the lightbox' do
+        page.find_by_id('recent-assets').find('a').click
+        assert page.has_selector?('#facebox h3 object')
+      end
     end
   
   end

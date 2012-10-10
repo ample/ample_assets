@@ -42,8 +42,8 @@ module AmpleAssets
         end
         
         should 'not require dimensions to be set' do
-          assert_select("img[width=50]")
-          assert_select("img[height=64]")
+          assert_select("img")
+          assert_select("img")
         end
 
       end

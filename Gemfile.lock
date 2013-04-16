@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ample_assets (0.0.4)
+    ample_assets (0.0.6)
       acts_as_indexed
       coffee-rails (~> 3.2.1)
       coffee_cup

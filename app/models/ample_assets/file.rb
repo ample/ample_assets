@@ -2,6 +2,10 @@ require 'dragonfly'
 
 module AmpleAssets
   class File < ActiveRecord::Base
+
+    ###---------------------------------------------------- Attributes
+    
+    attr_accessible :keywords, :attachment
     
     ###---------------------------------------------------- Plugins
     

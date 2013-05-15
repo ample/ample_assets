@@ -35,4 +35,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "guard-minitest"
   s.add_development_dependency "selenium-webdriver", ">= 2.25.0"
   s.add_development_dependency "rb-readline"
+  s.add_development_dependency "database_cleaner"
 end

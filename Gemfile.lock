@@ -67,6 +67,7 @@ GEM
       execjs
     coffee-script-source (1.4.0)
     coffee_cup (0.0.4)
+    database_cleaner (0.9.1)
     dragonfly (0.9.14)
       multi_json (~> 1.0)
       rack
@@ -189,6 +190,7 @@ PLATFORMS
 DEPENDENCIES
   ample_assets!
   capybara
+  database_cleaner
   guard-minitest
   launchy
   rb-readline

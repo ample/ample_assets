@@ -60,6 +60,7 @@ module AmpleAssets
       end
 
       should 'allow users to drag an asset into a textarea (Textile)' do
+        page.execute_script("$('#body').css({width:500, height:500})")
         body = page.find_by_id('body')
         assert body.value.blank?
         image = page.find_by_id('recent-assets').find('img')
@@ -69,6 +70,7 @@ module AmpleAssets
       end
 
       should 'allow users to drag an asset into a textarea (HTML)' do
+        page.execute_script("$('#body').css({width:500, height:500})")
         page.execute_script("$('#body').removeClass('textile')")
         body = page.find_by_id('body')
         assert body.value.blank?
@@ -94,6 +96,7 @@ module AmpleAssets
         page.find_by_id('recent-assets').find('a').click
         assert page.has_selector?('#facebox h3 object')
       end
+
     end
 
   end

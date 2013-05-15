@@ -5,8 +5,7 @@ module AmpleAssets
 
     ###---------------------------------------------------- Attributes
 
-    attr_accessible :keywords, :attachment, :attachment_mime_type
-
+    attr_accessible :keywords, :attachment, :attachment_mime_type, :attachment_url
 
     ###---------------------------------------------------- Validations
 

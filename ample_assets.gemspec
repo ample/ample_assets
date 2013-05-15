@@ -29,8 +29,10 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "turn", "~> 0.9.3"
-  s.add_development_dependency "shoulda", ">= 3.0.0.beta"
+  s.add_development_dependency "shoulda", "~> 3.0.1"
   s.add_development_dependency "capybara"
   s.add_development_dependency "launchy"
+  s.add_development_dependency "guard-minitest"
   s.add_development_dependency "selenium-webdriver", ">= 2.25.0"
+  s.add_development_dependency "rb-readline"
 end

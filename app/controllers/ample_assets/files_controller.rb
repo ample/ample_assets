@@ -20,7 +20,7 @@ module AmpleAssets
         filename, filedata = params['Filename'], params['Filedata']
         file = File.new(attachment: filedata)
       else
-        file = File.new(params[:file])
+        file = File.new(file_params)
       end
       if file.save
         if uploadify?
@@ -80,7 +80,7 @@ module AmpleAssets
       def current_files
         conditions = current_mime_types.keys.include?(params[:action].intern) ? current_file_conditions : nil
         pagination = { page: params[:page], per_page: per_page }
-        @current_files ||= AmpleAssets::File.where(conditions: conditions, order: 'created_at DESC').paginate(pagination)
+        @current_files ||= AmpleAssets::File.where(conditions).order('created_at DESC').paginate(pagination)
       end
 
       def current_file_conditions
@@ -119,6 +119,10 @@ module AmpleAssets
             AmpleAssets::Configuration::DEFAULT_ALLOWED_MIME_TYPES
           end
         end
+      end
+
+      def file_params
+        params.require(:file).permit(:attachment)
       end
 
   end

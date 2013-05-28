@@ -5,7 +5,6 @@ class TestModel < Page
 end
 
 class CustomTestModel < Page
-  self.abstract_class = true
   has_asset 'thing', :class_name => 'CustomFileModel'
 end
 

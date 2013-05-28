@@ -93,8 +93,10 @@ $asset-border-hover     : 3px solid #FFF;
   clear: both; 
   text-align: center;
   .droppable {
-    width: calc-em(75px, $base-font-size);
-    height: calc-em(75px, $base-font-size);
+    &, a img {
+      width: calc-em(75px, $base-font-size);
+      height: calc-em(75px, $base-font-size);
+    }
     margin: 0 0 calc-em(20px, $base-font-size);
     border: 1px solid #A5A5A5;
     

@@ -65,7 +65,7 @@ module AmpleAssets
     end
 
     def search
-      @current_files = File.with_query("^#{params[:q]}")
+      @current_files = AmpleAssets::File.with_query("^#{params[:q]}")
       respond_to do |format|
         format.js { render current_files, :content_type => :html }
         format.json { render :json => current_files.to_json }
@@ -80,7 +80,7 @@ module AmpleAssets
       def current_files
         conditions = current_mime_types.keys.include?(params[:action].intern) ? current_file_conditions : nil
         pagination = { :page => params[:page], :per_page => per_page }
-        @current_files ||= File.find(:all, :conditions => conditions, :order => 'created_at DESC').paginate(pagination)
+        @current_files ||= AmpleAssets::File.find(:all, :conditions => conditions, :order => 'created_at DESC').paginate(pagination)
       end
 
       def current_file_conditions
@@ -90,7 +90,7 @@ module AmpleAssets
       end
 
       def recent_files
-        @recent_files ||= File.recent.paginate(:page => params[:page], :per_page => per_page)
+        @recent_files ||= AmpleAssets::File.recent.paginate(:page => params[:page], :per_page => per_page)
       end
 
       def per_page
@@ -98,7 +98,7 @@ module AmpleAssets
       end
 
       def current_file
-        @current_file ||= File.find params[:id]
+        @current_file ||= AmpleAssets::File.find params[:id]
       end
 
       def uploadify?

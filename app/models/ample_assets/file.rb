@@ -3,10 +3,6 @@ require 'dragonfly'
 module AmpleAssets
   class File < ActiveRecord::Base
 
-    ###---------------------------------------------------- Attributes
-
-    attr_accessible :keywords, :attachment, :attachment_mime_type, :attachment_url
-
     ###---------------------------------------------------- Validations
 
     validates_presence_of :attachment

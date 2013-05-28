@@ -11,7 +11,7 @@ class Public::PagesController < PublicController
   end
   
   def update
-    if current_page.update_attributes(params[:page])
+    if current_page.update_attributes(page_params)
       flash[:notice] = "Page updated!"
       redirect_to :action => :index
     else
@@ -30,7 +30,7 @@ class Public::PagesController < PublicController
     end
 
     def page_params
-      params.require(:page).permit(:title)
+      params.require(:page).permit(:title, :file_id, :body)
     end
 
 end

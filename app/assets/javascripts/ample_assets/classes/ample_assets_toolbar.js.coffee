@@ -48,6 +48,7 @@ class window.AmpleAssetsToolbar
     ]
 
   constructor: (opts=undefined) ->
+    @set_options()
     @options = @default_options
     for k of opts
       @options[k] = opts[k]
@@ -67,14 +68,12 @@ class window.AmpleAssetsToolbar
     @events()
 
   # Setup global parameters & class options.
-  set_options: (opts) ->
-    @log "set_options()"
+  set_options: ->
     @current = 0
     @keys_enabled = true
     @reloading = false
     @searching = false
     @loaded = false
-    super
 
   # Build structure and stylize layout of toolbar, setup drag, drop and search logic.
   # Opens first tab if toolbar is expanded on init.
@@ -102,7 +101,7 @@ class window.AmpleAssetsToolbar
     @loading = $("##{@options.id}-tabs span.asset-loading")
     $("##{@options.id} .container").css('height',200)
     if @options.expanded
-      $("##{@options.id}").css({height:@options.expanded_height});
+      $("##{@options.id}").css({height:@options.expanded_height})
 
   # Reloads tab identified by `i`
   reload: (i) ->
@@ -134,7 +133,7 @@ class window.AmpleAssetsToolbar
     @enable_panel(i) if @already_loaded(i)
 
   # Hide all pages, show page identified by `i`
-  show: (i) ->
+  show: (i=0) ->
     @log "show()"
     $("##{@options.id} .pages .page").hide()
     $("##{@options.id} .pages .page:nth-child(#{i+1}), ##{@options.id} .pages .page:nth-child(#{i+1}) ul").show()
@@ -147,13 +146,14 @@ class window.AmpleAssetsToolbar
     ref = this
 
     # Note the use of liveDraggable here. See extended plugin at the bottom of this file.
-    $(".draggable").liveDraggable
-      appendTo: "body"
-      helper: "clone"
-      start: ->
-        $('div.ui-droppable, textarea.ui-droppable').addClass('asset-drop-target')
-      stop: ->
-        $('div.ui-droppable, textarea.ui-droppable').removeClass('asset-drop-target')
+    $(this).on 'json-loaded', ->
+      $('a.draggable:not(draggable-ui)').draggable
+        appendTo: "body"
+        helper: "clone"
+        start: ->
+          $('div.ui-droppable, textarea.ui-droppable').addClass('asset-drop-target')
+        stop: ->
+          $('div.ui-droppable, textarea.ui-droppable').removeClass('asset-drop-target')
 
     $("textarea").droppable
       activeClass: "asset-notice"
@@ -163,6 +163,10 @@ class window.AmpleAssetsToolbar
         unless $(ui.helper).data('role') == 'gravity'
           ref.target_textarea = this
           ref.resize_modal(ui.draggable)
+
+    $(".droppable").droppable
+      drop: (event, ui) ->
+        alert('dropped')
 
     $(".droppable").droppable
       activeClass: "asset-notice"
@@ -195,7 +199,7 @@ class window.AmpleAssetsToolbar
     $.facebox("<div class=\"asset-detail\">#{html}</div>")
 
   # Removes active state from all tabs, adds it back for tab identified by `i`
-  activate: (i) ->
+  activate: (i=0) ->
     @log "activate(#{i})"
     @current = i
     tabs = $("##{@options.id} a.tab")
@@ -246,7 +250,7 @@ class window.AmpleAssetsToolbar
         el.trigger('expand')
 
   # Loads contents of page identified by `i`
-  load: (i) ->
+  load: (i=0) ->
     @log "load(#{i})"
     ref = this
     load_next_page = true
@@ -312,6 +316,7 @@ class window.AmpleAssetsToolbar
         $(selector).append(li)
       ref.load_img(li.find('a'), el.sizes.tn)
     $(selector).show()
+    $(this).trigger('json-loaded')
     @panels(i) unless panels_loaded
     if @reloading
       @reloading = false
@@ -477,7 +482,7 @@ class window.AmpleAssetsToolbar
         $('nav.controls').hide()
 
   # Evaluates whether URL attached to page `i` has been loaded yet. Returns `boolean`.
-  already_loaded: (i) ->
+  already_loaded: (i=0) ->
     @log "already_loaded()"
     typeof @options.pages[i]['loaded'] == 'boolean' && @options.pages[i]['loaded']
 
@@ -582,7 +587,8 @@ class window.AmpleAssetsToolbar
   # Builds the markup for an asset dropped into a textarea.
   resize_events: ->
     @log "resize_events()"
-    $('.asset-resize').on 'click', =>
+    $('body').on 'click', '.asset-resize', =>
+      console.log 'click'
       constraints = $('#asset-constraints').val()
       uid = $('#asset-uid').val()
       width = $('#asset-width').val()
@@ -674,7 +680,7 @@ class window.AmpleAssetsToolbar
             @previous()
           when down
             @next()
-      e.stopPropagation();
+      e.stopPropagation()
 
   # Returns Mustache template for template defined by `view`
   tpl: (view) ->
@@ -740,12 +746,44 @@ class window.AmpleAssetsToolbar
       </ul>
       <p>{{ keywords }}</p>
     </div>'
-
-
-# Extend draggable to elements added to the DOM after page load.
-jQuery.fn.liveDraggable = (opts) ->
-  @on "mouseover", ->
-    $(this).data("init", true).draggable opts  unless $(this).data("init")
+    # PDF represents the HTML used within the modal window detail view for document assets.
+    pdf: '<div class="asset-detail">
+      <div id="pdf" class="asset-media"></div>
+        <a href="{{ delete_url }}" class="asset-delete" data-id="{{ id }}" data-method="delete" data-confirm="Are you sure?" data-remote="true">Delete This Asset?</a>
+        <h3>{{ filename }} <span class="clippy">{{ url }}</span></h3><hr />
+        <ul>
+          <li>MimeType: <strong>{{ mime_type }}</strong></li>
+        </ul>
+        <p>{{ keywords }}</p>
+    </div>'
+    # There's no content within this panels instance... 
+    empty: '<li class="empty">Oops. There\'s nothing here. You should <a href="#">upload something</a>.</li>'
+    # Your search query returned an empty result set...
+    no_results: '<li class="empty">Sorry. Your search returned zero results.</li>'
+    # Drop returns HTML used in the modal window resize view. This is used when dropping an asset onto a textarea.
+    drop: '<div class="asset-selection">
+      <div class="asset-media {{ orientation }}">
+        <img src="{{ src }}" />
+      </div>
+      <div class="asset-dimensions">
+        <p><label>Image Dimensions</label> ({{ dimensions }}, {{ orientation }})</p>
+        <p><select id="asset-constraints" name="asset-constraints">
+            <option value="">Maintain aspect ratio</option>
+            <option value="!">Force resize, don\'t maintain aspect ratio</option>
+        <option value=">">Resize only if image larger than this</option>
+        <option value="<">Resize only if image smaller than this</option>
+        <option value="^">Resize to minimum x,y, maintain aspect ratio</option>
+        <option value="#">Resize, crop if necessary to maintain aspect ratio</option>
+       </select></p>
+      <p><input type="hidden" id="asset-dimensions-target" name="asset-dimensions-target" value="" />
+        <input type="hidden" id="asset-uid" name="asset-uid" value="{{ uid }}" />
+        <input type="text" id="asset-width" name="asset-width" value="480" /> <span>x</span> 
+        <input type="text" id="asset-height" name="asset-height" value="" /><br />
+        <input type="text" id="asset-alt" name="asset-alt" value="" placeholder="Alt text" />
+        <input type="submit" id="asset-resize" name="asset-resize" class="asset-resize" value="Insert" /></p>
+      </div>
+      <hr class="space" />
+    </div>'
 
 # Insert `value` at the cursor position of the currently focused textarea or input field.
 jQuery.fn.insertAtCaret = (value) ->

@@ -1,7 +1,7 @@
 class Public::PagesController < PublicController
 
   def create
-    @current_page = Page.new params[:page]
+    @current_page = Page.new page_params
     if @current_page.save
       flash[:notice] = "Page saved!"
       redirect_to :action => :index
@@ -27,6 +27,10 @@ class Public::PagesController < PublicController
     
     def current_page
       @current_page ||= params[:id] ? Page.find(params[:id]) : Page.new
+    end
+
+    def page_params
+      params.require(:page).permit(:title)
     end
 
 end

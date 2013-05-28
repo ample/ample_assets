@@ -20,7 +20,7 @@ AmpleAssets::Engine.routes.draw do
   end
   
   # This shouldn't be behind authentication
-  match '/files/thumbs/:geometry' => AmpleAssets.dfly.endpoint { |params, app|
+  get '/files/thumbs/:geometry' => AmpleAssets.dfly.endpoint { |params, app|
     AmpleAssets.dfly.fetch(params[:uid]).thumb(params[:geometry])
   }
 

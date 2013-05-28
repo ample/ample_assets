@@ -15,13 +15,13 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib,vendor}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.textile"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", "~> 3.2.0"
+  s.add_dependency "rails", "4.0.0.rc1"
   s.add_dependency "dragonfly", "~> 0.9.11"
-  s.add_dependency "jquery-rails"
+  s.add_dependency "jquery-rails", "~> 2.2.1"
   s.add_dependency "rack-cache"
-  s.add_dependency "sass-rails", "~> 3.2.3"
-  s.add_dependency "coffee-rails", "~> 3.2.1"
-  s.add_dependency "uglifier", ">= 1.0.3"
+  s.add_dependency "sass-rails", "~> 4.0.0.rc1"
+  s.add_dependency "coffee-rails", "~> 4.0.0"
+  s.add_dependency "uglifier", ">= 1.3.0"
   s.add_dependency "therubyracer"
   s.add_dependency "will_paginate"
   s.add_dependency "acts_as_indexed"
@@ -34,6 +34,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "launchy"
   s.add_development_dependency "guard-minitest"
   s.add_development_dependency "selenium-webdriver", ">= 2.25.0"
-  s.add_development_dependency "rb-readline"
+  #s.add_development_dependency "rb-readline"
   s.add_development_dependency "database_cleaner"
 end

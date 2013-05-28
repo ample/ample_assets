@@ -4,40 +4,40 @@ module AmpleAssets
     ([:index, :recent] | AmpleAssets.allowed_mime_types.keys).compact.each do |key|
       define_method key do
         respond_to do |format|
-          format.js   { render current_files, :content_type => :html }
-          format.json { render :json => current_files.to_json }
+          format.js   { render current_files, content_type: :html }
+          format.json { render json: current_files.to_json }
           format.html
         end
       end
     end
 
     def new
-      render 'ample_assets/files/new', :layout => false, :content_type => :html if request.xhr?
+      render 'ample_assets/files/new', layout: false, content_type: :html if request.xhr?
     end
 
     def create
       if uploadify?
         filename, filedata = params['Filename'], params['Filedata']
-        file = File.new(:attachment => filedata)
+        file = File.new(attachment: filedata)
       else
         file = File.new(params[:file])
       end
       if file.save
         if uploadify?
-          render :nothing => true
+          render nothing: true
         else
           redirect_to file_path(file)
         end
       else
         flash[:error] = "Whoops! There was a problem creating new asset."
-        redirect_to :action => :index
+        redirect_to action: :index
       end
     end
 
     def show
       raise ActiveRecord::RecordNotFound if current_file.nil?
       respond_to do |format|
-        format.json { render :json => current_file.to_json }
+        format.json { render json: current_file.to_json }
         format.html
       end
     end
@@ -45,7 +45,7 @@ module AmpleAssets
     def destroy
       current_file.destroy
       if request.xhr?
-        render :nothing => true
+        render nothing: true
       else
         flash[:notice] = 'Asset deleted successfully.'
         redirect_to request.referrer
@@ -55,21 +55,21 @@ module AmpleAssets
     def touch
       raise ActiveRecord::RecordNotFound if current_file.nil?
       current_file.touch
-      render :nothing => true
+      render nothing: true
     end
 
     def gravity
       raise ActiveRecord::RecordNotFound if current_file.nil?
       current_file.update_attribute :attachment_gravity, params[:gravity]
-      render :nothing => true
+      render nothing: true
     end
 
     def search
       @current_files = AmpleAssets::File.with_query("^#{params[:q]}")
       respond_to do |format|
-        format.js { render current_files, :content_type => :html }
-        format.json { render :json => current_files.to_json }
-        format.html { render :nothing => true }
+        format.js { render current_files, content_type: :html }
+        format.json { render json: current_files.to_json }
+        format.html { render nothing: true }
       end
     end
 
@@ -79,8 +79,8 @@ module AmpleAssets
 
       def current_files
         conditions = current_mime_types.keys.include?(params[:action].intern) ? current_file_conditions : nil
-        pagination = { :page => params[:page], :per_page => per_page }
-        @current_files ||= AmpleAssets::File.find(:all, :conditions => conditions, :order => 'created_at DESC').paginate(pagination)
+        pagination = { page: params[:page], per_page: per_page }
+        @current_files ||= AmpleAssets::File.where(conditions: conditions, order: 'created_at DESC').paginate(pagination)
       end
 
       def current_file_conditions
@@ -90,7 +90,7 @@ module AmpleAssets
       end
 
       def recent_files
-        @recent_files ||= AmpleAssets::File.recent.paginate(:page => params[:page], :per_page => per_page)
+        @recent_files ||= AmpleAssets::File.recent.paginate(page: params[:page], per_page: per_page)
       end
 
       def per_page

@@ -93,7 +93,7 @@ class window.AmpleAssetsToolbar
   style: ->
     @log "style()"
     handle_opts =
-      position: 'absolute'
+      position: 'fixed'
       bottom: 0
       right: 0
     $("##{@options.id}-handle").css(handle_opts)

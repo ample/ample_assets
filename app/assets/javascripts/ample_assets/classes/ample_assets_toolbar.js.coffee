@@ -3,7 +3,7 @@
 class window.AmpleAssetsToolbar
 
   default_options:
-    debug: true
+    debug: false
     expanded: false
     id: "ample-assets"
     handle_text: 'Assets'

@@ -6,7 +6,7 @@ module AmpleAssets
       script = "var ample_assets = {}; ample_assets.load = true; "
       script += "ample_assets.mount_at = '#{AmpleAssets.mount_at}'; "
       script += "ample_assets.pages = #{tabs.to_json}"
-      content_tag :script, script.html_safe, :type => "text/javascript"
+      content_tag :script, script.html_safe, :type => "text/javascript", :data => { :turbolinks_track => false }
     end
     
     # Returns image tag for an object's attachment, with optional link element wrapped around it. 

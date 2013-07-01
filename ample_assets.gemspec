@@ -15,11 +15,11 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib,vendor}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.textile"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", "4.0.0.rc1"
+  s.add_dependency "rails", "~> 4.0.0"
   s.add_dependency "dragonfly", "~> 0.9.11"
   s.add_dependency "jquery-rails", "~> 2.2.1"
   s.add_dependency "rack-cache"
-  s.add_dependency "sass-rails", "~> 4.0.0.rc1"
+  s.add_dependency "sass-rails"
   s.add_dependency "coffee-rails", "~> 4.0.0"
   s.add_dependency "uglifier", ">= 1.3.0"
   s.add_dependency "therubyracer"

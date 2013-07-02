@@ -11,7 +11,7 @@
 //= require jquery.facebox
 //= require jquery.uploadify
 //= require jquery.clippy
-//= require moustache
+//= require mustache
 //= require pdfobject
 //= require swfobject
 //= require coffee_cup

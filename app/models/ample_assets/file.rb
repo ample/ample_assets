@@ -69,7 +69,7 @@ module AmpleAssets
         :uid => attachment_uid,
         :filename => attachment_name,
         :document => is_doc? ? 'true' : 'false',
-        :orientation => orientation,
+        :orientation => (is_image? ? orientation : nil),
         :mime_type => attachment_mime_type,
         :keywords => search_terms,
         :url => attachment.url,

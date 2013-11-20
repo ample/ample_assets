@@ -74,7 +74,7 @@ module AmpleAssets
         :keywords => search_terms,
         :url => attachment.url,
         :gravity => attachment_gravity,
-        :size => "#{attachment.width}x#{attachment.height}",
+        :size => (is_image? ? "#{attachment.width}x#{attachment.height}" : nil),
         :sizes => { :tn => thumbnail, :md => medium }
       }
     end

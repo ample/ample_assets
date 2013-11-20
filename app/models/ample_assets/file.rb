@@ -69,12 +69,12 @@ module AmpleAssets
         :uid => attachment_uid,
         :filename => attachment_name,
         :document => is_doc? ? 'true' : 'false',
-        :orientation => orientation,
+        :orientation => (is_image? ? orientation : nil),
         :mime_type => attachment_mime_type,
         :keywords => search_terms,
         :url => attachment.url,
         :gravity => attachment_gravity,
-        :size => "#{attachment.width}x#{attachment.height}",
+        :size => (is_image? ? "#{attachment.width}x#{attachment.height}" : nil),
         :sizes => { :tn => thumbnail, :md => medium }
       }
     end

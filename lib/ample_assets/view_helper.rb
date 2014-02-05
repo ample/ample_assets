@@ -42,10 +42,15 @@ module AmpleAssets
       if opts[:object]
         attachment = opts[:object].attachment
         attachment_gravity = opts[:object].attachment_gravity
+        # Override alt text with attachment alt_text if it exists
+        opts[:alt] = escape_javascript(opts[:object].alt_text) if opts[:object].respond_to?('alt_text') && !opts[:object].send(:alt_text).blank?
       else 
         attachment = object.file.attachment
         attachment_gravity = object.file.attachment_gravity
+        # Override alt text with attachment alt_text if it exists
+        opts[:alt] = escape_javascript(object.file.alt_text) if object.file.respond_to?('alt_text') && !object.file.send(:alt_text).blank?
       end
+
 
       # If this is a crop, try to add gravity
       if opts.try(:[], :dimensions) && opts[:dimensions].include?('#')

@@ -5,7 +5,7 @@ module AmpleAssets
 
     ###---------------------------------------------------- Attributes
 
-    attr_accessible :keywords, :attachment, :attachment_mime_type, :attachment_url
+    attr_accessible :keywords, :attachment, :attachment_mime_type, :attachment_url, :alt_text
 
     ###---------------------------------------------------- Validations
 
@@ -72,6 +72,7 @@ module AmpleAssets
         :orientation => (is_image? ? orientation : nil),
         :mime_type => attachment_mime_type,
         :keywords => search_terms,
+        :alt_text => alt_text,
         :url => attachment.url,
         :gravity => attachment_gravity,
         :size => (is_image? ? "#{attachment.width}x#{attachment.height}" : nil),

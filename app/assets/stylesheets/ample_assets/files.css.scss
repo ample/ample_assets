@@ -218,6 +218,30 @@ $asset-border-hover     : 3px solid #FFF;
     padding-top: 0;
     padding-bottom: 0;
   } //asset-details
+  .inputs {
+    @include clearfix;
+    margin: 10px 0;
+    border-top: 1px solid #D4D4D4;
+    padding-top: 10px;
+    label {
+      display: block;
+      font-weight: bold;
+    }
+    .input-l {
+      float: left;
+      button {
+        padding: 5px;
+      }
+      input {
+        width: 200px;
+        margin-right: 5px;
+        padding: 3px;
+      }
+      &.form-actions {
+        margin-top: 15px;
+      }
+    }
+  }
 } //asset-detail
 
 .asset-detail {

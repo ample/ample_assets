@@ -34,6 +34,11 @@ module AmpleAssets
       end
     end
 
+    def update
+      success = current_file.update_attributes(params[:file])
+      render :text => success 
+    end
+
     def show
       raise ActiveRecord::RecordNotFound if current_file.nil?
       respond_to do |format|

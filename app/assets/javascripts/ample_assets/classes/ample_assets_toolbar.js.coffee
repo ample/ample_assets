@@ -367,18 +367,20 @@ class window.AmpleAssetsToolbar extends CoffeeCup
       url = "#{@options.base_url}#{@options.thumb_url}/#{geometry}?uid=#{data.uid}"
       delete_url = Mustache.to_html @options.show_url, { id: data.id }
       gravity_url = Mustache.to_html @options.gravity_url, { id: data.id }
+      update_url = Mustache.to_html @options.show_url, { id: data.id }
       gravity = $("a[data-uid='#{data.uid}']").first().attr('data-gravity')
-      keywords = ""
       html = Mustache.to_html @tpl('show'),
+        alt_text: data.alt_text,
         filename: data.filename, 
         size: data.size,
         mime_type: data.mime_type,
-        keywords: keywords,
+        keywords: data.keywords,
         src: url, 
         orientation: data.orientation, 
         id: data.id,
         uid: data.uid,
         gravity: gravity,
+        update_url: "#{@options.base_url}#{update_url}",
         delete_url: "#{@options.base_url}#{delete_url}",
         gravity_url: "#{@options.base_url}#{gravity_url}"
       $.facebox("<div class=\"asset-detail\">#{html}</div>")
@@ -703,7 +705,21 @@ class window.AmpleAssetsToolbar extends CoffeeCup
         <li>MimeType: <strong>{{ mime_type }}</strong></li>
         <li>Orientation: <strong>{{ orientation }}</strong></li>
       </ul>
-      <p>{{ keywords }}</p>
+      <form action="{{ update_url }}" data-remote="true" method="put">
+      <div class="inputs">
+        <div class="input-l">
+          <label>Alt Text</label>
+          <input type="text" name="file[alt_text]" id="file_alt_text" value="{{ alt_text }}" class="string" /><br>
+        </div>
+        <div class="input-l">
+          <label>Keywords</label>
+          <input type="text" name="file[keywords]" id="file_keywords" value="{{ keywords }}" class="string" />
+        </div>
+        <div class="input-l form-actions">
+          <button name="submit" data-disable-with="Saving...">Save</button>
+        </div>
+      </div>
+      </form>
     </div>'
     # PDF represents the HTML used within the modal window detail view for document assets.
     pdf: '

@@ -380,11 +380,12 @@ textarea {
   position: fixed; 
   left: 0; 
   bottom: 0; 
-  width: 100%; 
+  width: 100%;
+  min-width: calc-em(960px, $base-font-size); 
   height: 0; 
   
   .container {
-    width: 950px;
+    width: 100%;
     margin: 0 auto;
   } //container
   
@@ -427,7 +428,7 @@ textarea {
        border: none;
        @include imprint;
 
-       width: calc-em(940px,$base-font-size);
+       width: 100%;
        margin: 0 auto;
        padding: calc-em(16px, $base-font-size) 0;
 
@@ -551,7 +552,8 @@ textarea {
   } //asset-search
 
   .container {
-    width: 950px;
+    width: 100%;
+    max-width: 950px;
     margin: 0 auto;
   } //container
 
@@ -589,6 +591,14 @@ textarea {
       padding: 0;
     } //ul
   } //page
+  
+  // ---- Asset Navigation ------------------------------------ //    
+  
+  .asset-nav {
+    float: left;
+    width: 52%;
+    min-width: 520px;
+  }
 
   .tabs {
     @include clearfix; 

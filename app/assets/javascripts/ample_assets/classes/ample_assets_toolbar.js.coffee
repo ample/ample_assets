@@ -30,7 +30,7 @@ class window.AmpleAssetsToolbar extends CoffeeCup
       children: 'div.page'
     pages_options:
       interval: 5000
-      width: 81 
+      width: 81
       height: 81
       enabled: true
       distance: 10
@@ -654,14 +654,17 @@ class window.AmpleAssetsToolbar extends CoffeeCup
       <a href="#" class="collapse">Close</a>
       <div class="container">
         <div id="{{ id }}-tabs" class="tabs">
-          <div class="asset-refresh"></div>
+          <nav class="asset-nav">
+            <div class="asset-refresh"></div>
+            {{{ tabs }}}
+            <span class="asset-loading"></span>
+          </nav>
           <div class="asset-search">
             <input type="text" id="asset-search" name="q" placeholder="Enter keywords..." />
             <label for="asset-search">Search</label>
           </div>
-          {{{ tabs }}}
           <a href="#" data-role="asset-search-results" class="tab asset-results">Results</a>
-          <span class="asset-loading"></span>
+          
         </div>
         <div id="{{ id }}-pages" class="pages">
           {{{ pages }}}

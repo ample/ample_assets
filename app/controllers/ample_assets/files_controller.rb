@@ -26,7 +26,7 @@ module AmpleAssets
         if uploadify?
           render :nothing => true
         else
-          redirect_to file_path(file)
+          redirect_to :back
         end
       else
         flash[:error] = "Whoops! There was a problem creating new asset."

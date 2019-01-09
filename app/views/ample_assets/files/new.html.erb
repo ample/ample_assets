@@ -1,21 +1,5 @@
-<% if request.xhr? %>
-
-    <p><input type="file" name="uploadify" id="uploadify" /></p>
-
-    <div id="fileQueue"></div>
-
-    <script type="text/javascript">
-    $(document).ready(function() {
-    	new AmpleAssetsUploadify()
-    });
-    </script>
-
-<% else %>
-
-    <%= form_for AmpleAssets::File.new, :multipart => true do |f| %>
-        <%= f.label :attachment %>
-        <%= f.file_field :attachment %>
-        <%= f.submit %>
-    <% end %>
-
+<%= form_for AmpleAssets::File.new, :multipart => true, :remote => true do |f| %>
+  <%= f.label :attachment %>
+  <%= f.file_field :attachment %>
+  <%= f.submit %>
 <% end %>
